@@ -3,7 +3,13 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.2.1",
+    "@mui/material": "^6.2.1",
+    "@mui/x-date-pickers": "^7.23.3",
     "@polymer/polymer": "3.5.2",
+    "@tanstack/react-query": "^5.62.8",
     "@vaadin/bundles": "24.6.0",
     "@vaadin/common-frontend": "0.0.19",
     "@vaadin/hilla-file-router": "24.6.0",
@@ -25,10 +31,12 @@
     "construct-style-sheets-polyfill": "3.1.0",
     "date-fns": "2.29.3",
     "lit": "3.2.1",
+    "material-react-table": "^3.0.3",
     "proj4": "2.12.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-router-dom": "6.28.0"
+    "react-router-dom": "6.28.0",
+    "react-toastify": "^11.0.2"
   },
   "devDependencies": {
     "@babel/preset-react": "7.26.3",
@@ -50,6 +58,7 @@
     "@vitejs/plugin-react": "4.3.4",
     "async": "3.2.6",
     "glob": "10.4.5",
+    "prettier": "3.3.3",
     "rollup-plugin-brotli": "3.1.0",
     "rollup-plugin-visualizer": "5.12.0",
     "strip-css-comments": "5.0.0",
@@ -59,8 +68,7 @@
     "vite-plugin-checker": "0.8.0",
     "workbox-build": "7.3.0",
     "workbox-core": "7.3.0",
-    "workbox-precaching": "7.3.0",
-    "prettier": "3.3.3"
+    "workbox-precaching": "7.3.0"
   },
   "vaadin": {
     "dependencies": {
@@ -122,7 +130,7 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "659b23811cce5a7bd01a033586520642435d34009de7bd16082a2fb499a9f6ee"
+    "hash": "4e72a0ccd3dff5fe37b5c38efa5e0f3a753e83dfa480d6266560a1a9871fbd68"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -136,7 +144,6 @@
     "construct-style-sheets-polyfill": "$construct-style-sheets-polyfill",
     "react-router-dom": "$react-router-dom",
     "lit": "$lit",
-    "@types/react": "$@types/react",
     "@polymer/polymer": "$@polymer/polymer",
     "react": "$react",
     "@vaadin/hilla-generator-plugin-model": "$@vaadin/hilla-generator-plugin-model",
@@ -161,6 +168,14 @@
     "@vaadin/react-components-pro": "$@vaadin/react-components-pro",
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
-    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles"
+    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles",
+    "@tanstack/react-query": "$@tanstack/react-query",
+    "@emotion/react": "$@emotion/react",
+    "@emotion/styled": "$@emotion/styled",
+    "@mui/icons-material": "$@mui/icons-material",
+    "@mui/material": "$@mui/material",
+    "@mui/x-date-pickers": "$@mui/x-date-pickers",
+    "material-react-table": "$material-react-table",
+    "react-toastify": "$react-toastify"
   }
 }

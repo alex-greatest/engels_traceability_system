@@ -31,7 +31,8 @@
   },
   "include": [
     "src/main/frontend/**/*",
-    "types.d.ts"
+    "types.d.ts",
+    "custom.d.ts"
   ],
   "exclude": [
     "src/main/frontend/generated/jar-resources/**"

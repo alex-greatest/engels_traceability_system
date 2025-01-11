@@ -1,7 +1,5 @@
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 
-export const config: ViewConfig = { menu: { order: 0, icon: 'line-awesome/svg/file.svg' }, title: 'Empty' };
-
 export default function EmptyView() {
   return (
     <div className="flex flex-col h-full items-center justify-center p-l text-center box-border">
@@ -11,3 +9,9 @@ export default function EmptyView() {
     </div>
   );
 }
+
+export const config: ViewConfig = {
+  loginRequired: true,
+  rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
+  title: "Emptyнах"
+};

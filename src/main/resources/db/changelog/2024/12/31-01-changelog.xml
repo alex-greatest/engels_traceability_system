@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1735663753818-1" author="Alexander (generated)">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint columnNames="name" constraintName="uc_role_name" tableName="role"/>
+    </changeSet>
+    <changeSet id="1735663753818-2" author="Alexander (generated)">
+        <createTable tableName="user_">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_"/>
+            </column>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="username" type="VARCHAR(50)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_deleted" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_" constraintName="FK_USER__ON_ROLE"
+                                 referencedColumnNames="id" referencedTableName="role"/>
+
+        <addUniqueConstraint columnNames="code" constraintName="uc_user__code" tableName="user_"/>
+
+        <createIndex indexName="idx_user__role_id" tableName="user_">
+            <column name="role_id"/>
+        </createIndex>
+
+        <createIndex indexName="idx_user__is_deleted" tableName="user_">
+            <column name="is_deleted"/>
+        </createIndex>
+
+        <createIndex indexName="idx_user__username" tableName="user_">
+            <column name="username"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1735663753818-3" author="Alexander (generated)">
+        <createTable tableName="user_history">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_history"/>
+            </column>
+            <column name="code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username_changed" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code_changed" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_history"
+                                 constraintName="FK_USER_HISTORY_ON_ROLE" referencedColumnNames="id"
+                                 referencedTableName="role"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_history"
+                                 constraintName="FK_USER_HISTORY_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="user_"/>
+
+        <createIndex indexName="idx_user_history_code" tableName="user_history">
+            <column name="code"/>
+            <column name="is_active"/>
+        </createIndex>
+
+        <createIndex indexName="idx_user_history_role_id" tableName="user_history">
+            <column name="role_id"/>
+        </createIndex>
+
+        <createIndex indexName="idx_user_history_user_id" tableName="user_history">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
