@@ -18,7 +18,7 @@ public class ComponentHistoryService {
     private final UserRepository userRepository;
 
     public void addComponentHistory(String name, Component component, boolean isActive, int typeOperation) {
-        changeActiveStatusOld(name);
+        changeActiveStatusOld(name, typeOperation);
         var userInfo = userInfoService.getUserInfo();
         var user = userRepository.findByCode(userInfo.code()).
                 orElseThrow(() -> new DbException("Не удалось сохранить компонент. Не найден пользователь"));
@@ -31,8 +31,11 @@ public class ComponentHistoryService {
         componentHistoryRepository.save(componentHistory);
     }
 
-    private void changeActiveStatusOld(String name)
+    private void changeActiveStatusOld(String name, int typeOperation)
     {
+        if (typeOperation == 1) {
+            return;
+        }
         componentHistoryRepository.findByNameAndIsActive(name, true).ifPresent((c) -> {
             c.setIsActive(false);
             componentHistoryRepository.save(c);

@@ -23,7 +23,7 @@ export const usersAddMutation = (queryClient: QueryClient, navigate: NavigateFun
     navigate("/users");
   },
   onError: (error) => {
-    if (error instanceof EndpointError && error.type?.includes("DbException")) {
+    if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
       showErrorMessage("users_add_error", error.message);
     } else {
       showErrorMessage("users_add_error", "Неизвестная ошибка");
@@ -73,22 +73,27 @@ export const usersEditPasswordMutation = (queryClient: QueryClient, navigate: Na
 
 export const userDelete = (queryClient: QueryClient) => useMutation({
   mutationFn: UserService.deleteUser,
-  onMutate: async (newTodo) => {
+  onMutate: async (newUser) => {
     await queryClient.cancelQueries({ queryKey: ['users'] });
-    const previousTodos = queryClient.getQueryData<UserResponse>(['users']);
-    queryClient.setQueryData<UserResponse[]>(['users'], old => old?.filter((t) => t.code !== newTodo));
-    return { previousTodos }
+    const previous = queryClient.getQueryData<UserResponse[]>(['users']);
+    queryClient.setQueryData<UserResponse[]>(['users'], old => old?.filter((t) => t.code !== newUser));
+    return { previous }
   },
   onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ["users"] }).then();
     showSuccessMessage("users_delete_success", "Пользователь успешно удалён");
   },
-  onError: (error) => {
-    if (error instanceof EndpointError && error.type?.includes("DbException")) {
+  onError: (error, newUser, context) => {
+    if (context?.previous) {
+      queryClient.setQueryData<UserResponse[]>(['users'], context.previous)
+    }
+    if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
       showErrorMessage("users_delete_error", error.message);
     } else {
       showErrorMessage("users_delete_error", "Неизвестная ошибка");
     }
   },
+  onSettled: () => {
+    queryClient.invalidateQueries({ queryKey: ["users"] }).then();
+  }
 });
 

@@ -10,6 +10,7 @@ import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,11 +54,11 @@ public class ComponentService {
     }
 
     @Transactional
-    public void updateComponent(@Nonnull Long id, @Valid ComponentDto componentDto) {
+    public void updateComponent(@Nonnull Long id, @NotBlank String oldNameComponent, @Valid ComponentDto componentDto) {
         try {
             Component component = componentRepository.findById(id).
                     orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
-            componentHistoryService.addComponentHistory(component.getName(), component, true, 2);
+            componentHistoryService.addComponentHistory(oldNameComponent, component, true, 2);
             componentRepository.save(component);
         } catch (DataAccessException e) {
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
@@ -71,7 +72,7 @@ public class ComponentService {
             Component component = componentRepository.findById(id).
                     orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
             componentHistoryService.addComponentHistory(component.getName(), component, false, 3);
-            componentRepository.save(component);
+            componentRepository.delete(component);
         } catch (DataAccessException e) {
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);

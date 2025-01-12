@@ -19,7 +19,7 @@ public class UserHistoryService {
     private final UserInfoService userInfoService;
 
     public void addUserHistory(Integer code, User user, Role role, boolean isActive, int typeOperation) {
-        changeActiveStatusOld(code);
+        changeActiveStatusOld(code, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
         UserHistory userHistory = new UserHistory();
         userHistory.setCode(user.getCode());
@@ -34,8 +34,11 @@ public class UserHistoryService {
         userHistoryRepository.save(userHistory);
     }
 
-    private void changeActiveStatusOld(Integer code)
+    private void changeActiveStatusOld(Integer code, int typeOperation)
     {
+        if (typeOperation == 1) {
+            return;
+        }
         userHistoryRepository.findByCodeAndIsActive(code, true).ifPresent((u) -> {
             u.setIsActive(false);
             userHistoryRepository.save(u);

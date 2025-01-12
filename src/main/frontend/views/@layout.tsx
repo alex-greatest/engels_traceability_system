@@ -56,6 +56,10 @@ export default function MainLayout() {
                     <Icon icon="vaadin:users" slot="prefix" />
                     Пользователи
                 </SideNavItem>
+              <SideNavItem path={'/components'} key={"components_key"}>
+                  <Icon icon="vaadin:compile" slot="prefix" />
+                  Компоненты
+              </SideNavItem>
             </SideNav>
         </header>
       </div>

@@ -19,7 +19,7 @@ import org.hibernate.type.SqlTypes;
 public class User {
     @Id
     @Column(name = "code", unique = true)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer code;
 
     @Size(max = 50)

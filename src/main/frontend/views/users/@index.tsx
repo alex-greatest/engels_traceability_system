@@ -55,10 +55,11 @@ const Users = () => {
     localization: MRT_Localization_RU,
     positionActionsColumn: 'last',
     enableRowActions: true,
+    paginationDisplayMode: 'pages',
     state: {
       isLoading,
       showAlertBanner: isError,
-      showProgressBars: isRefetching,
+      showProgressBars: isRefetching || isLoading,
     },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box sx={{display: 'flex', gap: '1em'}}>
