@@ -1,19 +1,19 @@
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import { ComponentService } from 'Frontend/generated/endpoints';
 import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config/notification';
 import { EndpointError } from '@vaadin/hilla-frontend';
 import ComponentDto from 'Frontend/generated/com/rena/application/entity/dto/user/ComponentDto';
+import { ComponentController } from 'Frontend/generated/endpoints';
 
 export function useComponents() {
   return useQuery({
     queryKey: ['components'],
-    queryFn: ComponentService.getAllComponents,
+    queryFn: ComponentController.getAllComponents,
     staleTime: 1000 * 60 * 5
   })
 }
 
 export const componentAddMutation = (queryClient: QueryClient) => useMutation({
-  mutationFn: ComponentService.addComponent,
+  mutationFn: ComponentController.addComponent,
   onMutate: async (newComponent) => {
     await queryClient.cancelQueries({ queryKey: ['components'] });
     const previous = queryClient.getQueryData<ComponentDto[]>(['components']);
@@ -40,7 +40,7 @@ export const componentAddMutation = (queryClient: QueryClient) => useMutation({
 
 export const componentEditMutation = (queryClient: QueryClient) => useMutation({
   mutationFn: ({ id, oldName, component }: { id: number; oldName: string; component: ComponentDto }) =>
-    ComponentService.updateComponent(id, oldName, component),
+    ComponentController.updateComponent(id, oldName, component),
   onMutate: async (newComponent) => {
     await queryClient.cancelQueries({ queryKey: ['components'] });
     const previous = queryClient.getQueryData<ComponentDto[]>(['components']);
@@ -66,7 +66,7 @@ export const componentEditMutation = (queryClient: QueryClient) => useMutation({
 })
 
 export const componentDelete = (queryClient: QueryClient) => useMutation({
-  mutationFn: ComponentService.deleteComponent,
+  mutationFn: ComponentController.deleteComponent,
   onMutate: async (newTodo) => {
     await queryClient.cancelQueries({ queryKey: ['components'] });
     const previous = queryClient.getQueryData<ComponentDto[]>(['components']);

@@ -1,22 +1,22 @@
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import { UserService } from 'Frontend/generated/endpoints';
 import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config/notification';
 import { EndpointError } from '@vaadin/hilla-frontend';
 import { NavigateFunction } from 'react-router-dom';
 import UserRequestUpdate from 'Frontend/generated/com/rena/application/entity/dto/user/UserRequestUpdate';
 import UserRequestPassword from 'Frontend/generated/com/rena/application/entity/dto/user/UserRequestPassword';
 import UserResponse from 'Frontend/generated/com/rena/application/entity/dto/user/UserResponse';
+import { UserController } from 'Frontend/generated/endpoints';
 
 export function useUsers() {
   return useQuery({
     queryKey: ['users'],
-    queryFn: UserService.getAllUsers,
+    queryFn: UserController.getAllUsers,
     staleTime: 1000 * 60 * 5
   })
 }
 
 export const usersAddMutation = (queryClient: QueryClient, navigate: NavigateFunction) => useMutation({
-  mutationFn: UserService.addUser,
+  mutationFn: UserController.addUser,
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["users"] }).then();
     showSuccessMessage("users_add_success", "Пользователь успешно добавлен");
@@ -34,13 +34,13 @@ export const usersAddMutation = (queryClient: QueryClient, navigate: NavigateFun
 export function useUser(code: number) {
   return useQuery({
     queryKey: ['user_edit'],
-    queryFn: () => UserService.getUser(code ?? 0),
+    queryFn: () => UserController.getUser(code ?? 0),
     enabled: !isNaN(code)
   })
 }
 
 export const usersEditMutation = (queryClient: QueryClient, navigate: NavigateFunction) => useMutation({
-  mutationFn: ({ code, user }: { code: number; user: UserRequestUpdate }) => UserService.updateUser(code, user),
+  mutationFn: ({ code, user }: { code: number; user: UserRequestUpdate }) => UserController.updateUser(code, user),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["users"] }).then();
     showSuccessMessage("users_edit_success", "Данные пользователя обновленны");
@@ -56,7 +56,7 @@ export const usersEditMutation = (queryClient: QueryClient, navigate: NavigateFu
 })
 
 export const usersEditPasswordMutation = (queryClient: QueryClient, navigate: NavigateFunction) => useMutation({
-  mutationFn: ({ code, user }: { code: number; user: UserRequestPassword }) => UserService.updatePasswordUser(code, user),
+  mutationFn: ({ code, user }: { code: number; user: UserRequestPassword }) => UserController.updatePasswordUser(code, user),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["users"] }).then();
     showSuccessMessage("users_edit_password_success", "Данные пользователя обновленны");
@@ -72,7 +72,7 @@ export const usersEditPasswordMutation = (queryClient: QueryClient, navigate: Na
 })
 
 export const userDelete = (queryClient: QueryClient) => useMutation({
-  mutationFn: UserService.deleteUser,
+  mutationFn: UserController.deleteUser,
   onMutate: async (newUser) => {
     await queryClient.cancelQueries({ queryKey: ['users'] });
     const previous = queryClient.getQueryData<UserResponse[]>(['users']);

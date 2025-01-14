@@ -5,36 +5,29 @@ import com.rena.application.entity.model.component.Component;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.ComponentRepository;
-import com.rena.application.service.HandlerErrorConstraintDB;
-import com.vaadin.hilla.BrowserCallable;
-import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import java.util.List;
 
 @RequiredArgsConstructor
-@BrowserCallable
-@Validated
+@Service
 @RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
+@Slf4j
 public class ComponentService {
     private final ComponentRepository componentRepository;
     private final ComponentHistoryService componentHistoryService;
     private final ComponentMapper componentMapper;
-    private final HandlerErrorConstraintDB handlerErrorConstraintDB;
 
-    @Nonnull
-    public List<@Nonnull ComponentDto> getAllComponents() {
+    public List<ComponentDto> getAllComponents() {
         List<Component> component = componentRepository.findAll();
         return componentMapper.toDto(component);
     }
 
-    @Nonnull
-    public ComponentDto getComponent(@Nonnull Long id)
+    public ComponentDto getComponent(Long id)
     {
         Component component = componentRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
@@ -42,40 +35,26 @@ public class ComponentService {
     }
 
     @Transactional
-    public void addComponent(@Valid ComponentDto componentDto) {
-        try {
-            Component component = componentMapper.toEntity(componentDto);
-            componentHistoryService.addComponentHistory(component.getName(), component, true, 1);
-            componentRepository.save(component);
-        } catch (DataAccessException e) {
-            String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
-            throw new DbException(message);
-        }
+    public void addComponent(ComponentDto componentDto) {
+        Component component = componentMapper.toEntity(componentDto);
+        componentHistoryService.addComponentHistory(component.getName(), component, true, 1);
+        componentRepository.save(component);
     }
 
     @Transactional
-    public void updateComponent(@Nonnull Long id, @NotBlank String oldNameComponent, @Valid ComponentDto componentDto) {
-        try {
-            Component component = componentRepository.findById(id).
-                    orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
-            componentHistoryService.addComponentHistory(oldNameComponent, component, true, 2);
-            componentRepository.save(component);
-        } catch (DataAccessException e) {
-            String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
-            throw new DbException(message);
-        }
+    public void updateComponent(Long id, String oldNameComponent, ComponentDto componentDto) {
+        Component component = componentRepository.findById(id).
+                orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
+        component.setName(componentDto.name());
+        componentHistoryService.addComponentHistory(oldNameComponent, component, true, 2);
+        componentRepository.save(component);
     }
 
     @Transactional
-    public void deleteComponent(@Nonnull Long id) {
-        try {
-            Component component = componentRepository.findById(id).
-                    orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
-            componentHistoryService.addComponentHistory(component.getName(), component, false, 3);
-            componentRepository.delete(component);
-        } catch (DataAccessException e) {
-            String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
-            throw new DbException(message);
-        }
+    public void deleteComponent(Long id) {
+        Component component = componentRepository.findById(id).
+                orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
+        componentHistoryService.addComponentHistory(component.getName(), component, false, 3);
+        componentRepository.delete(component);
     }
 }

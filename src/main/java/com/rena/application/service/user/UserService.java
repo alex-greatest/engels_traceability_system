@@ -13,33 +13,26 @@ import com.rena.application.exceptions.DbException;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.RoleRepository;
 import com.rena.application.repository.UserRepository;
-import com.rena.application.service.HandlerErrorConstraintDB;
-import com.vaadin.hilla.BrowserCallable;
-import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import java.util.List;
 
 @RequiredArgsConstructor
-@BrowserCallable
-@Validated
+@Service
 @RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
-    private final HandlerErrorConstraintDB handlerErrorConstraintDB;
     private final UserHistoryService userHistoryService;
     private final UserInfoService userInfoService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Nonnull
-    public List<@Nonnull UserResponse> getAllUsers() {
+    @Transactional(readOnly = true)
+    public List<UserResponse> getAllUsers() {
         UserInfo userInfo = userInfoService.getUserInfo();
         String role = userInfo.authorities().getFirst();
         List<User> users = switch (role) {
@@ -59,8 +52,7 @@ public class UserService {
         }).toList();
     }
 
-    @Nonnull
-    public UserResponse getUser(@Nonnull Integer code)
+    public UserResponse getUser(Integer code)
     {
         User user = userRepository.findByCode(code).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
@@ -70,61 +62,41 @@ public class UserService {
     }
 
     @Transactional
-    public void addUser(@Valid UserRequest userRequest) {
-        try {
-            String roleName = String.format("ROLE_%s", userRequest.role().name());
-            Role role = roleRepository.findByName(roleName);
-            var user = userMapper.toEntity(userRequest);
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.setRole(role);
-            userHistoryService.addUserHistory(user.getCode(), user, role, true, 1);
-            userRepository.save(user);
-        } catch (DataAccessException e) {
-            String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
-            throw new DbException(message);
-        }
+    public void addUser(UserRequest userRequest) {
+        String roleName = String.format("ROLE_%s", userRequest.role().name());
+        Role role = roleRepository.findByName(roleName);
+        var user = userMapper.toEntity(userRequest);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setRole(role);
+        userHistoryService.addUserHistory(user.getCode(), user, role, true, 1);
+        userRepository.save(user);
     }
 
     @Transactional
-    public void updateUser(@Nonnull Integer code, @Valid UserRequestUpdate userRequest) {
-        try {
-            String roleName = String.format("ROLE_%s", userRequest.role().name());
-            Role role = roleRepository.findByName(roleName);
-            User user = userRepository.findByCode(code).
-                    orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-            user.setCode(userRequest.code());
-            user.setUsername(userRequest.username());
-            user.setRole(role);
-            userHistoryService.addUserHistory(code, user, role, true, 2);
-            userRepository.save(user);
-        } catch (DataAccessException e) {
-            String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
-            throw new DbException(message);
-        }
+    public void updateUser(Integer code, UserRequestUpdate userRequest) {
+        String roleName = String.format("ROLE_%s", userRequest.role().name());
+        Role role = roleRepository.findByName(roleName);
+        User user = userRepository.findByCode(code).
+                orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        user.setCode(userRequest.code());
+        user.setUsername(userRequest.username());
+        user.setRole(role);
+        userHistoryService.addUserHistory(code, user, role, true, 2);
+        userRepository.save(user);
     }
 
     @Transactional
-    public void updatePasswordUser(@Nonnull Integer code, @Valid UserRequestPassword userRequest) {
-        try {
-            User user = userRepository.findByCode(code).orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-            user.setPassword(bCryptPasswordEncoder.encode(userRequest.password()));
-            userHistoryService.addUserHistory(code, user, user.getRole(), true, 2);
-            userRepository.save(user);
-        } catch (DataAccessException e) {
-            String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
-            throw new DbException(message);
-        }
+    public void updatePasswordUser(Integer code, UserRequestPassword userRequest) {
+        User user = userRepository.findByCode(code).orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        user.setPassword(bCryptPasswordEncoder.encode(userRequest.password()));
+        userHistoryService.addUserHistory(code, user, user.getRole(), true, 2);
+        userRepository.save(user);
     }
 
     @Transactional
-    public void deleteUser(@Nonnull Integer code) {
-        try {
-            User user = userRepository.findByCode(code).orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-            userHistoryService.addUserHistory(code, user, user.getRole(), false, 3);
-            userRepository.delete(user);
-        } catch (DataAccessException e) {
-            String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
-            throw new DbException(message);
-        }
+    public void deleteUser(Integer code) {
+        User user = userRepository.findByCode(code).orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        userHistoryService.addUserHistory(code, user, user.getRole(), false, 3);
+        userRepository.delete(user);
     }
 }

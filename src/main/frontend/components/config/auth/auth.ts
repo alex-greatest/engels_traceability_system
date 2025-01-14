@@ -1,7 +1,7 @@
 import { configureAuth } from '@vaadin/hilla-react-auth';
-import {UserInfoService} from "Frontend/generated/endpoints";
+import { UserInfoController } from 'Frontend/generated/endpoints';
 
-const auth = configureAuth(UserInfoService.getUserInfo, {
+const auth = configureAuth(UserInfoController.getUserInfo, {
     getRoles: (userInfo) => userInfo.authorities?.map((v) => v ?? '') ?? [],
 });
 

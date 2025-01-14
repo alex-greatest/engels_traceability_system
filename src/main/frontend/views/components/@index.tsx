@@ -36,12 +36,13 @@ const Components = () => {
   const handleCreateComponent: MRT_TableOptions<ComponentDto>['onCreatingRowSave'] = async ({values, table}) => {
     const newValidationErrors = validateComponent(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
-      console.log(newValidationErrors);
       setValidationErrors(newValidationErrors);
       return;
     }
     setValidationErrors({});
-    await addComponent(values);
+    try {
+      await addComponent(values);
+    } catch (error) {}
     table.setCreatingRow(null);
   };
 
@@ -52,8 +53,9 @@ const Components = () => {
       return;
     }
     setValidationErrors({});
-    await editComponent({id: values.id, oldName: componentName.value, component: values});
-    componentName.value = "";
+    try {
+      await editComponent({id: componentId.value, oldName: componentName.value, component: values});
+    } catch (error) {}
     table.setEditingRow(null);
   };
 

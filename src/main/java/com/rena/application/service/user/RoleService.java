@@ -7,24 +7,22 @@ import com.rena.application.entity.dto.user.RoleDTO;
 import com.rena.application.entity.model.user.Role;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.repository.RoleRepository;
-import com.vaadin.hilla.BrowserCallable;
-import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
-@BrowserCallable
-@Validated
+@Service
 @RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
 public class RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
     private final UserInfoService userInfoService;
 
-    @Nonnull
-    public List<@Nonnull RoleDTO> getAllRoles() {
+    @Transactional(readOnly = true)
+    public List<RoleDTO> getAllRoles() {
         UserInfo userInfo = userInfoService.getUserInfo();
         String role = userInfo.authorities().getFirst();
         List<Role> roles = switch (role) {

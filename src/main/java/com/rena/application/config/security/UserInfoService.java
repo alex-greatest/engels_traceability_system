@@ -1,14 +1,15 @@
 package com.rena.application.config.security;
 
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-@BrowserCallable
+@Service
 public class UserInfoService {
 
     @AnonymousAllowed

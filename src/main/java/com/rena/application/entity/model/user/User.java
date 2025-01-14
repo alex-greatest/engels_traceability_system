@@ -24,7 +24,7 @@ public class User {
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "username", length = 50)
+    @Column(name = "username", length = 50, unique = true)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String username;
 

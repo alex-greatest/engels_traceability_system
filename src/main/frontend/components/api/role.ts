@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { RoleService, UserService } from 'Frontend/generated/endpoints';
+import { RoleController } from 'Frontend/generated/endpoints';
 
 export function useRoles() {
   return useQuery({
     queryKey: ['roles'],
-    queryFn: RoleService.getAllRoles,
+    queryFn: RoleController.getAllRoles,
     staleTime: Infinity
   })
 }
