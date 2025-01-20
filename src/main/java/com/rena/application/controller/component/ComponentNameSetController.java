@@ -1,9 +1,9 @@
-package com.rena.application.controller;
+package com.rena.application.controller.component;
 
-import com.rena.application.entity.dto.user.ComponentDto;
+import com.rena.application.entity.dto.component.ComponentNameSetDto;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.service.HandlerErrorConstraintDB;
-import com.rena.application.service.component.ComponentService;
+import com.rena.application.service.component.ComponentNameSetService;
 import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
@@ -20,34 +20,34 @@ import java.util.List;
 @Validated
 @RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
 @Slf4j
-public class ComponentController {
-    private final ComponentService componentService;
+public class ComponentNameSetController {
+    private final ComponentNameSetService componentNameSetService;
     private final HandlerErrorConstraintDB handlerErrorConstraintDB;
 
     @Nonnull
-    public List<@Nonnull ComponentDto> getAllComponents() {
-        return componentService.getAllComponents();
+    public List<@Nonnull ComponentNameSetDto> getAllComponents() {
+        return componentNameSetService.getAllComponents();
     }
 
     @Nonnull
-    public ComponentDto getComponent(@Nonnull Long id)
+    public ComponentNameSetDto getComponent(@Nonnull Long id)
     {
-        return componentService.getComponent(id);
+        return componentNameSetService.getComponent(id);
     }
 
-    public void addComponent(@Valid ComponentDto componentDto) {
+    public void addComponent(@Valid ComponentNameSetDto componentNameSetDto) {
         try {
-            componentService.addComponent(componentDto);
+            componentNameSetService.addComponent(componentNameSetDto);
         } catch (DataAccessException e) {
-            log.error("Ошибка при добавлении компонента", e);
+            log.error("Ошибка при добавлении имени набора компонентов", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }
     }
 
-    public void updateComponent(@Nonnull Long id, @NotBlank String oldNameComponent, @Valid ComponentDto componentDto) {
+    public void updateComponent(@Nonnull Long id, @NotBlank String oldNameComponent, @Valid ComponentNameSetDto componentNameSetDto) {
         try {
-            componentService.updateComponent(id, oldNameComponent, componentDto);
+            componentNameSetService.updateComponent(id, oldNameComponent, componentNameSetDto);
         }
         catch (DataAccessException e) {
             log.error("Ошибка при обновлении компонента", e);
@@ -58,7 +58,7 @@ public class ComponentController {
 
     public void deleteComponent(@Nonnull Long id) {
         try {
-            componentService.deleteComponent(id);
+            componentNameSetService.deleteComponent(id);
         } catch (DataAccessException e) {
             log.error("Ошибка при удалении компонента", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());

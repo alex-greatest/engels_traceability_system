@@ -12,24 +12,18 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "component_value_history", indexes = {
-        @Index(name = "idx_component_value_history_component_id", columnList = "component_id"),
-        @Index(name = "idx_component_value_history_user_code", columnList = "user_code"),
-        @Index(name = "idx_component_value_history_is_acitve", columnList = "is_active")
+@Table(name = "component_name_set_history", indexes = {
+        @Index(name = "idx_component_set_history__user_code", columnList = "user_code"),
+        @Index(name = "idx_component_set_history_name", columnList = "name, is_active")
 })
-public class ComponentValueHistory {
+public class ComponentNameSetHistory {
     @Id
-    @Column(name = "id", nullable = false, length = 100)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "component_id", nullable = false)
-    private ComponentHistory component;
-
-    @Column(name = "value", nullable = false)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String value;
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
 
     @NotNull
     @Column(name = "modified_date", nullable = false)

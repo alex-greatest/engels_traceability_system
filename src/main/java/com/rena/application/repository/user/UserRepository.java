@@ -1,4 +1,4 @@
-package com.rena.application.repository;
+package com.rena.application.repository.user;
 
 import com.rena.application.entity.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

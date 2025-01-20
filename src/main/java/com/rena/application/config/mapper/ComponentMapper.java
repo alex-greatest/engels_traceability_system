@@ -1,5 +1,6 @@
-package com.rena.application.entity.dto.user;
+package com.rena.application.config.mapper;
 
+import com.rena.application.entity.dto.component.ComponentDto;
 import com.rena.application.entity.model.component.Component;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

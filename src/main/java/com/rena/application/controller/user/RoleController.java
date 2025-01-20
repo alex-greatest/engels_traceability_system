@@ -1,4 +1,4 @@
-package com.rena.application.controller;
+package com.rena.application.controller.user;
 
 import com.rena.application.entity.dto.user.RoleDTO;
 import com.rena.application.service.user.RoleService;

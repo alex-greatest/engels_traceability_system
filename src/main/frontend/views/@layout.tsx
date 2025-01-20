@@ -1,5 +1,5 @@
-import { createMenuItems, useViewConfig } from '@vaadin/hilla-file-router/runtime.js';
-import { effect, signal } from '@vaadin/hilla-react-signals';
+import { useViewConfig } from '@vaadin/hilla-file-router/runtime.js';
+import { effect, signal, useSignal } from '@vaadin/hilla-react-signals';
 import { AppLayout, DrawerToggle, Icon, SideNav, SideNavItem } from '@vaadin/react-components';
 import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ export default function MainLayout() {
   const currentTitle = useViewConfig()?.title;
   const navigate = useNavigate();
   const location = useLocation();
+  const isCollapsed = useSignal(true);
 
   useEffect(() => {
     if (currentTitle) {
@@ -52,14 +53,22 @@ export default function MainLayout() {
             </div>
 
             <SideNav color={"--lumo-primary-color"} onNavigate={({path}) => navigate(path!)} location={location}>
-                <SideNavItem path={'/users'} key={"index"}>
-                    <Icon icon="vaadin:users" slot="prefix" />
-                    Пользователи
-                </SideNavItem>
-              <SideNavItem path={'/components'} key={"components_key"}>
-                  <Icon icon="vaadin:compile" slot="prefix" />
-                  Компоненты
+              <SideNavItem path={'/users'} key={"index"}>
+                <Icon icon="vaadin:users" slot="prefix" />
+                Пользователи
               </SideNavItem>
+              <SideNav onCollapsedChanged={(event) => isCollapsed.value = event.detail.value }
+                       style={{ width: '100%' }} collapsible collapsed={isCollapsed.value}>
+                <span slot="label">Компоненты</span>
+                <SideNavItem path={'/components'} key={'components_key'}>
+                  <Icon icon="vaadin:compile" slot="prefix" />
+                  Типы компонентов
+                </SideNavItem>
+                <SideNavItem path={'/components_name_set'} key={'components_name_set_key'}>
+                  <Icon icon="vaadin:archives" slot="prefix" />
+                  Набор компонентов
+                </SideNavItem>
+              </SideNav>
             </SideNav>
         </header>
       </div>

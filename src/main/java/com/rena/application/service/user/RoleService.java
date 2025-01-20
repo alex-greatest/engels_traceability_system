@@ -6,7 +6,7 @@ import com.rena.application.config.security.UserInfoService;
 import com.rena.application.entity.dto.user.RoleDTO;
 import com.rena.application.entity.model.user.Role;
 import com.rena.application.exceptions.DbException;
-import com.rena.application.repository.RoleRepository;
+import com.rena.application.repository.user.RoleRepository;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

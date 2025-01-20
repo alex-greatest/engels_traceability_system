@@ -1,8 +1,8 @@
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config/notification';
 import { EndpointError } from '@vaadin/hilla-frontend';
-import ComponentDto from 'Frontend/generated/com/rena/application/entity/dto/user/ComponentDto';
 import { ComponentController } from 'Frontend/generated/endpoints';
+import ComponentDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentDto';
 
 export function useComponents() {
   return useQuery({
@@ -23,7 +23,7 @@ export const componentAddMutation = (queryClient: QueryClient) => useMutation({
   onSuccess: () => {
     showSuccessMessage("components_add_success", "Компонент успешно добавлен");
   },
-  onError: (error, newComponent, context) => {
+  onError: (error, _, context) => {
     if (context?.previous) {
       queryClient.setQueryData<ComponentDto[]>(['components'], context.previous)
     }
@@ -50,7 +50,7 @@ export const componentEditMutation = (queryClient: QueryClient) => useMutation({
   onSuccess: () => {
     showSuccessMessage("components_edit_success", "Компонент обновлен");
   },
-  onError: (error, newComponent, context) => {
+  onError: (error, _, context) => {
     if (context?.previous) {
       queryClient.setQueryData<ComponentDto[]>(['components'], context.previous)
     }
@@ -76,7 +76,7 @@ export const componentDelete = (queryClient: QueryClient) => useMutation({
   onSuccess: () => {
     showSuccessMessage("components_delete_success", "Компонент успешно удалён");
   },
-  onError: (error, newComponent, context) => {
+  onError: (error, _, context) => {
     queryClient.setQueryData<ComponentDto[]>(['components'], context?.previous);
     if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
       showErrorMessage("components_delete_error", error.message);

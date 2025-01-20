@@ -1,14 +1,13 @@
 package com.rena.application.service.component;
 
-import com.rena.application.entity.dto.user.*;
+import com.rena.application.config.mapper.ComponentMapper;
+import com.rena.application.entity.dto.component.ComponentDto;
 import com.rena.application.entity.model.component.Component;
-import com.rena.application.exceptions.DbException;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.ComponentRepository;
+import com.rena.application.repository.component.ComponentRepository;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;

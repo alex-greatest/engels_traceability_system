@@ -5,7 +5,7 @@ import com.rena.application.config.security.UserInfoService;
 import com.rena.application.entity.model.user.Role;
 import com.rena.application.entity.model.user.User;
 import com.rena.application.entity.model.user.UserHistory;
-import com.rena.application.repository.UserHistoryRepository;
+import com.rena.application.repository.user.UserHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

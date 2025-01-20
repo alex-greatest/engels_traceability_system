@@ -10,8 +10,8 @@ public class HandlerErrorConstraintDB {
     private final Map<String, String> CONSTRAINS_MAP = Map.of(
             "uc_user__code", "Пользователь с таким кодом уже существует",
             "uc_user__username", "Пользователь с таким именем уже существует",
+            "uc_component_name_set_name", "Набор компонентов с таким именем уже существует",
             "uc_component_name", "Компонент с таким именем уже существует",
-            "UQ_reference_part_type_id_unique", "Деталь с таким идентификатором уже существует",
             "UQ_reference_model_description_unique", "Деталь с таким именем уже существует",
             "UQ_reference_recipe_reference_id_recipe_id", "Тег для данного типа уже добавлен",
             "UQ_recipe_path_tag_unique", "Тег с таким именем уже существует",

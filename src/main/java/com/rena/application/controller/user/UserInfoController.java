@@ -1,4 +1,4 @@
-package com.rena.application.controller;
+package com.rena.application.controller.user;
 
 import com.rena.application.config.security.UserInfo;
 import com.rena.application.config.security.UserInfoService;

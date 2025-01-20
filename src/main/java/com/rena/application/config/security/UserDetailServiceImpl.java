@@ -1,7 +1,7 @@
 package com.rena.application.config.security;
 
 import com.rena.application.entity.model.user.User;
-import com.rena.application.repository.UserRepository;
+import com.rena.application.repository.user.UserRepository;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

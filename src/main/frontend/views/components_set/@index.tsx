@@ -1,28 +1,32 @@
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
+import { VerticalLayout } from '@vaadin/react-components/VerticalLayout.js';
 import React, { useMemo, useState } from 'react';
+import { FormLayout, Icon } from '@vaadin/react-components';
+import TextField from '@mui/material/TextField';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSignal } from '@vaadin/hilla-react-signals';
 import {
-  MaterialReactTable, type MRT_ColumnDef, MRT_TableOptions,
-  useMaterialReactTable
-} from 'material-react-table';
+  componentAddMutation,
+  componentDelete,
+  componentEditMutation,
+  useComponents, validateComponent
+} from 'Frontend/components/api/components';
+import { MaterialReactTable, type MRT_ColumnDef, MRT_TableOptions, useMaterialReactTable } from 'material-react-table';
+import ComponentDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentDto';
+import { MRT_Localization_RU } from 'material-react-table/locales/ru';
+import Box from '@mui/material/Box';
 import { Button, Container, Tooltip } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { MRT_Localization_RU } from 'material-react-table/locales/ru';
-import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ConfirmDialog } from '@vaadin/react-components/ConfirmDialog.js';
-import { useSignal } from '@vaadin/hilla-react-signals';
-import { useQueryClient } from '@tanstack/react-query';
-import {
-  componentAddMutation,
-  componentDelete, componentEditMutation,
-  useComponents,
-  validateComponent
-} from 'Frontend/components/api/components';
-import ComponentDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentDto';
 
-const Components = () => {
+const responsiveSteps = [
+  { minWidth: '0', columns: 2 },
+  { minWidth: '500px', columns: 2 },
+];
+
+const ComponentsSet = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
   const queryClient = useQueryClient();
   const openDialog = useSignal(false);
@@ -32,7 +36,7 @@ const Components = () => {
   const { mutateAsync: addComponent, isPending: isCreatingComponent } = componentAddMutation(queryClient);
   const { mutateAsync: editComponent, isPending: isUpdatingComponent } = componentEditMutation(queryClient);
   const { mutate: deleteComponent, isPending: isDeletingComponent } = componentDelete(queryClient);
-  
+
   const handleCreateComponent: MRT_TableOptions<ComponentDto>['onCreatingRowSave'] = async ({values, table}) => {
     const newValidationErrors = validateComponent(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
@@ -46,7 +50,7 @@ const Components = () => {
     table.setCreatingRow(null);
   };
 
-  const handleSaveComponent: MRT_TableOptions<ComponentDto>['onEditingRowSave'] = async ({values, table}) => {
+  const handleSaveUser: MRT_TableOptions<ComponentDto>['onEditingRowSave'] = async ({values, table}) => {
     const newValidationErrors = validateComponent(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);
@@ -143,7 +147,7 @@ const Components = () => {
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleCreateComponent,
     onEditingRowCancel: () => setValidationErrors({}),
-    onEditingRowSave: handleSaveComponent,
+    onEditingRowSave: handleSaveUser,
     muiTablePaperProps: ({ table }) => ({
       style: {
         zIndex: table.getState().isFullScreen ? 3000 : undefined,
@@ -153,37 +157,32 @@ const Components = () => {
 
   return (
     <>
-      <ConfirmDialog
-        key={"dialog"}
-        header='Удаление пользователя'
-        cancelButtonVisible
-        confirmText="Удалить"
-        confirmTheme="error primary"
-        opened={openDialog.value}
-        onCancel={() => {
-          openDialog.value = false;
-        }}
-        onConfirm={() => {
-          deleteComponent(componentId.value);
-          openDialog.value = false;
-          componentName.value = "";
-          componentId.value = -1;
-        }}
-      >
-        <p> Вы уверены, что хотите удалить компонент: {componentName.value} </p>
-      </ConfirmDialog>
-      <Container maxWidth={"xl"} sx={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%', marginTop: '5em'}} >
-        <MaterialReactTable table={table} />
-      </Container>
+      <VerticalLayout theme="spacing padding">
+        <Container maxWidth={"xl"} sx={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%', marginTop: '2em'}} >
+          <FormLayout responsiveSteps={responsiveSteps}>
+            <TextField
+              data-colspan="1"
+              label="Название набора"
+              id="outlined-size-small"
+              defaultValue="Small"
+              size="small"
+              sx={{backgroundColor: "#1A39601A"}}
+            />
+          </FormLayout>
+          <Box sx={{marginTop: '3em'}}>
+            <MaterialReactTable table={table} />
+          </Box>
+          </Container>
+      </VerticalLayout>
     </>
     );
 
 };
 
-export default Components;
+export default ComponentsSet;
 
 export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
-  title: "Комопненты"
+  title: "Создание набора компонентов"
 };
