@@ -18,7 +18,6 @@ import java.util.List;
 @Slf4j
 public class ComponentNameSetService {
     private final ComponentNameSetRepository componentNameSetRepository;
-    private final ComponentNameSetHistoryService componentNameSetHistoryService;
     private final ComponentNameSetMapper componentNameSetMapper;
 
     public List<ComponentNameSetDto> getAllComponents() {
@@ -36,7 +35,6 @@ public class ComponentNameSetService {
     @Transactional
     public void addComponent(ComponentNameSetDto componentNameSetDto) {
         ComponentNameSet componentNameSet = componentNameSetMapper.toEntity(componentNameSetDto);
-        componentNameSetHistoryService.addComponentHistory(componentNameSet.getName(), componentNameSet, true, 1);
         componentNameSetRepository.save(componentNameSet);
     }
 
@@ -45,7 +43,6 @@ public class ComponentNameSetService {
         ComponentNameSet componentNameSet = componentNameSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
         componentNameSet.setName(componentNameSetDto.name());
-        componentNameSetHistoryService.addComponentHistory(oldNameComponent, componentNameSet, true, 2);
         componentNameSetRepository.save(componentNameSet);
     }
 
@@ -53,7 +50,6 @@ public class ComponentNameSetService {
     public void deleteComponent(Long id) {
         ComponentNameSet componentNameSet = componentNameSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Набор компонентов не найден"));
-        componentNameSetHistoryService.addComponentHistory(componentNameSet.getName(), componentNameSet, false, 3);
         componentNameSetRepository.delete(componentNameSet);
     }
 }

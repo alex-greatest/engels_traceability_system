@@ -3,7 +3,6 @@ import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config
 import { EndpointError } from '@vaadin/hilla-frontend';
 import { ComponentNameSetController } from 'Frontend/generated/endpoints';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
-import ComponentDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentDto';
 
 export function useComponentsNameSet() {
   return useQuery({
@@ -24,7 +23,7 @@ export const componentNameSetAddMutation = (queryClient: QueryClient) => useMuta
   onSuccess: () => {
     showSuccessMessage("components_name_set_add_success", "Набор компонентов успешно добавлен");
   },
-  onError: (error, newComponentNameSet, context) => {
+  onError: (error, _, context) => {
     if (context?.previous) {
       queryClient.setQueryData<ComponentNameSetDto[]>(['components_name_set'], context.previous)
     }
@@ -41,19 +40,19 @@ export const componentNameSetAddMutation = (queryClient: QueryClient) => useMuta
 });
 
 export const componentNameSetEditMutation = (queryClient: QueryClient) => useMutation({
-  mutationFn: ({ id, oldName, component }: { id: number; oldName: string; component: ComponentDto }) =>
+  mutationFn: ({ id, oldName, component }: { id: number; oldName: string; component: ComponentNameSetDto }) =>
     ComponentNameSetController.updateComponent(id, oldName, component),
-  onMutate: async (newComponent) => {
+  onMutate: async (newComponentNameSet) => {
     await queryClient.cancelQueries({ queryKey: ['components_name_set'] });
     const previous = queryClient.getQueryData<ComponentNameSetDto[]>(['components_name_set']);
     queryClient.setQueryData<ComponentNameSetDto[]>(['components_name_set'], old => [...(old as ComponentNameSetDto[]),
-      (newComponent as ComponentNameSetDto)]);
+      (newComponentNameSet.component as ComponentNameSetDto)]);
     return { previous }
   },
   onSuccess: () => {
     showSuccessMessage("components_name_set_edit_success", "Набор компонентов обновлен");
   },
-  onError: (error, newComponentNameSet, context) => {
+  onError: (error, _, context) => {
     if (context?.previous) {
       queryClient.setQueryData<ComponentNameSetDto[]>(['components_name_set'], context.previous)
     }
@@ -70,16 +69,16 @@ export const componentNameSetEditMutation = (queryClient: QueryClient) => useMut
 
 export const componentNameSetDelete = (queryClient: QueryClient) => useMutation({
   mutationFn: ComponentNameSetController.deleteComponent,
-  onMutate: async (newTodo) => {
+  onMutate: async (newComponentNameSet) => {
     await queryClient.cancelQueries({ queryKey: ['components_name_set'] });
     const previous = queryClient.getQueryData<ComponentNameSetDto[]>(['components_name_set']);
-    queryClient.setQueryData<ComponentNameSetDto[]>(['components_name_set'], old => old?.filter((t) => t.id !== newTodo));
+    queryClient.setQueryData<ComponentNameSetDto[]>(['components_name_set'], old => old?.filter((t) => t.id !== newComponentNameSet));
     return { previous }
   },
   onSuccess: () => {
     showSuccessMessage("components_name_set_delete_success", "Набор компонентов успешно удалён");
   },
-  onError: (error, newComponentNameSet, context) => {
+  onError: (error, _, context) => {
     queryClient.setQueryData<ComponentNameSetDto[]>(['components_name_set'], context?.previous);
     if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
       showErrorMessage("components_name_set_delete_error", error.message);
@@ -92,11 +91,11 @@ export const componentNameSetDelete = (queryClient: QueryClient) => useMutation(
   }
 });
 
-const validateRequired = (value: string) => !!value.length;
+const validateRequired = (value: string) => !!value.trim().length;
 
-export function validateComponentNameSet(component: ComponentDto) {
+export function validateComponentNameSet(componentNameSetDto: ComponentNameSetDto) {
   return {
-    name: !validateRequired(component?.name ?? "")
+    name: !validateRequired(componentNameSetDto?.name ?? "")
       ? 'Название не может быть пустым'
       : '',
   };

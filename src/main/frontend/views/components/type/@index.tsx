@@ -14,41 +14,26 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { ConfirmDialog } from '@vaadin/react-components/ConfirmDialog.js';
 import { useSignal } from '@vaadin/hilla-react-signals';
 import { useQueryClient } from '@tanstack/react-query';
-import AppsIcon from '@mui/icons-material/Apps';
 import {
-  componentNameSetAddMutation, componentNameSetDelete, componentNameSetEditMutation,
-  useComponentsNameSet,
-  validateComponentNameSet
-} from 'Frontend/components/api/components_name_set';
-import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
-import ComponentDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentDto';
-import { validateComponent } from 'Frontend/components/api/components';
+  componentAddMutation,
+  componentDelete, componentEditMutation,
+  useComponents,
+  validateComponent
+} from 'Frontend/components/api/components_type';
+import ComponentTypeDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentTypeDto';
 
-const ComponentsNameSet = () => {
+const ComponentsType = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
   const queryClient = useQueryClient();
   const openDialog = useSignal(false);
-  const componentNameSetName = useSignal("");
-  const componentNameSetId = useSignal(-1);
-  const {data: componentNameSet, isError, isLoading, refetch, isRefetching } = useComponentsNameSet();
-  const { mutateAsync: addComponentNameSet, isPending: isCreatingComponentNameSet } = componentNameSetAddMutation(queryClient);
-  const { mutateAsync: editComponentNameSet, isPending: isUpdatingComponentNameSet } = componentNameSetEditMutation(queryClient);
-  const { mutate: deleteComponentNameSet, isPending: isDeletingComponentNameSet } = componentNameSetDelete(queryClient);
-
-  const handleCreateComponentNameSet: MRT_TableOptions<ComponentNameSetDto>['onCreatingRowSave'] = async ({values, table}) => {
-    const newValidationErrors = validateComponentNameSet(values);
-    if (Object.values(newValidationErrors).some((error) => error)) {
-      setValidationErrors(newValidationErrors);
-      return;
-    }
-    setValidationErrors({});
-    try {
-      await addComponentNameSet(values);
-    } catch (error) {}
-    table.setCreatingRow(null);
-  };
-
-  const handleSaveComponentNameSet: MRT_TableOptions<ComponentDto>['onEditingRowSave'] = async ({values, table}) => {
+  const componentName = useSignal("");
+  const componentId = useSignal(-1);
+  const {data: components, isError, isLoading, refetch, isRefetching } = useComponents();
+  const { mutateAsync: addComponent, isPending: isCreatingComponent } = componentAddMutation(queryClient);
+  const { mutateAsync: editComponent, isPending: isUpdatingComponent } = componentEditMutation(queryClient);
+  const { mutate: deleteComponent, isPending: isDeletingComponent } = componentDelete(queryClient);
+  
+  const handleCreateComponent: MRT_TableOptions<ComponentTypeDto>['onCreatingRowSave'] = async ({values, table}) => {
     const newValidationErrors = validateComponent(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);
@@ -56,16 +41,29 @@ const ComponentsNameSet = () => {
     }
     setValidationErrors({});
     try {
-      await editComponentNameSet({id: componentNameSetId.value, oldName: componentNameSetName.value, component: values});
+      await addComponent(values);
+    } catch (error) {}
+    table.setCreatingRow(null);
+  };
+
+  const handleSaveComponent: MRT_TableOptions<ComponentTypeDto>['onEditingRowSave'] = async ({values, table}) => {
+    const newValidationErrors = validateComponent(values);
+    if (Object.values(newValidationErrors).some((error) => error)) {
+      setValidationErrors(newValidationErrors);
+      return;
+    }
+    setValidationErrors({});
+    try {
+      await editComponent({id: componentId.value, oldName: componentName.value, component: values});
     } catch (error) {}
     table.setEditingRow(null);
   };
 
-  const componentNameSetColumns = useMemo<MRT_ColumnDef<ComponentNameSetDto>[]>(
+  const componentsColumn = useMemo<MRT_ColumnDef<ComponentTypeDto>[]>(
     () => [
       {
-        accessorKey: 'name', //access nested data with dot notation
-        header: 'Название набора компонентов',
+        accessorKey: 'name',
+        header: 'Название компонента',
         size: 50,
         muiEditTextFieldProps: {
           required: true,
@@ -84,14 +82,14 @@ const ComponentsNameSet = () => {
 
   const table = useMaterialReactTable({
     initialState: { showColumnFilters: true, density: 'compact' },
-    columns: componentNameSetColumns,
+    columns: componentsColumn,
     localization: MRT_Localization_RU,
     positionActionsColumn: 'last',
     enableRowActions: true,
     paginationDisplayMode: 'pages',
     state: {
       isLoading,
-      isSaving: isCreatingComponentNameSet || isUpdatingComponentNameSet || isDeletingComponentNameSet,
+      isSaving: isCreatingComponent || isUpdatingComponent || isDeletingComponent,
       showAlertBanner: isError,
       showProgressBars: isRefetching || isLoading,
     },
@@ -106,34 +104,25 @@ const ComponentsNameSet = () => {
           variant="contained"
           color="primary"
           onClick={() => table.setCreatingRow(true)}>
-          Создать новый набор компонентов
+          Создать новый тип компонента
         </Button>
       </Box>
     ),
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip title="Изменить название">
+        <Tooltip title="Edit">
           <IconButton onClick={() => {
-            componentNameSetName.value = row.original?.name ?? "";
-            componentNameSetId.value = row.original?.id ?? -1;
+            componentName.value = row.original?.name ?? "";
+            componentId.value = row.original?.id ?? -1;
             table.setEditingRow(row)
           }}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Изменить набор">
-          <IconButton onClick={() => {
-            componentNameSetName.value = row.original?.name ?? "";
-            componentNameSetId.value = row.original?.id ?? -1;
-            openDialog.value = true;
-          }}>
-            <AppsIcon />
-          </IconButton>
-        </Tooltip>
         <Tooltip title="Delete">
           <IconButton color="error" onClick={() => {
-            componentNameSetName.value = row.original?.name ?? "";
-            componentNameSetId.value = row.original?.id ?? -1;
+            componentName.value = row.original?.name ?? "";
+            componentId.value = row.original?.id ?? -1;
             openDialog.value = true;
           }}>
             <DeleteIcon />
@@ -147,14 +136,14 @@ const ComponentsNameSet = () => {
         children: 'Ошибка при загрузке данных',
       }
       : undefined,
-    data: componentNameSet || {} as ComponentNameSetDto[],
+    data: components || {} as ComponentTypeDto[],
     createDisplayMode: 'row', // ('modal', and 'custom' are also available)
     editDisplayMode: 'row', // ('modal', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
     onCreatingRowCancel: () => setValidationErrors({}),
-    onCreatingRowSave: handleCreateComponentNameSet,
+    onCreatingRowSave: handleCreateComponent,
     onEditingRowCancel: () => setValidationErrors({}),
-    onEditingRowSave: handleSaveComponentNameSet,
+    onEditingRowSave: handleSaveComponent,
     muiTablePaperProps: ({ table }) => ({
       style: {
         zIndex: table.getState().isFullScreen ? 3000 : undefined,
@@ -166,7 +155,7 @@ const ComponentsNameSet = () => {
     <>
       <ConfirmDialog
         key={"dialog"}
-        header='Удаление набор компонетнов'
+        header='Удаление пользователя'
         cancelButtonVisible
         confirmText="Удалить"
         confirmTheme="error primary"
@@ -175,16 +164,15 @@ const ComponentsNameSet = () => {
           openDialog.value = false;
         }}
         onConfirm={() => {
-          deleteComponentNameSet(componentNameSetId.value);
+          deleteComponent(componentId.value);
           openDialog.value = false;
-          componentNameSetName.value = "";
-          componentNameSetId.value = -1;
+          componentName.value = "";
+          componentId.value = -1;
         }}
       >
-        <p> Вы уверены, что хотите удалить набор компонентов: {componentNameSetName.value} ? </p>
+        <p> Вы уверены, что хотите удалить компонент: {componentName.value} </p>
       </ConfirmDialog>
-      <Container maxWidth={'xl'}
-                 sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', marginTop: '5em'}} >
+      <Container maxWidth={"xl"} sx={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%', marginTop: '5em'}} >
         <MaterialReactTable table={table} />
       </Container>
     </>
@@ -192,10 +180,10 @@ const ComponentsNameSet = () => {
 
 };
 
-export default ComponentsNameSet;
+export default ComponentsType;
 
 export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
-  title: "Создание набора компонентов"
+  title: "Комопненты"
 };

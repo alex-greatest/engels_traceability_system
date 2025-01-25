@@ -1,9 +1,13 @@
 package com.rena.application.entity.dto.component;
 
+import com.vaadin.hilla.Nonnull;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  * DTO for {@link com.rena.application.entity.model.component.ComponentNameSet}
  */
-public record ComponentNameSetDto(Long id, @NotBlank(message = "Поле не может быть пустым") String name) {
+public record ComponentNameSetDto(Long id,
+                                  @Nonnull @NotBlank @Size(message = "Длина должна быть больше 1 и меньше 50 символов", min = 1, max = 50)
+                                  String name) {
 }

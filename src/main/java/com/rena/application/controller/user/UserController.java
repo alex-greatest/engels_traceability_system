@@ -11,6 +11,7 @@ import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @Nonnull
-    public UserResponse getUser(@Nonnull Integer code)
+    public UserResponse getUser(@Nonnull @NotNull Integer code)
     {
         return userService.getUser(code);
     }
@@ -47,7 +48,7 @@ public class UserController {
         }
     }
 
-    public void updateUser(@Nonnull Integer code, @Valid UserRequestUpdate userRequest) {
+    public void updateUser(@Nonnull @NotNull Integer code, @Valid UserRequestUpdate userRequest) {
         try {
             userService.updateUser(code, userRequest);
         } catch (DataAccessException e) {
@@ -57,7 +58,7 @@ public class UserController {
         }
     }
 
-    public void updatePasswordUser(@Nonnull Integer code, @Valid UserRequestPassword userRequest) {
+    public void updatePasswordUser(@Nonnull @NotNull Integer code, @Valid UserRequestPassword userRequest) {
         try {
             userService.updatePasswordUser(code, userRequest);
         } catch (DataAccessException e) {
@@ -67,7 +68,7 @@ public class UserController {
         }
     }
 
-    public void deleteUser(@Nonnull Integer code) {
+    public void deleteUser(@Nonnull @NotNull Integer code) {
         try {
             userService.deleteUser(code);
         } catch (DataAccessException e) {

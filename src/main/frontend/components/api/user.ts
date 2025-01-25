@@ -82,7 +82,7 @@ export const userDelete = (queryClient: QueryClient) => useMutation({
   onSuccess: () => {
     showSuccessMessage("users_delete_success", "Пользователь успешно удалён");
   },
-  onError: (error, newUser, context) => {
+  onError: (error, _, context) => {
     if (context?.previous) {
       queryClient.setQueryData<UserResponse[]>(['users'], context.previous)
     }

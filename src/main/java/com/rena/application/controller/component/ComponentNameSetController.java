@@ -9,6 +9,7 @@ import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -45,22 +46,22 @@ public class ComponentNameSetController {
         }
     }
 
-    public void updateComponent(@Nonnull Long id, @NotBlank String oldNameComponent, @Valid ComponentNameSetDto componentNameSetDto) {
+    public void updateComponent(@Nonnull @NotNull Long id, @NotBlank String oldNameComponent, @Valid ComponentNameSetDto componentNameSetDto) {
         try {
             componentNameSetService.updateComponent(id, oldNameComponent, componentNameSetDto);
         }
         catch (DataAccessException e) {
-            log.error("Ошибка при обновлении компонента", e);
+            log.error("Ошибка при обновлении имени набора компонентов", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }
     }
 
-    public void deleteComponent(@Nonnull Long id) {
+    public void deleteComponent(@Nonnull @NotNull Long id) {
         try {
             componentNameSetService.deleteComponent(id);
         } catch (DataAccessException e) {
-            log.error("Ошибка при удалении компонента", e);
+            log.error("Ошибка при удалении имени набора компонентов", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }

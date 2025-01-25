@@ -11,7 +11,7 @@ import org.hibernate.type.SqlTypes;
 @Setter
 @Entity
 @Table(name = "component_set", indexes = {
-        @Index(name = "idx_component_set", columnList = "component_id"),
+        @Index(name = "idx_component_set", columnList = "component_type_id"),
         @Index(name = "idx_component_name_set", columnList = "component_name_set_id"),
         @Index(name = "idx_component_set_value", columnList = "value")
 })
@@ -22,14 +22,14 @@ public class ComponentSet {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "component_name_set_id")
     private ComponentNameSet componentNameSet;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "component_id")
-    private Component component;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "component_type_id")
+    private ComponentType componentType;
 
     @NotNull
     @Column(name = "value", nullable = false, length = 50)

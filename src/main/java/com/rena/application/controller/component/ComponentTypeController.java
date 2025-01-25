@@ -1,14 +1,15 @@
 package com.rena.application.controller.component;
 
-import com.rena.application.entity.dto.component.ComponentDto;
+import com.rena.application.entity.dto.component.ComponentTypeDto;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.service.HandlerErrorConstraintDB;
-import com.rena.application.service.component.ComponentService;
+import com.rena.application.service.component.ComponentTypeService;
 import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -20,47 +21,47 @@ import java.util.List;
 @Validated
 @RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
 @Slf4j
-public class ComponentController {
-    private final ComponentService componentService;
+public class ComponentTypeController {
+    private final ComponentTypeService componentTypeService;
     private final HandlerErrorConstraintDB handlerErrorConstraintDB;
 
     @Nonnull
-    public List<@Nonnull ComponentDto> getAllComponents() {
-        return componentService.getAllComponents();
+    public List<@Nonnull ComponentTypeDto> getAllComponents() {
+        return componentTypeService.getAllComponents();
     }
 
     @Nonnull
-    public ComponentDto getComponent(@Nonnull Long id)
+    public ComponentTypeDto getComponent(@Nonnull @NotNull Long id)
     {
-        return componentService.getComponent(id);
+        return componentTypeService.getComponent(id);
     }
 
-    public void addComponent(@Valid ComponentDto componentDto) {
+    public void addComponent(@Valid ComponentTypeDto componentTypeDto) {
         try {
-            componentService.addComponent(componentDto);
+            componentTypeService.addComponent(componentTypeDto);
         } catch (DataAccessException e) {
-            log.error("Ошибка при добавлении компонента", e);
+            log.error("Ошибка при добавлении типа компонента", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }
     }
 
-    public void updateComponent(@Nonnull Long id, @NotBlank String oldNameComponent, @Valid ComponentDto componentDto) {
+    public void updateComponent(@Nonnull @NotNull Long id, @NotBlank String oldNameComponent, @Valid ComponentTypeDto componentTypeDto) {
         try {
-            componentService.updateComponent(id, oldNameComponent, componentDto);
+            componentTypeService.updateComponent(id, oldNameComponent, componentTypeDto);
         }
         catch (DataAccessException e) {
-            log.error("Ошибка при обновлении компонента", e);
+            log.error("Ошибка при обновлении типа компонента", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }
     }
 
-    public void deleteComponent(@Nonnull Long id) {
+    public void deleteComponent(@Nonnull @NotNull Long id) {
         try {
-            componentService.deleteComponent(id);
+            componentTypeService.deleteComponent(id);
         } catch (DataAccessException e) {
-            log.error("Ошибка при удалении компонента", e);
+            log.error("Ошибка при удалении типа компонента", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }

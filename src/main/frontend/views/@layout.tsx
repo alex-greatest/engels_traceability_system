@@ -1,8 +1,10 @@
 import { useViewConfig } from '@vaadin/hilla-file-router/runtime.js';
 import { effect, signal, useSignal } from '@vaadin/hilla-react-signals';
-import { AppLayout, DrawerToggle, Icon, SideNav, SideNavItem } from '@vaadin/react-components';
+import { AppLayout, Button, DrawerToggle, Icon, SideNav, SideNavItem, Tooltip } from '@vaadin/react-components';
 import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from 'Frontend/components/config/auth/auth';
+
 
 const documentTitleSignal = signal('');
 effect(() => {
@@ -17,6 +19,7 @@ export default function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const isCollapsed = useSignal(true);
+  const { logout } = useAuth();
 
   useEffect(() => {
     if (currentTitle) {
@@ -60,11 +63,11 @@ export default function MainLayout() {
               <SideNav onCollapsedChanged={(event) => isCollapsed.value = event.detail.value }
                        style={{ width: '100%' }} collapsible collapsed={isCollapsed.value}>
                 <span slot="label">Компоненты</span>
-                <SideNavItem path={'/components'} key={'components_key'}>
+                <SideNavItem path={'/components/type'} key={'components_type_key'}>
                   <Icon icon="vaadin:compile" slot="prefix" />
                   Типы компонентов
                 </SideNavItem>
-                <SideNavItem path={'/components_name_set'} key={'components_name_set_key'}>
+                <SideNavItem path={'/components/name_set'} key={'components_name_set_key'}>
                   <Icon icon="vaadin:archives" slot="prefix" />
                   Набор компонентов
                 </SideNavItem>
@@ -74,16 +77,22 @@ export default function MainLayout() {
       </div>
 
         <DrawerToggle slot="navbar" aria-label="Menu toggle"></DrawerToggle>
-        <h1 slot="navbar" className="text-l m-0">
-            {documentTitleSignal}
-        </h1>
+      <h1 slot="navbar" style={{ width: '100%', alignItems: 'center' }} className="text-l m-0 flex">
+        {documentTitleSignal}
+        <div style={{ marginLeft: 'auto', marginRight: '2em' }}>
+          <Button onClick={logout} theme="icon" aria-label="Close">
+            <Icon icon="vaadin:close-small" />
+            <Tooltip slot="tooltip" text="Выход" />
+          </Button>
+        </div>
+      </h1>
 
-        <Suspense fallback={"Loading..."}>
-          <div className={"container_outer"}>
-            <Outlet/>
-          </div>
+      <Suspense fallback={"Loading..."}>
+        <div className={"container_outer"}>
+          <Outlet />
+        </div>
 
-        </Suspense>
+      </Suspense>
     </AppLayout>
   );
 }

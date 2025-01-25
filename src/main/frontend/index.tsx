@@ -10,13 +10,14 @@
  *     - `index.js` is also supported if you don't want to use TypeScript.
  ******************************************************************************/
 
-import {createContext, createElement} from 'react';
+import { createContext, createElement, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
 import {AuthProvider} from "Frontend/components/config/auth/auth";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
+import { Loading } from 'Frontend/components/config/Loading';
 
 const Context = createContext(null);
 
@@ -27,7 +28,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
             <Context.Provider value={null}>
-                <RouterProvider router={router} />
+                <Suspense fallback={<Loading />}>
+                    <RouterProvider router={router} />
+                </Suspense>
                 <ToastContainer />
             </Context.Provider>
         </AuthProvider>
