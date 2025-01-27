@@ -1,12 +1,12 @@
-package com.rena.application.service.boiler;
+package com.rena.application.service.boiler_type;
 
 import com.rena.application.config.security.UserInfo;
 import com.rena.application.config.security.UserInfoService;
-import com.rena.application.entity.model.boiler.BoilerHistory;
+import com.rena.application.entity.model.boiler.BoilerTypeHistory;
 import com.rena.application.entity.model.component.ComponentNameSetHistory;
 import com.rena.application.entity.model.user.UserHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.boiler.BoilerHistoryRepository;
+import com.rena.application.repository.boiler_type.BoilerTypeHistoryRepository;
 import com.rena.application.repository.component.ComponentNameSetHistoryRepository;
 import com.rena.application.repository.user.UserHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class BoilerHistoryService {
+public class BoilerTypeHistoryService {
     private final ComponentNameSetHistoryRepository componentNameSetHistoryRepository;
-    private final BoilerHistoryRepository boilerHistoryRepository;
+    private final BoilerTypeHistoryRepository boilerTypeHistoryRepository;
     private final UserInfoService userInfoService;
     private final UserHistoryRepository userHistoryRepository;
 
@@ -33,14 +33,17 @@ public class BoilerHistoryService {
         ComponentNameSetHistory componentNameSetHistory =
                 componentNameSetHistoryRepository.findByNameAndIsActive(componentNameSet, true).
                         orElseThrow(() -> new RecordNotFoundException("Не удалось сохранить историю. Набор компонентов не найден"));
-        BoilerHistory boilerHistory = new BoilerHistory();
-        boilerHistory.setBoilerId(boilerId);
-        boilerHistory.setArticle(article);
-        boilerHistory.setOldArticle(oldArticle != null && typeOperation == 2 ? oldArticle : null);
-        boilerHistory.setIsActive(isActive);
-        boilerHistory.setUserHistory(userHistory);
-        boilerHistory.setModifiedDate(LocalDateTime.now());
-        boilerHistoryRepository.save(boilerHistory);
+        BoilerTypeHistory boilerTypeHistory = new BoilerTypeHistory();
+        boilerTypeHistory.setBoilerId(boilerId);
+        boilerTypeHistory.setArticle(article);
+        boilerTypeHistory.setOldArticle(oldArticle != null && typeOperation == 2 ? oldArticle : null);
+        boilerTypeHistory.setIsActive(isActive);
+        boilerTypeHistory.setUserHistory(userHistory);
+        boilerTypeHistory.setModifiedDate(LocalDateTime.now());
+        boilerTypeHistory.setComponentNameSetHistory(componentNameSetHistory);
+        boilerTypeHistory.setTypeOperation(typeOperation);
+        boilerTypeHistory.setName(name);
+        boilerTypeHistoryRepository.save(boilerTypeHistory);
     }
 
     private void changeActiveStatusOld(Long boilerId, int typeOperation)
@@ -48,9 +51,9 @@ public class BoilerHistoryService {
         if (typeOperation == 1 || boilerId == null) {
             return;
         }
-        boilerHistoryRepository.findByBoilerIdAndIsActive(boilerId, true).ifPresent((c) -> {
+        boilerTypeHistoryRepository.findByBoilerIdAndIsActive(boilerId, true).ifPresent((c) -> {
             c.setIsActive(false);
-            boilerHistoryRepository.save(c);
+            boilerTypeHistoryRepository.save(c);
         });
     }
 }

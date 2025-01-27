@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "boiler_history", indexes = {
-        @Index(name = "idx_boiler_history_article_article_is_active", columnList = "article, is_active"),
-        @Index(name = "idx_boiler_history_name_name", columnList = "name"),
-        @Index(name = "idx_boiler_history_component_name_set", columnList = "component_name_set_history_id"),
-        @Index(name = "idx_boiler_history_user_history_id", columnList = "user_history_id")
+@Table(name = "boiler_type_history", indexes = {
+        @Index(name = "idx_boiler_type_history_article_article_is_active", columnList = "article, is_active"),
+        @Index(name = "idx_boiler_type_history_name_name", columnList = "name"),
+        @Index(name = "idx_boiler_type_history_component_name_set", columnList = "component_name_set_history_id"),
+        @Index(name = "idx_boiler_type_history_user_history_id", columnList = "user_history_id")
 })
-public class BoilerHistory {
+public class BoilerTypeHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -30,7 +30,7 @@ public class BoilerHistory {
     private Long boilerId;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 50)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String name;
 
@@ -39,8 +39,7 @@ public class BoilerHistory {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String article;
 
-    @NotNull
-    @Column(name = "old_article", nullable = false)
+    @Column(name = "old_article", length = 50)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String oldArticle;
 

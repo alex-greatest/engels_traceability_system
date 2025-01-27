@@ -56,9 +56,13 @@ export default function MainLayout() {
             </div>
 
             <SideNav color={"--lumo-primary-color"} onNavigate={({path}) => navigate(path!)} location={location}>
-              <SideNavItem path={'/users'} key={"index"}>
+              <SideNavItem path={'/users'} key={"users"}>
                 <Icon icon="vaadin:users" slot="prefix" />
                 Пользователи
+              </SideNavItem>
+              <SideNavItem path={'/boiler_type'} key={"boiler_type"}>
+                <Icon icon="vaadin:cube" slot="prefix" />
+                Типы котлов
               </SideNavItem>
               <SideNav onCollapsedChanged={(event) => isCollapsed.value = event.detail.value }
                        style={{ width: '100%' }} collapsible collapsed={isCollapsed.value}>

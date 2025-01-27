@@ -16,10 +16,8 @@ import {
   componentSetAddMutation, componentSetCopyAllComponentsSetMutation,
   componentSetDelete,
   componentSetEditMutation,
-  errorMessage,
   useComponentSet,
   validateComponentSet,
-  validateLength
 } from 'Frontend/components/api/components_set';
 import { Loading } from 'Frontend/components/config/Loading';
 import ComponentTypeDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentTypeDto';
@@ -27,6 +25,7 @@ import ComponentSetDto from 'Frontend/generated/com/rena/application/entity/dto/
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ConfirmDialog } from '@vaadin/react-components/ConfirmDialog';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { errorMessageLength50, validateLength } from 'Frontend/components/api/helper';
 
 const responsiveSteps = [
   { minWidth: '0', columns: 2 },
@@ -83,6 +82,7 @@ const ComponentsSet = () => {
   };
 
   const handleEditComponentSet = async () => {
+    console.log(editedComponentSet);
     if (Object.values(validationErrors).some((error) => !!error)) return;
     await editComponentSet(Object.values(editedComponentSet));
     setEditedComponentSet({});
@@ -100,17 +100,20 @@ const ComponentsSet = () => {
             row._valuesCache[column.id] = event.target.value;
             if (!isCreatingRowComponentSet.value) {
               const validationError = !validateLength(event.target.value)
-                ? errorMessage
+                ? errorMessageLength50
                 : undefined;
               setValidationErrors({
                 ...validationErrors,
                 [cell.id]: validationError,
               });
-              const componentSet = componentsSetList?.componentsTypeList.find(c => c.name === event.target.value);
+              const componentType = componentsSetList?.componentsTypeList.find(c => c.name === event.target.value);
+              const componentSetDto: ComponentSetDto = {id: row.original.id, componentType: componentType || {name: ""},
+                value: row.original.value};
+              /*const componentSet = componentsSetList?.componentsTypeList.find(c => c.name === event.target.value);
               if (componentSet !== undefined) {
                 row.original.componentType = componentSet;
-              }
-              setEditedComponentSet({ ...editedComponentSet, [row.id]: row.original});
+              }*/
+              setEditedComponentSet({ ...editedComponentSet, [row.id]: componentSetDto});
             }
           };
 
@@ -145,14 +148,19 @@ const ComponentsSet = () => {
           onBlur: (event) => {
             if (!isCreatingRowComponentSet.value) {
               const validationError = !validateLength(event.target.value)
-                ? errorMessage
+                ? errorMessageLength50
                 : undefined;
               setValidationErrors({
                 ...validationErrors,
                 [cell.id]: validationError,
               });
-              row.original.value = event.target.value
-              setEditedComponentSet({ ...editedComponentSet, [row.id]: row.original });
+              const componentSetDto: ComponentSetDto = {id: row.original.id,
+                componentType: row.original.componentType || {name: ""}, value: event.target.value};
+              const componentType = editedComponentSet[row.id]?.componentType;
+              if (componentType !== undefined) {
+                componentSetDto.componentType = componentType;
+              }
+              setEditedComponentSet({ ...editedComponentSet, [row.id]: componentSetDto });
             }
           },
           onFocus: () =>

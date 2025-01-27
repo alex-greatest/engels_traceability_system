@@ -4,6 +4,12 @@ import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config
 import { EndpointError } from '@vaadin/hilla-frontend';
 import ComponentSetList from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentSetList';
 import ComponentSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentSetDto';
+import {
+  errorMessageEmpty,
+  errorMessageLength50,
+  validateLength,
+  validateRequired
+} from 'Frontend/components/api/helper';
 
 export function useComponentSet(id: number, url: string) {
   return useQuery({
@@ -101,15 +107,11 @@ export const componentSetCopyAllComponentsSetMutation = (queryClient: QueryClien
   },
 })
 
-export const errorMessage = "Длина должна быть больше 0 и меньше 50";
-
-export const validateLength = (value: string) => value.length > 0 && value.length <= 50 ;
-
 export function validateComponentSet(componentSetDto: ComponentSetDto) {
   return {
-    'mrt-row-create_componentType.name': !validateLength(componentSetDto.componentType?.name ?? "")
-      ? errorMessage
+    'mrt-row-create_componentType.name': !validateRequired(componentSetDto.componentType?.name ?? "")
+      ? errorMessageEmpty
       : undefined,
-    'mrt-row-create_value': !validateLength(componentSetDto.value ?? "") ? errorMessage : undefined,
+    'mrt-row-create_value': !validateLength(componentSetDto.value ?? "") ? errorMessageLength50 : undefined,
   };
 }

@@ -83,7 +83,7 @@ public class ComponentSetService {
                 orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
         componentSetHistoryService.addComponentHistory(componentSet.getId(), null,
                 componentSet.getComponentNameSet().getName(),
-                componentSet.getComponentType().getName(), componentSet.getValue(), true, 3);
+                componentSet.getComponentType().getName(), componentSet.getValue(), false, 3);
         componentSetRepository.delete(componentSet);
     }
 

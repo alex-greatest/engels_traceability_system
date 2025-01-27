@@ -3,6 +3,7 @@ import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config
 import { EndpointError } from '@vaadin/hilla-frontend';
 import { ComponentNameSetController } from 'Frontend/generated/endpoints';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
+import { errorMessageEmpty, validateRequired } from 'Frontend/components/api/helper';
 
 export function useComponentsNameSet() {
   return useQuery({
@@ -90,12 +91,10 @@ export const componentNameSetDelete = (queryClient: QueryClient) => useMutation(
   }
 });
 
-const validateRequired = (value: string) => !!value.trim().length;
-
 export function validateComponentNameSet(componentNameSetDto: ComponentNameSetDto) {
   return {
     name: !validateRequired(componentNameSetDto?.name ?? "")
-      ? 'Название не может быть пустым'
+      ? errorMessageEmpty
       : '',
   };
 }
