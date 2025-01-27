@@ -36,7 +36,7 @@ public class ComponentNameSetController {
         return componentNameSetService.getComponent(id);
     }
 
-    public void addComponent(@Valid ComponentNameSetDto componentNameSetDto) {
+    public void addComponent(@Nonnull @Valid ComponentNameSetDto componentNameSetDto) {
         try {
             componentNameSetService.addComponent(componentNameSetDto);
         } catch (DataAccessException e) {
@@ -46,7 +46,8 @@ public class ComponentNameSetController {
         }
     }
 
-    public void updateComponent(@Nonnull @NotNull Long id, @NotBlank String oldNameComponent, @Valid ComponentNameSetDto componentNameSetDto) {
+    public void updateComponent(@Nonnull @NotNull Long id, @NotBlank String oldNameComponent,
+                                @Nonnull @Valid ComponentNameSetDto componentNameSetDto) {
         try {
             componentNameSetService.updateComponent(id, oldNameComponent, componentNameSetDto);
         }

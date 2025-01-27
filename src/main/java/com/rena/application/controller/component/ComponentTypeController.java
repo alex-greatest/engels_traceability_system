@@ -46,9 +46,9 @@ public class ComponentTypeController {
         }
     }
 
-    public void updateComponent(@Nonnull @NotNull Long id, @NotBlank String oldNameComponent, @Valid ComponentTypeDto componentTypeDto) {
+    public void updateComponent(@Nonnull @NotNull Long id, @Valid ComponentTypeDto componentTypeDto) {
         try {
-            componentTypeService.updateComponent(id, oldNameComponent, componentTypeDto);
+            componentTypeService.updateComponent(id, componentTypeDto);
         }
         catch (DataAccessException e) {
             log.error("Ошибка при обновлении типа компонента", e);

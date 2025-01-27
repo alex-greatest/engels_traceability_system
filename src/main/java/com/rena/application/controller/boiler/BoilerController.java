@@ -1,10 +1,9 @@
-package com.rena.application.controller.component;
+package com.rena.application.controller.boiler;
 
-import com.rena.application.entity.dto.component.ComponentSetDto;
-import com.rena.application.entity.dto.component.ComponentSetList;
+import com.rena.application.entity.dto.boiler.BoilerDto;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.service.HandlerErrorConstraintDB;
-import com.rena.application.service.component.ComponentSetService;
+import com.rena.application.service.boiler.BoilerService;
 import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
@@ -21,47 +20,42 @@ import java.util.List;
 @Validated
 @RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
 @Slf4j
-public class ComponentSetController {
-    private final ComponentSetService componentSetService;
+public class BoilerController {
+    private final BoilerService boilerService;
     private final HandlerErrorConstraintDB handlerErrorConstraintDB;
 
     @Nonnull
-    public ComponentSetList getAllComponentSet(@Nonnull @NotNull Long id) {
-        return componentSetService.getAllComponentsSet(id);
+    public List<BoilerDto> getAllBoiler() {
+        return boilerService.getAllBoilers();
     }
 
-    public void addComponentSet(@Nonnull @NotNull Long componentNameSetId,
-                                @Nonnull @Valid ComponentSetDto componentSetDto) {
+    public void addBoiler(@Nonnull @Valid BoilerDto boilerDto) {
         try {
-            componentSetService.addComponentSet(componentNameSetId, componentSetDto);
+            boilerService.addBoiler(boilerDto);
         } catch (DataAccessException e) {
-            log.error("Ошибка при добавлении компонента", e);
+            log.error("Ошибка при добавлении котла", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }
     }
 
-    public void updateComponentSet(@Nonnull @NotNull List<@Nonnull @Valid ComponentSetDto> componentsSetRequest) {
+    public void updateBoiler(@Nonnull @Valid BoilerDto boilerDto) {
         try {
-            componentSetService.updateComponentSet(componentsSetRequest);
+            boilerService.addBoiler(boilerDto);
         } catch (DataAccessException e) {
-            log.error("Ошибка при обновлении компонента", e);
+            log.error("Ошибка при обновлении котла", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }
     }
 
-    public void deleteComponent(@Nonnull @NotNull Long componentSetId) {
+    public void deleteBoiler(@Nonnull @NotNull Long id) {
         try {
-            componentSetService.deleteComponentSet(componentSetId);
+            boilerService.deleteComponent(id);
         } catch (DataAccessException e) {
             log.error("Ошибка при удалении компонента", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }
-    }
-
-    public void copyAllComponentsType(@Nonnull @NotNull Long componentSetId) {
-        componentSetService.copyAllComponentsType(componentSetId);
     }
 }

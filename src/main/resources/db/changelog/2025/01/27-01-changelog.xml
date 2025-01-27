@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1737969022755-1" author="Alexander (generated)">
+        <createTable tableName="boiler">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="component_name_set_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1737969022755-2" author="Alexander (generated)">
+        <createTable tableName="boiler_history">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler_history"/>
+            </column>
+            <column name="boiler_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="old_article" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="component_name_set_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_operation" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1737969022755-3" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="article" constraintName="uc_boiler_article" tableName="boiler"/>
+    </changeSet>
+    <changeSet id="1737969022755-4" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_boiler_name" tableName="boiler"/>
+    </changeSet>
+    <changeSet id="1737969022755-6" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_history_article_article_is_active" tableName="boiler_history">
+            <column name="article"/>
+            <column name="is_active"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1737969022755-8" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_history_name_name" tableName="boiler_history">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1737969022755-10" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="component_name_set_history_id" baseTableName="boiler_history"
+                                 constraintName="FK_BOILER_HISTORY_ON_COMPONENT_NAME_SET_HISTORY"
+                                 referencedColumnNames="id" referencedTableName="component_name_set_history"/>
+
+        <createIndex indexName="idx_boiler_history_component_name_set" tableName="boiler_history">
+            <column name="component_name_set_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1737969022755-11" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="boiler_history"
+                                 constraintName="FK_BOILER_HISTORY_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+
+        <createIndex indexName="idx_boiler_history_user_history_id" tableName="boiler_history">
+            <column name="user_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1737969022755-12" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="component_name_set_id" baseTableName="boiler"
+                                 constraintName="FK_BOILER_ON_COMPONENT_NAME_SET" referencedColumnNames="id"
+                                 referencedTableName="component_name_set"/>
+
+        <createIndex indexName="idx_boiler_component_name_set" tableName="boiler">
+            <column name="component_name_set_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

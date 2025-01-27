@@ -19,6 +19,7 @@ import java.util.List;
 public class ComponentTypeService {
     private final ComponentTypeRepository componentTypeRepository;
     private final ComponentTypeMapper componentTypeMapper;
+    private final ComponentTypeHistoryService componentTypeHistoryService;
 
     public List<ComponentTypeDto> getAllComponents() {
         List<ComponentType> componentType = componentTypeRepository.findAll();
@@ -35,13 +36,16 @@ public class ComponentTypeService {
     @Transactional
     public void addComponent(ComponentTypeDto componentTypeDto) {
         ComponentType componentType = componentTypeMapper.toEntity(componentTypeDto);
+        componentTypeHistoryService.addComponentTypeHistory(null, componentTypeDto.name(), true, 1);
         componentTypeRepository.save(componentType);
     }
 
     @Transactional
-    public void updateComponent(Long id, String oldNameComponent, ComponentTypeDto componentTypeDto) {
+    public void updateComponent(Long id, ComponentTypeDto componentTypeDto) {
         ComponentType componentType = componentTypeRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден"));
+        String oldComponentTypeName = componentType.getName();
+        componentTypeHistoryService.addComponentTypeHistory(oldComponentTypeName, componentTypeDto.name(), true, 2);
         componentType.setName(componentTypeDto.name());
         componentTypeRepository.save(componentType);
     }
@@ -50,6 +54,7 @@ public class ComponentTypeService {
     public void deleteComponent(Long id) {
         ComponentType componentType = componentTypeRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден"));
+        componentTypeHistoryService.addComponentTypeHistory(componentType.getName(), componentType.getName(), false, 3);
         componentTypeRepository.delete(componentType);
     }
 }

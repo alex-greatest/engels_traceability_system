@@ -30,6 +30,7 @@ public class ComponentSetService {
     private final ComponentTypeMapper componentTypeMapper;
     private final ComponentSetMapper componentSetMapper;
     private final ComponentNameSetMapper componentNameSetMapper;
+    private final ComponentSetHistoryService componentSetHistoryService;
 
     @Transactional
     public ComponentSetList getAllComponentsSet(Long componentNameSetId) {
@@ -54,13 +55,23 @@ public class ComponentSetService {
         componentSet.setComponentType(componentType);
         componentSet.setComponentNameSet(componentNameSet);
         componentSetRepository.save(componentSet);
+        componentSetHistoryService.addComponentHistory(componentSet.getId(), null, componentNameSet.getName(),
+                componentType.getName(), componentSetDto.value(), true, 1);
     }
 
     @Transactional
     public void updateComponentSet(List<ComponentSetDto> componentsSetDto) {
         componentsSetDto.forEach(componentSetResponse -> {
+            String componentTypeNameNew = componentSetResponse.componentType().name();
             ComponentSet componentSet = componentSetRepository.findByIdComponentSet(componentSetResponse.id()).
                     orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
+            ComponentType componentType = componentTypeRepository.findComponentTypeByName(componentTypeNameNew).
+                    orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден"));
+            String oldComponentTypeName = componentSet.getComponentType().getName();
+            componentSetHistoryService.addComponentHistory(componentSet.getId(), oldComponentTypeName,
+                    componentSet.getComponentNameSet().getName(),
+                    componentTypeNameNew, componentSetResponse.value(), true, 2);
+            componentSet.setComponentType(componentType);
             componentSet.setValue(componentSetResponse.value());
             componentSetRepository.save(componentSet);
         });
@@ -70,6 +81,9 @@ public class ComponentSetService {
     public void deleteComponentSet(Long id) {
         ComponentSet componentSet = componentSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
+        componentSetHistoryService.addComponentHistory(componentSet.getId(), null,
+                componentSet.getComponentNameSet().getName(),
+                componentSet.getComponentType().getName(), componentSet.getValue(), true, 3);
         componentSetRepository.delete(componentSet);
     }
 
@@ -84,6 +98,8 @@ public class ComponentSetService {
             componentSet.setComponentNameSet(componentNameSet);
             componentSet.setValue("0");
             componentSetRepository.save(componentSet);
+            componentSetHistoryService.addComponentHistory(componentSet.getId(), null, componentNameSet.getName(),
+                    componentType.getName(), componentSet.getValue(), true, 1);
         });
     }
 }

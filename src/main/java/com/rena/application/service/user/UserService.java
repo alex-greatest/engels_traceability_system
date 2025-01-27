@@ -68,7 +68,7 @@ public class UserService {
         var user = userMapper.toEntity(userRequest);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRole(role);
-        userHistoryService.addUserHistory(user.getCode(), user, role, true, 1);
+        userHistoryService.addUserHistory(null, null, user.getCode(), user, role, true, 1);
         userRepository.save(user);
     }
 
@@ -78,10 +78,12 @@ public class UserService {
         Role role = roleRepository.findByName(roleName);
         User user = userRepository.findByCode(code).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        String oldUsername = user.getUsername();
+        Integer oldCode = user.getCode();
         user.setCode(userRequest.code());
         user.setUsername(userRequest.username());
         user.setRole(role);
-        userHistoryService.addUserHistory(code, user, role, true, 2);
+        userHistoryService.addUserHistory(oldCode, oldUsername, code, user, role, true, 2);
         userRepository.save(user);
     }
 
@@ -89,14 +91,14 @@ public class UserService {
     public void updatePasswordUser(Integer code, UserRequestPassword userRequest) {
         User user = userRepository.findByCode(code).orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
         user.setPassword(bCryptPasswordEncoder.encode(userRequest.password()));
-        userHistoryService.addUserHistory(code, user, user.getRole(), true, 2);
+        userHistoryService.addUserHistory(code, null, code, user, user.getRole(), true, 4);
         userRepository.save(user);
     }
 
     @Transactional
     public void deleteUser(Integer code) {
         User user = userRepository.findByCode(code).orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-        userHistoryService.addUserHistory(code, user, user.getRole(), false, 3);
+        userHistoryService.addUserHistory(code, null, code, user, user.getRole(), false, 3);
         userRepository.delete(user);
     }
 }

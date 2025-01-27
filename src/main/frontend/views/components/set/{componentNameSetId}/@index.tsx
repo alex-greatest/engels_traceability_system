@@ -58,6 +58,14 @@ const ComponentsSet = () => {
     getOptionLabel: (option: ComponentTypeDto) => option.name,
   };
 
+  const resetEditing = () => {
+    isEnableEditing.value = false;
+    refetch().finally(() => {
+      isEnableEditing.value = true;
+      setEditedComponentSet({});
+    });
+  }
+
   const handleCreateComponentSet: MRT_TableOptions<ComponentSetDto>['onCreatingRowSave'] = async ({values, table}) => {
     const componentSetDto: ComponentSetDto = {componentType: {name: values['componentType.name']}, value: values.value};
     const newValidationErrors = validateComponentSet(componentSetDto);
@@ -71,21 +79,15 @@ const ComponentsSet = () => {
     } catch (error) {}
     table.setCreatingRow(null);
     isCreatingRowComponentSet.value = false;
+    resetEditing();
   };
 
   const handleEditComponentSet = async () => {
     if (Object.values(validationErrors).some((error) => !!error)) return;
     await editComponentSet(Object.values(editedComponentSet));
     setEditedComponentSet({});
+    resetEditing();
   };
-
-  const resetEditing = () => {
-    isEnableEditing.value = false;
-    refetch().finally(() => {
-      isEnableEditing.value = true;
-      setEditedComponentSet({});
-    });
-  }
 
   const componentsSetColumn = useMemo<MRT_ColumnDef<ComponentSetDto>[]>(
     () => [
@@ -104,13 +106,10 @@ const ComponentsSet = () => {
                 ...validationErrors,
                 [cell.id]: validationError,
               });
-              componentsSetList?.componentsSet.map(c => {
-                if (c.componentType.id === row.original.componentType.id) {
-                  c.componentType.name = event.currentTarget.value;
-                  return c;
-                }
-                return c;
-              });
+              const componentSet = componentsSetList?.componentsTypeList.find(c => c.name === event.target.value);
+              if (componentSet !== undefined) {
+                row.original.componentType = componentSet;
+              }
               setEditedComponentSet({ ...editedComponentSet, [row.id]: row.original});
             }
           };
@@ -126,7 +125,7 @@ const ComponentsSet = () => {
               {...defaultProps}
               onBlur={onBlur}
               size="small"
-              value={row.original.componentType}
+              defaultValue={row.original.componentType}
               noOptionsText={"Не найдено"}
               renderInput={(params) => <TextField onFocus={onFocus} error={!!validationErrors?.[cell.id]}
                                                   helperText={validationErrors?.[cell.id]}
@@ -152,13 +151,7 @@ const ComponentsSet = () => {
                 ...validationErrors,
                 [cell.id]: validationError,
               });
-              componentsSetList?.componentsSet.map(cSet => {
-                if (cSet.componentType.id === row.original.componentType.id) {
-                  cSet.value = event.target.value;
-                  return cSet;
-                }
-                return cSet;
-              });
+              row.original.value = event.target.value
               setEditedComponentSet({ ...editedComponentSet, [row.id]: row.original });
             }
           },
@@ -170,7 +163,7 @@ const ComponentsSet = () => {
         }),
       }
     ],
-    [validationErrors, defaultProps, isCreatingRowComponentSet.value, editedComponentSet, componentsSetList?.componentsSet],
+    [validationErrors, defaultProps, isCreatingRowComponentSet.value, editedComponentSet, componentsSetList?.componentsTypeList],
   );
 
   const table = useMaterialReactTable({
@@ -245,12 +238,13 @@ const ComponentsSet = () => {
           onClick={resetEditing}
           disabled={
             Object.keys(editedComponentSet).length === 0 ||
-            isCreatingRowComponentSet.value
+            isCreatingRowComponentSet.value ||
+            Object.values(validationErrors).some((error) => !!error)
           }
         >
           {isEditComponentSet ? <CircularProgress size={25} /> : 'Отменить изменения'}
         </Button>
-        {Object.values(validationErrors).some((error) => !!error) && (
+        {Object.values(validationErrors).some((error) => !!error) && !isCreatingRowComponentSet.value && (
           <Typography color="error">Необходимо устранить все ошибки</Typography>
         )}
       </Box>
@@ -320,12 +314,13 @@ const ComponentsSet = () => {
                   id="outlined-size-small"
                   value={componentsSetList?.componentNameSet.name}
                   size="small"
+                  slotProps={{
+                    input: {
+                      readOnly: true,
+                    },
+                  }}
                   sx={{backgroundColor: "#1A39601A"}}
                 />
-                <Button sx={{maxWidth: '150px', marginTop: 'auto', marginBottom: 'auto', marginLeft: '10px'}}
-                        variant="contained">
-                  Обновить
-                </Button>
               </FormLayout>
               <Box sx={{marginTop: '3em'}}>
                 <MaterialReactTable table={table} />

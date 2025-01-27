@@ -33,6 +33,15 @@ public class UserHistory {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String username;
 
+    @Column(name = "old_code")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private Integer oldCode;
+
+    @Size(max = 50)
+    @Column(name = "old_username", length = 50)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String oldUsername;
+
     @Size(max = 255)
     @NotNull
     @Column(name = "password", nullable = false, length = 30)
@@ -64,6 +73,7 @@ public class UserHistory {
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer typeOperation;
 
+    @NotNull
     @Column(name = "is_active", nullable = false)
     @JdbcTypeCode(SqlTypes.BIT)
     private Boolean isActive = false;

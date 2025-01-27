@@ -30,7 +30,6 @@ export const componentNameSetAddMutation = (queryClient: QueryClient) => useMuta
     if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
       showErrorMessage("components_name_set_add_error", error.message);
     } else {
-      console.log(error);
       showErrorMessage("components_name_set_add_error", "Неизвестная ошибка");
     }
   },

@@ -39,8 +39,8 @@ export const componentAddMutation = (queryClient: QueryClient) => useMutation({
 });
 
 export const componentEditMutation = (queryClient: QueryClient) => useMutation({
-  mutationFn: ({ id, oldName, component }: { id: number; oldName: string; component: ComponentTypeDto }) =>
-    ComponentTypeController.updateComponent(id, oldName, component),
+  mutationFn: ({ id, component }: { id: number; component: ComponentTypeDto }) =>
+    ComponentTypeController.updateComponent(id, component),
   onMutate: async (newComponentType) => {
     await queryClient.cancelQueries({ queryKey: ['components_type'] });
     const previous = queryClient.getQueryData<ComponentTypeDto[]>(['components_type']);

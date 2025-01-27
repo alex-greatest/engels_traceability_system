@@ -43,45 +43,21 @@ export const componentSetAddMutation = (queryClient: QueryClient, url: string) =
     } else {
       showErrorMessage("components_set_add_error", "Неизвестная ошибка");
     }
-  },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ['components_set', url] }).then();
   }
 });
 
 export const componentSetEditMutation = (queryClient: QueryClient, url: string) => useMutation({
   mutationFn:  ComponentSetController.updateComponentSet,
-  onMutate: async (newComponentsSet) => {
-    await queryClient.cancelQueries({ queryKey: ['components_set', url] });
-    const previous = queryClient.getQueryData<ComponentSetList>(['components_set', url]);
-    queryClient.setQueryData<ComponentSetList>(['components_set', url], (old) => {
-        if (!old) return old;
-        return {
-          ...old,
-          componentsSet: old?.componentsSet.map((componentSet) => {
-            const newComponentSet = newComponentsSet.find((c) => c?.id === componentSet.id);
-            return newComponentSet ? newComponentSet : componentSet;
-          }),
-        };
-    });
-    return { previous }
-  },
   onSuccess: () => {
     showSuccessMessage("components_set_edit_success", "Компонент(ы) обновлен(ы)");
   },
-  onError: (error, _, context) => {
-    if (context?.previous) {
-      queryClient.setQueryData<ComponentSetList>(['components_set', url], context.previous)
-    }
+  onError: (error) => {
     if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
       showErrorMessage("components_set_edit_error", error.message);
     } else {
       showErrorMessage("components_set_edit_error", "Неизвестная ошибка");
     }
   },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ['components_set', url] }).then();
-  }
 })
 
 export const componentSetDelete = (queryClient: QueryClient, url: string) => useMutation({
@@ -108,9 +84,6 @@ export const componentSetDelete = (queryClient: QueryClient, url: string) => use
     } else {
       showErrorMessage("components_set_delete_error", "Неизвестная ошибка");
     }
-  },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ['components_set', url] }).then();
   }
 });
 
@@ -126,9 +99,6 @@ export const componentSetCopyAllComponentsSetMutation = (queryClient: QueryClien
       showErrorMessage("components_set_copy_values_error", "Неизвестная ошибка");
     }
   },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ['components_set', url] }).then();
-  }
 })
 
 export const errorMessage = "Длина должна быть больше 0 и меньше 50";
