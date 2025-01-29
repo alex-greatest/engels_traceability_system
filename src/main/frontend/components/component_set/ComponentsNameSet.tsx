@@ -20,10 +20,8 @@ import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ConfirmDialog } from '@vaadin/react-components/ConfirmDialog.js';
 import { useSignal } from '@vaadin/hilla-react-signals';
 import { useQueryClient } from '@tanstack/react-query';
-import AppsIcon from '@mui/icons-material/Apps';
 import {
   componentNameSetAddMutation, componentNameSetDelete, componentNameSetEditMutation,
   useComponentsNameSet,
@@ -31,12 +29,10 @@ import {
 } from 'Frontend/components/api/components_name_set';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 import { validateComponent } from 'Frontend/components/api/components_type';
-import { useNavigate } from 'react-router-dom';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 
 const ComponentsNameSet = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const openDialog = useSignal(false);
   const componentNameSetName = useSignal("");
@@ -75,7 +71,7 @@ const ComponentsNameSet = () => {
   const componentNameSetColumns = useMemo<MRT_ColumnDef<ComponentNameSetDto>[]>(
     () => [
       {
-        accessorKey: 'name', //access nested data with dot notation
+        accessorKey: 'name',
         header: 'Название набора компонентов',
         size: 50,
         muiEditTextFieldProps: {
@@ -133,13 +129,6 @@ const ComponentsNameSet = () => {
             table.setEditingRow(row)
           }}>
             <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Изменить набор">
-          <IconButton onClick={() => {
-            navigate(`/components/set/${row.original?.id ?? -1}`)
-          }}>
-            <AppsIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Удалить">

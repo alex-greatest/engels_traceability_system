@@ -203,12 +203,14 @@ const ComponentsSetTable = (props: Props) => {
           </IconButton>
         </Tooltip>
         <Button
+          disabled={componentNameSetId === undefined}
           variant="contained"
           color="primary"
           onClick={() => { table.setCreatingRow(true); isCreatingRowComponentSet.value = true }}>
           Создать новый компонент
         </Button>
         <Button
+          disabled={componentNameSetId === undefined}
           variant="contained"
           color="primary"
           onClick={() => { openDialogCopyValues.value = true }}>

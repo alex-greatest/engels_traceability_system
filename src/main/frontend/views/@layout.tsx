@@ -71,7 +71,7 @@ export default function MainLayout() {
                   <Icon icon="vaadin:compile" slot="prefix" />
                   Типы компонентов
                 </SideNavItem>
-                <SideNavItem path={'/components/name_set'} key={'components_name_set_key'}>
+                <SideNavItem path={'/components/set'} key={'components_set_key'}>
                   <Icon icon="vaadin:archives" slot="prefix" />
                   Набор компонентов
                 </SideNavItem>
@@ -95,7 +95,6 @@ export default function MainLayout() {
         <div className={"container_outer"}>
           <Outlet />
         </div>
-
       </Suspense>
     </AppLayout>
   );
