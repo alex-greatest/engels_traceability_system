@@ -4,7 +4,16 @@ import {
   MaterialReactTable, type MRT_ColumnDef, MRT_TableOptions,
   useMaterialReactTable
 } from 'material-react-table';
-import { Button, Container, Tooltip } from '@mui/material';
+import {
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Tooltip
+} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
@@ -23,6 +32,7 @@ import {
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 import { validateComponent } from 'Frontend/components/api/components_type';
 import { useNavigate } from 'react-router-dom';
+import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 
 const ComponentsNameSet = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
@@ -90,6 +100,9 @@ const ComponentsNameSet = () => {
     positionActionsColumn: 'last',
     enableRowActions: true,
     paginationDisplayMode: 'pages',
+    enableStickyHeader: true,
+    enableStickyFooter: true,
+    muiTableContainerProps: { sx: { maxHeight: '1000px' } },
     state: {
       isLoading,
       isSaving: isCreatingComponentNameSet || isUpdatingComponentNameSet || isDeletingComponentNameSet,
@@ -163,26 +176,42 @@ const ComponentsNameSet = () => {
 
   return (
     <>
-      <ConfirmDialog
-        key={"dialog"}
-        header='Удаление набор компонетнов'
-        cancelButtonVisible
-        confirmText="Удалить"
-        cancelText="Отмена"
-        confirmTheme="error primary"
-        opened={openDialog.value}
-        onCancel={() => {
-          openDialog.value = false;
-        }}
-        onConfirm={() => {
-          deleteComponentNameSet(componentNameSetId.value);
-          openDialog.value = false;
-          componentNameSetName.value = "";
-          componentNameSetId.value = -1;
-        }}
-      >
-        <p> Вы уверены, что хотите удалить набор компонентов: {componentNameSetName.value}? </p>
-      </ConfirmDialog>
+      <Dialog
+        open={openDialog.value}
+        onClose={() => openDialog.value = false}
+        aria-labelledby="alert-dialog-delete_component_name_set_lab"
+        aria-describedby="alert-dialog-delete_component_name_set_description">
+        <DialogTitle id="alert-dialog-title_delete_component_name_set">
+          {"Удаление набора компонентов"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description_component_name_set">
+            Вы уверены, что хотите удалить набор компонентов: {componentNameSetName.value}?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{gap: '0.5em'}}>
+          <Button color="error"
+                  onClick={() => {
+                    deleteComponentNameSet(componentNameSetId.value);
+                    openDialog.value = false;
+                    componentNameSetName.value = "";
+                    componentNameSetId.value = -1;
+                  }}
+                  startIcon={<DeleteIcon />}
+                  sx={{maxWidth: '200px'}}
+                  variant="contained">
+            Удалить
+          </Button>
+          <Button startIcon={<DoDisturbIcon />}
+                  onClick={() => {
+                    openDialog.value = false;
+                  }}
+                  sx={{maxWidth: '200px'}}
+                  variant="contained">
+            Отмена
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Container maxWidth={'xl'}
                  sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', marginTop: '5em'}} >
         <MaterialReactTable table={table} />

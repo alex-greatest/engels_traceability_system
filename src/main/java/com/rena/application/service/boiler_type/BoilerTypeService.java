@@ -44,7 +44,7 @@ public class BoilerTypeService {
     public void updateBoiler(BoilerTypeDto boilerTypeDto) {
         BoilerType boilerType = boilerTypeRepository.findBoilerById(boilerTypeDto.id()).
                 orElseThrow(() -> new RecordNotFoundException("Котёл не найден"));
-        ComponentNameSet componentNameSetNew = componentNameSetRepository.findById(boilerType.getComponentNameSet().getId()).
+        ComponentNameSet componentNameSetNew = componentNameSetRepository.findById(boilerTypeDto.componentNameSet().id()).
                 orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
         String oldArticle = boilerType.getArticle();
         boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), oldArticle, componentNameSetNew.getName(),

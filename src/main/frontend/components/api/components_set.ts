@@ -72,6 +72,7 @@ export const componentSetDelete = (queryClient: QueryClient, url: string) => use
     await queryClient.cancelQueries({ queryKey: ['components_set', url] });
     const previous = queryClient.getQueryData<ComponentSetList>(['components_set', url]);
     queryClient.setQueryData<ComponentSetList>(['components_set', url], old => {
+      console.log(url);
       if (!old) return old;
       return {
         ...old,
