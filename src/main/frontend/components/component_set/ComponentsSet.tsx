@@ -2,7 +2,6 @@ import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import { Autocomplete, Button, Container, Stack } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import {
   useComponentSet,
 } from 'Frontend/components/api/components_set';
@@ -10,13 +9,13 @@ import { Loading } from 'Frontend/components/config/Loading';
 import ComponentsSetTable from 'Frontend/components/component_set/ComponentsSetTable';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 import Box from '@mui/system/Box';
-import { emptyComponentNameSet } from 'Frontend/components/api/helper';
+import { emptyComponentNameSet, PropsLambdaVoid } from 'Frontend/components/api/helper';
 import { useSignal } from '@vaadin/hilla-react-signals';
 import { useComponentsNameSet } from 'Frontend/components/api/components_name_set';
-import { HorizontalLayout } from '@vaadin/react-components';
+import CheckIcon from '@mui/icons-material/Check';
 
-const ComponentsSet = () => {
-  const navigate = useNavigate();
+const ComponentsSet = (props: PropsLambdaVoid) => {
+  const { func } = props;
   const { data: componentsNameSet, isLoading: isLoadingComponentsNameSet, isError: isErrorComponentsNameSet,
     isRefetching: isRefetchingComponentsNameSet} = useComponentsNameSet();
   const componentNameInputValue = useSignal<string>("");
@@ -38,6 +37,17 @@ const ComponentsSet = () => {
             <Container maxWidth={'xl'} sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%'}} >
               <Box sx={{width: '100%', display: 'flex', marginTop: '1em', marginLeft: 'auto'}}>
                 <Box sx={{display: 'flex', marginLeft: 'auto', gap: '1em'}}>
+                  {func !== undefined &&
+                    <Button color="primary"
+                            onClick={() => {
+                              func();
+                            }}
+                            startIcon={<CheckIcon />}
+                            sx={{maxWidth: '200px'}}
+                            variant="contained">
+                      Выбрать
+                    </Button>
+                  }
                   <Autocomplete
                     {...defaultProps}
                     value={componentNameValue.value}

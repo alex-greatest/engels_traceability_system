@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config/notification';
 import { EndpointError } from '@vaadin/hilla-frontend';
-import { BoilerController, ComponentNameSetController } from 'Frontend/generated/endpoints';
+import { BoilerController } from 'Frontend/generated/endpoints';
 import BoilerTypeDto from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeDto';
 import {
   errorMessageEmpty,
@@ -96,10 +96,10 @@ export const boilerTypeDelete = (queryClient: QueryClient) => useMutation({
 
 export function validateBoilerType(boiler: BoilerTypeDto) {
   return {
-    name: !validateLength(boiler?.name ?? "")
+    typeName: !validateLength(boiler?.typeName ?? "")
       ? errorMessageLength50
       : '',
-    article: !validateLength(boiler?.article ?? "")
+    model: !validateLength(boiler?.model ?? "")
       ? errorMessageLength50
       : '',
     componentNameSet: !validateRequired(boiler?.componentNameSet.name ?? "")

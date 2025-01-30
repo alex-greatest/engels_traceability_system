@@ -23,8 +23,8 @@ public class BoilerTypeHistoryService {
     private final UserInfoService userInfoService;
     private final UserHistoryRepository userHistoryRepository;
 
-    public void addBoilerHistory(Long boilerId, String oldArticle,
-                                    String componentNameSet, String article, String name,
+    public void addBoilerHistory(Long boilerId, String oldTypeName,
+                                    String componentNameSet, String model, String typeName,
                                     boolean isActive, int typeOperation) {
         changeActiveStatusOld(boilerId, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
@@ -35,14 +35,14 @@ public class BoilerTypeHistoryService {
                         orElseThrow(() -> new RecordNotFoundException("Не удалось сохранить историю. Набор компонентов не найден"));
         BoilerTypeHistory boilerTypeHistory = new BoilerTypeHistory();
         boilerTypeHistory.setBoilerId(boilerId);
-        boilerTypeHistory.setArticle(article);
-        boilerTypeHistory.setOldArticle(oldArticle != null && typeOperation == 2 ? oldArticle : null);
+        boilerTypeHistory.setModel(model);
+        boilerTypeHistory.setOdlTypeName(oldTypeName != null && typeOperation == 2 ? oldTypeName : null);
         boilerTypeHistory.setIsActive(isActive);
         boilerTypeHistory.setUserHistory(userHistory);
         boilerTypeHistory.setModifiedDate(LocalDateTime.now());
         boilerTypeHistory.setComponentNameSetHistory(componentNameSetHistory);
         boilerTypeHistory.setTypeOperation(typeOperation);
-        boilerTypeHistory.setName(name);
+        boilerTypeHistory.setTypeName(typeName);
         boilerTypeHistoryRepository.save(boilerTypeHistory);
     }
 

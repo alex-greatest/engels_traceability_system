@@ -12,3 +12,7 @@ export const validateLength = (value: string) => value.length > 0 && value.lengt
 export const emptyComponentNameSet = {id: undefined, name: ""};
 
 export const emptyBoilerType = {name: "", article: "", componentNameSet: {name: ""}};
+
+export interface PropsLambdaVoid {
+  func?: () => void;
+}

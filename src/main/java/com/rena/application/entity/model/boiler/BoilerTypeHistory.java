@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "boiler_type_history", indexes = {
-        @Index(name = "idx_boiler_type_history_article_article_is_active", columnList = "article, is_active"),
-        @Index(name = "idx_boiler_type_history_name_name", columnList = "name"),
+        @Index(name = "idx_boiler_type_history_article_model_is_active", columnList = "model, is_active"),
+        @Index(name = "idx_boiler_type_history_name_type_name", columnList = "type_name"),
         @Index(name = "idx_boiler_type_history_component_name_set", columnList = "component_name_set_history_id"),
         @Index(name = "idx_boiler_type_history_user_history_id", columnList = "user_history_id")
 })
@@ -30,18 +30,18 @@ public class BoilerTypeHistory {
     private Long boilerId;
 
     @NotNull
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "type_name", nullable = false, length = 50)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String name;
+    private String typeName;
 
     @NotNull
-    @Column(name = "article", nullable = false)
+    @Column(name = "model", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String article;
+    private String model;
 
-    @Column(name = "old_article", length = 50)
+    @Column(name = "old_type_name", length = 50)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String oldArticle;
+    private String odlTypeName;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

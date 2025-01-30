@@ -29,7 +29,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { errorMessageLength50, validateLength } from 'Frontend/components/api/helper';
 import ComponentSetList from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentSetList';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-import CopyAllIcon from '@mui/icons-material/CopyAll';
 
 interface Props {
   componentNameSetId: string | undefined;

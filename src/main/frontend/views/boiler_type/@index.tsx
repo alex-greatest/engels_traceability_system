@@ -59,7 +59,7 @@ const BoilersType = () => {
 
   const handleCreateBoilerType: MRT_TableOptions<BoilerTypeDto>['onCreatingRowSave'] = async ({values, table}) => {
     const componentNameSet = componentsNameSet?.find(c => c.name === values['componentNameSet.name']);
-    const boilerType = {name: values.name, article: values.article, componentNameSet: componentNameSet || {name: ""}};
+    const boilerType = {typeName: values.name, model: values.article, componentNameSet: componentNameSet || {name: ""}};
     const newValidationErrors = validateBoilerType(boilerType);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);
@@ -75,7 +75,7 @@ const BoilersType = () => {
 
   const handleSaveBoilerType: MRT_TableOptions<BoilerTypeDto>['onEditingRowSave'] = async ({values, table, row}) => {
     const componentNameSet = componentsNameSet?.find(c => c.name === values['componentNameSet.name']);
-    const boilerType = {id: Number(row.original.id), name: values.name, article: values.article,
+    const boilerType = {id: Number(row.original.id), typeName: values.name, model: values.article,
       componentNameSet: componentNameSet || {name: ""}};
     const newValidationErrors = validateBoilerType(boilerType);
     if (Object.values(newValidationErrors).some((error) => error)) {
@@ -93,8 +93,8 @@ const BoilersType = () => {
   const boilersColumn = useMemo<MRT_ColumnDef<BoilerTypeDto>[]>(
     () => [
       {
-        accessorKey: 'name', //access nested data with dot notation
-        header: 'Название котла',
+        accessorKey: 'typeName', //access nested data with dot notation
+        header: 'Тип котла',
         size: 50,
         muiEditTextFieldProps: {
           required: true,
@@ -108,8 +108,8 @@ const BoilersType = () => {
         },
       },
       {
-        accessorKey: 'article', //access nested data with dot notation
-        header: 'Идентификатор',
+        accessorKey: 'model', //access nested data with dot notation
+        header: 'Модель',
         size: 50,
         muiEditTextFieldProps: {
           required: true,
@@ -212,7 +212,7 @@ const BoilersType = () => {
         </Tooltip>
         <Tooltip title="Удалить">
           <IconButton color="error" onClick={() => {
-            boilerTypeName.value = row.original?.name ?? "";
+            boilerTypeName.value = row.original?.typeName ?? "";
             boilerTypeId.value = row.original?.id ?? -1;
             openDialog.value = true;
           }}>

@@ -37,7 +37,7 @@ public class BoilerTypeService {
         boilerType.setComponentNameSet(componentNameSet);
         boilerTypeRepository.save(boilerType);
         boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), null, boilerType.getComponentNameSet().getName(),
-                boilerType.getArticle(), boilerType.getName(), true, 1);
+                boilerType.getModel(), boilerType.getTypeName(), true, 1);
     }
 
     @Transactional
@@ -46,12 +46,12 @@ public class BoilerTypeService {
                 orElseThrow(() -> new RecordNotFoundException("Котёл не найден"));
         ComponentNameSet componentNameSetNew = componentNameSetRepository.findById(boilerTypeDto.componentNameSet().id()).
                 orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
-        String oldArticle = boilerType.getArticle();
-        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), oldArticle, componentNameSetNew.getName(),
-                boilerTypeDto.article(), boilerTypeDto.name(), true, 2);
+        String oldTypeName = boilerType.getTypeName();
+        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), oldTypeName, componentNameSetNew.getName(),
+                boilerTypeDto.model(), boilerTypeDto.typeName(), true, 2);
         boilerType.setComponentNameSet(componentNameSetNew);
-        boilerType.setArticle(boilerTypeDto.article());
-        boilerType.setName(boilerTypeDto.name());
+        boilerType.setModel(boilerTypeDto.model());
+        boilerType.setTypeName(boilerTypeDto.typeName());
         boilerTypeRepository.save(boilerType);
     }
 
@@ -60,7 +60,7 @@ public class BoilerTypeService {
         BoilerType boilerType = boilerTypeRepository.findBoilerById(id).
                 orElseThrow(() -> new RecordNotFoundException("Котёл не найден"));
         boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), null,
-                boilerType.getComponentNameSet().getName(), boilerType.getArticle(), boilerType.getName(), false, 3);
+                boilerType.getComponentNameSet().getName(), boilerType.getModel(), boilerType.getTypeName(), false, 3);
         boilerTypeRepository.delete(boilerType);
     }
 }
