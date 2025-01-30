@@ -1,4 +1,3 @@
-import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import React, { useMemo, useState } from 'react';
 import {
   MaterialReactTable, type MRT_ColumnDef, MRT_TableOptions,
@@ -211,9 +210,3 @@ const ComponentsNameSet = () => {
 };
 
 export default ComponentsNameSet;
-
-export const config: ViewConfig = {
-  loginRequired: true,
-  rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
-  title: "Создание набора компонентов"
-};

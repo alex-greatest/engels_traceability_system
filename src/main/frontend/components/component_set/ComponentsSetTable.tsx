@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { QueryObserverResult, RefetchOptions, useQueryClient } from '@tanstack/react-query';
-import { useSignal } from '@vaadin/hilla-react-signals'
+import { Signal, useSignal } from '@vaadin/hilla-react-signals';
 import { MaterialReactTable, type MRT_ColumnDef, MRT_TableOptions, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import Box from '@mui/material/Box';
@@ -20,36 +20,30 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import {
   componentSetAddMutation, componentSetCopyAllComponentsSetMutation,
   componentSetDelete,
-  componentSetEditMutation,
-  validateComponentSet,
+  componentSetEditMutation, useComponentSet,
+  validateComponentSet
 } from 'Frontend/components/api/components_set';
 import ComponentTypeDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentTypeDto';
 import ComponentSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentSetDto';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { errorMessageLength50, validateLength } from 'Frontend/components/api/helper';
-import ComponentSetList from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentSetList';
+import { emptyComponentNameSet, errorMessageLength50, validateLength } from 'Frontend/components/api/helper';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 
 interface Props {
-  componentNameSetId: string | undefined;
-  data: ComponentSetList | undefined;
-  isError: boolean;
-  isLoading: boolean;
-  refetch: (options?: RefetchOptions) => Promise<QueryObserverResult<ComponentSetList, Error>>;
-  isRefetching: boolean;
-  url: string;
-  minHeight: string;
-  maxHeight: string;
+  componentNameValue: Signal<ComponentNameSetDto>;
 }
 
 const ComponentsSetTable = (props: Props) => {
-  const { componentNameSetId } = props;
-  const {data: componentsSetList, isError, isLoading, refetch, isRefetching, url, minHeight, maxHeight } = props;
+  const { componentNameValue } = props;
+  const componentNameSetId = Number(componentNameValue.value.id);
+  const url = componentNameValue.value.id?.toString() ?? ""
   const queryClient = useQueryClient();
   const openDialog = useSignal(false);
   const openDialogCopyValues = useSignal(false);
   const componentSetName = useSignal("");
   const componentSetId = useSignal(-1);
+  const { data: componentsSetList, isError, isLoading, refetch, isRefetching } = useComponentSet(componentNameSetId, url);
   const { mutateAsync: addComponentSet, isPending: isCreatingComponentSet } = componentSetAddMutation(queryClient, url);
   const { mutateAsync: editComponentSet, isPending: isEditComponentSet } = componentSetEditMutation(queryClient, url);
   const { mutate: deleteComponentSet, isPending: isDeletingComponentSet } = componentSetDelete(queryClient, url);
@@ -84,7 +78,7 @@ const ComponentsSetTable = (props: Props) => {
     }
     setValidationErrors({});
     try {
-      await addComponentSet({componentNameSetId: Number(componentNameSetId) , componentSetDto: componentSetDto});
+      await addComponentSet({componentNameSetId, componentSetDto: componentSetDto});
     } catch (error) {}
     table.setCreatingRow(null);
     isCreatingRowComponentSet.value = false;
@@ -185,11 +179,11 @@ const ComponentsSetTable = (props: Props) => {
     enablePagination: false,
     enableStickyHeader: true,
     enableStickyFooter: true,
-    muiTableContainerProps: { sx: { maxHeight: maxHeight, minHeight: minHeight } },
+    muiTableContainerProps: { sx: { maxHeight: '1000px' } },
     onCreatingRowCancel: () => {setValidationErrors({}); isCreatingRowComponentSet.value = false;},
     onCreatingRowSave: handleCreateComponentSet,
     state: {
-      isLoading,
+      isLoading: isLoading,
       isSaving: isCreatingComponentSet || isDeletingComponentSet || isEditComponentSet || isCopyAllComponentSet,
       showAlertBanner: isError,
       showProgressBars: isRefetching || isLoading || !isEnableEditing.value,
@@ -202,14 +196,14 @@ const ComponentsSetTable = (props: Props) => {
           </IconButton>
         </Tooltip>
         <Button
-          disabled={componentNameSetId === undefined}
+          disabled={isNaN(componentNameSetId)}
           variant="contained"
           color="primary"
           onClick={() => { table.setCreatingRow(true); isCreatingRowComponentSet.value = true }}>
           Создать новый компонент
         </Button>
         <Button
-          disabled={componentNameSetId === undefined}
+          disabled={isNaN(componentNameSetId)}
           variant="contained"
           color="primary"
           onClick={() => { openDialogCopyValues.value = true }}>
@@ -291,7 +285,7 @@ const ComponentsSetTable = (props: Props) => {
         <DialogActions sx={{gap: '0.5em'}}>
           <Button color="error"
                   onClick={() => {
-                    copyAllComponentSet(Number(componentNameSetId));
+                    copyAllComponentSet(componentNameSetId);
                     openDialogCopyValues.value = false;
                   }}
                   startIcon={<DeleteIcon />}

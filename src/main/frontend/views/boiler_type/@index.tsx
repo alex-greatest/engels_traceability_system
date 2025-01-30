@@ -136,6 +136,7 @@ const BoilersType = () => {
           const callBackUpdaterComponentNameSet = (componentNameSet: ComponentNameSetDto) => {
             row._valuesCache[column.id] = componentNameSet.name;
             componentNameValueSelected.value = componentNameSet;
+            console.log(componentNameSet);
           }
 
           return (

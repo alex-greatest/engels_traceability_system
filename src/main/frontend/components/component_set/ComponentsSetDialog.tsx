@@ -1,20 +1,15 @@
 import { Signal, useSignal } from '@vaadin/hilla-react-signals';
-import { useComponentSet } from 'Frontend/components/api/components_set';
 import React from 'react';
 import {
-  Button,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogTitle,
-  Stack
+  DialogTitle, Tooltip
 } from '@mui/material';
-import { useComponentsNameSet } from 'Frontend/components/api/components_name_set';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
-import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-import { emptyComponentNameSet } from 'Frontend/components/api/helper';
-import CheckIcon from '@mui/icons-material/Check';
 import SetLayout from 'Frontend/views/components/set/@layout';
+import Box from '@mui/system/Box';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
   dialogOpen: Signal<boolean>;
@@ -23,51 +18,27 @@ interface Props {
 
 const ComponentsSetDialog = (props: Props) => {
   const { dialogOpen, updaterComponentNameSet } = props;
-  const { data: componentsNameSet, isLoading: isLoadingComponentsNameSet,
-    isError:  isErrorComponentsNameSet, isRefetching: isRefetchingComponentsNameSet} = useComponentsNameSet();
-  const componentNameInputValue = useSignal<string>("");
-  const componentNameValue = useSignal<ComponentNameSetDto>(emptyComponentNameSet);
-  const url = componentNameValue.value.id?.toString() ?? ""
-  const { data: componentsSetList, isError, isLoading, refetch, isRefetching } =
-    useComponentSet(Number(componentNameValue.value.id), url);
-
-  const defaultProps = {
-    options: componentsNameSet ?? {} as ComponentNameSetDto[],
-    getOptionLabel: (option: ComponentNameSetDto) => option.name,
-  };
 
   return (
     <Dialog
-      maxWidth={"xl"}
+      fullScreen
       open={dialogOpen.value}
       onClose={() => dialogOpen.value = false}>
-      <DialogTitle>Набор компонентов</DialogTitle>
+      <DialogTitle sx={{display: 'flex'}}>
+        Набор компонентов
+        <Box sx={{marginLeft: 'auto'}}>
+          <IconButton onClick={() => dialogOpen.value = false} aria-label="icon_close_component_set_dialog">
+            <Tooltip title="Закрыть">
+              <CloseIcon />
+            </Tooltip>
+          </IconButton>
+        </Box>
+      </DialogTitle>
       <DialogContent>
-              <SetLayout func={() => {
-                updaterComponentNameSet.value(componentNameValue.value);
+              <SetLayout key={"components_set_layout"} func={(componentNameSet: ComponentNameSetDto) => {
+                updaterComponentNameSet.value(componentNameSet);
                 dialogOpen.value = false;
               }} />
-            <DialogActions sx={{gap: '0.5em'}}>
-                <Button color="primary"
-                        onClick={() => {
-                          updaterComponentNameSet.value(componentNameValue.value);
-                          dialogOpen.value = false;
-                        }}
-                        startIcon={<CheckIcon />}
-                        sx={{maxWidth: '200px'}}
-                        variant="contained">
-                  Выбрать
-                </Button>
-                <Button color="secondary"
-                        onClick={() => {
-                          dialogOpen.value = false;
-                        }}
-                        startIcon={<DoDisturbIcon />}
-                        sx={{maxWidth: '200px'}}
-                        variant="contained">
-                  Закрыть
-                </Button>
-            </DialogActions>
       </DialogContent>
     </Dialog>
   );

@@ -1,5 +1,5 @@
-import { MRT_Row } from 'material-react-table';
-import BoilerTypeDto from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeDto';
+
+import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 
 export const validateRequired = (value: string) => !!value.trim().length;
 
@@ -13,6 +13,6 @@ export const emptyComponentNameSet = {id: undefined, name: ""};
 
 export const emptyBoilerType = {name: "", article: "", componentNameSet: {name: ""}};
 
-export interface PropsLambdaVoid {
-  func?: () => void;
+export interface PropsComponentSet {
+  func?: (componentNameSet: ComponentNameSetDto) => void;
 }
