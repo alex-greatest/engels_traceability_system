@@ -1,11 +1,11 @@
-package com.rena.application.service.boiler_type;
+package com.rena.application.service.boiler.type;
 
 import com.rena.application.config.mapper.BoilerTypeMapper;
 import com.rena.application.entity.dto.boiler_type.BoilerTypeDto;
 import com.rena.application.entity.model.boiler.BoilerType;
 import com.rena.application.entity.model.component.ComponentNameSet;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.boiler_type.BoilerTypeRepository;
+import com.rena.application.repository.boiler.type.BoilerTypeRepository;
 import com.rena.application.repository.component.ComponentNameSetRepository;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;

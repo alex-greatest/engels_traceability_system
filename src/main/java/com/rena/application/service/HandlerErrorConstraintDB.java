@@ -12,7 +12,7 @@ public class HandlerErrorConstraintDB {
             "uc_user__username", "Пользователь с таким именем уже существует",
             "uc_component_name_set_name", "Набор компонентов с таким именем уже существует",
             "uc_component_name", "Компонент с таким именем уже существует",
-            "UQ_reference_model_description_unique", "Деталь с таким именем уже существует",
+            "uc_boiler_type_additional_data_set", "Набор данных котла с таким именем уже существует",
             "UQ_reference_recipe_reference_id_recipe_id", "Тег для данного типа уже добавлен",
             "UQ_recipe_path_tag_unique", "Тег с таким именем уже существует",
             "UQ_reference_tag_result_reference_id_tag_result_id", "Тег с таким именем уже существует",

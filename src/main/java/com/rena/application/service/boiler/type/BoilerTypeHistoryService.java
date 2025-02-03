@@ -1,4 +1,4 @@
-package com.rena.application.service.boiler_type;
+package com.rena.application.service.boiler.type;
 
 import com.rena.application.config.security.UserInfo;
 import com.rena.application.config.security.UserInfoService;
@@ -6,7 +6,7 @@ import com.rena.application.entity.model.boiler.BoilerTypeHistory;
 import com.rena.application.entity.model.component.ComponentNameSetHistory;
 import com.rena.application.entity.model.user.UserHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.boiler_type.BoilerTypeHistoryRepository;
+import com.rena.application.repository.boiler.type.BoilerTypeHistoryRepository;
 import com.rena.application.repository.component.ComponentNameSetHistoryRepository;
 import com.rena.application.repository.user.UserHistoryRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.rena.application.repository.boiler_type;
+package com.rena.application.repository.boiler.type;
 
 import com.rena.application.entity.model.boiler.BoilerType;
 import org.springframework.data.jpa.repository.JpaRepository;

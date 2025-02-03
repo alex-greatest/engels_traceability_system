@@ -1,7 +1,6 @@
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config/notification';
 import { EndpointError } from '@vaadin/hilla-frontend';
-import { BoilerController } from 'Frontend/generated/endpoints';
 import BoilerTypeDto from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeDto';
 import {
   errorMessageEmpty,
@@ -9,17 +8,18 @@ import {
   validateLength,
   validateRequired
 } from 'Frontend/components/api/helper';
+import { BoilerTypeController } from 'Frontend/generated/endpoints';
 
 export function useBoilers() {
   return useQuery({
     queryKey: ['boiler'],
-    queryFn: BoilerController.getAllBoiler,
+    queryFn: BoilerTypeController.getAllBoiler,
     staleTime: 1000 * 60 * 5
   })
 }
 
 export const boilerTypeAddMutation = (queryClient: QueryClient) => useMutation({
-  mutationFn: BoilerController.addBoiler,
+  mutationFn: BoilerTypeController.addBoiler,
   onMutate: async (newBoiler) => {
     await queryClient.cancelQueries({ queryKey: ['boiler'] });
     const previous = queryClient.getQueryData<BoilerTypeDto[]>(['boiler']);
@@ -45,7 +45,7 @@ export const boilerTypeAddMutation = (queryClient: QueryClient) => useMutation({
 });
 
 export const boilerTypeEditMutation = (queryClient: QueryClient) => useMutation({
-  mutationFn: BoilerController.updateBoiler,
+  mutationFn: BoilerTypeController.updateBoiler,
   onMutate: async (newBoiler) => {
     await queryClient.cancelQueries({ queryKey: ['boiler'] });
     const previous = queryClient.getQueryData<BoilerTypeDto[]>(['boiler']);
@@ -71,7 +71,7 @@ export const boilerTypeEditMutation = (queryClient: QueryClient) => useMutation(
 })
 
 export const boilerTypeDelete = (queryClient: QueryClient) => useMutation({
-  mutationFn: BoilerController.deleteBoiler,
+  mutationFn: BoilerTypeController.deleteBoiler,
   onMutate: async (newBoiler) => {
     await queryClient.cancelQueries({ queryKey: ['boiler'] });
     const previous = queryClient.getQueryData<BoilerTypeDto[]>(['boiler']);

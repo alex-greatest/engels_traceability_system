@@ -41,7 +41,7 @@ public class ComponentNameSetService {
     }
 
     @Transactional
-    public void updateComponent(Long id, String oldNameComponent, ComponentNameSetDto componentNameSetDto) {
+    public void updateComponent(Long id, ComponentNameSetDto componentNameSetDto) {
         ComponentNameSet componentNameSet = componentNameSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
         String oldNameNameSet = componentNameSet.getName();

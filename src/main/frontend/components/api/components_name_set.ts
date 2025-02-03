@@ -40,8 +40,8 @@ export const componentNameSetAddMutation = (queryClient: QueryClient) => useMuta
 });
 
 export const componentNameSetEditMutation = (queryClient: QueryClient) => useMutation({
-  mutationFn: ({ id, oldName, component }: { id: number; oldName: string; component: ComponentNameSetDto }) =>
-    ComponentNameSetController.updateComponent(id, oldName, component),
+  mutationFn: ({ id, component }: { id: number; component: ComponentNameSetDto }) =>
+    ComponentNameSetController.updateComponent(id, component),
   onMutate: async (newComponentNameSet) => {
     await queryClient.cancelQueries({ queryKey: ['components_name_set'] });
     const previous = queryClient.getQueryData<ComponentNameSetDto[]>(['components_name_set']);

@@ -60,6 +60,10 @@ export default function MainLayout() {
                 <Icon icon="vaadin:users" slot="prefix" />
                 Пользователи
               </SideNavItem>
+              <SideNavItem path={'/boiler_type/set/name'} key={'components_set_key1'}>
+                <Icon icon="vaadin:archives" slot="prefix" />
+                Набор компонентов
+              </SideNavItem>
               <SideNavItem path={'/boiler_type'} key={"boiler_type"}>
                 <Icon icon="vaadin:cube" slot="prefix" />
                 Типы котлов

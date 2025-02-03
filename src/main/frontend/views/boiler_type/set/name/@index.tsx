@@ -21,57 +21,58 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSignal } from '@vaadin/hilla-react-signals';
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  componentNameSetAddMutation, componentNameSetDelete, componentNameSetEditMutation,
-  useComponentsNameSet,
-  validateComponentNameSet
-} from 'Frontend/components/api/components_name_set';
-import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
-import { validateComponent } from 'Frontend/components/api/components_type';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+import {
+  boilerDataSetAddMutation, boilerDataSetDelete,
+  boilerDataSetEditMutation,
+  useBoilerDataSet, validateBoilerTypeDataSet
+} from 'Frontend/components/api/boiler_type_addition_data_set';
+import BoilerTypeAdditionalDataSetDto
+  from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeAdditionalDataSetDto';
+import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 
-const ComponentsNameSet = () => {
+const BoilerTypeDataSet = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
   const queryClient = useQueryClient();
   const openDialog = useSignal(false);
-  const componentNameSetName = useSignal("");
-  const componentNameSetId = useSignal(-1);
-  const {data: componentNameSet, isError, isLoading, refetch, isRefetching } = useComponentsNameSet();
-  const { mutateAsync: addComponentNameSet, isPending: isCreatingComponentNameSet } = componentNameSetAddMutation(queryClient);
-  const { mutateAsync: editComponentNameSet, isPending: isUpdatingComponentNameSet } = componentNameSetEditMutation(queryClient);
-  const { mutate: deleteComponentNameSet, isPending: isDeletingComponentNameSet } = componentNameSetDelete(queryClient);
+  const boilerTypeDataSetName = useSignal("");
+  const boilerTypeDataSetId = useSignal(-1);
+  const {data: boilerTypeDatasSet, isError, isLoading, refetch, isRefetching } = useBoilerDataSet();
+  const { mutateAsync: addBoilerTypeDataSet, isPending: isCreatingBoilerTypeDataSet } = boilerDataSetAddMutation(queryClient);
+  const { mutateAsync: editBoilerTypeDataSet, isPending: isUpdatingBoilerTypeDataSet } = boilerDataSetEditMutation(queryClient);
+  const { mutate: deleteBoilerTypeDataSet, isPending: isDeletingBoilerTypeDataSet } = boilerDataSetDelete(queryClient);
 
-  const handleCreateComponentNameSet: MRT_TableOptions<ComponentNameSetDto>['onCreatingRowSave'] = async ({values, table}) => {
-    const newValidationErrors = validateComponentNameSet(values);
+  const handleCreateBoilerTypeDataSet: MRT_TableOptions<BoilerTypeAdditionalDataSetDto>['onCreatingRowSave'] = async ({values, table}) => {
+    const newValidationErrors = validateBoilerTypeDataSet(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);
       return;
     }
     setValidationErrors({});
     try {
-      await addComponentNameSet(values);
+      await addBoilerTypeDataSet(values);
     } catch (error) {}
     table.setCreatingRow(null);
   };
 
-  const handleSaveComponentNameSet: MRT_TableOptions<ComponentNameSetDto>['onEditingRowSave'] = async ({values, table}) => {
-    const newValidationErrors = validateComponent(values);
+  const handleSaveBoilerTypeDataSet: MRT_TableOptions<BoilerTypeAdditionalDataSetDto>['onEditingRowSave'] = async ({values, table, row}) => {
+    const newValidationErrors = validateBoilerTypeDataSet(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);
       return;
     }
     setValidationErrors({});
     try {
-      await editComponentNameSet({id: componentNameSetId.value, component: values});
+      await editBoilerTypeDataSet({ id: row.original.id, name: values.name });
     } catch (error) {}
     table.setEditingRow(null);
   };
 
-  const componentNameSetColumns = useMemo<MRT_ColumnDef<ComponentNameSetDto>[]>(
+  const componentNameSetColumns = useMemo<MRT_ColumnDef<BoilerTypeAdditionalDataSetDto>[]>(
     () => [
       {
         accessorKey: 'name',
-        header: 'Название набора компонентов',
+        header: 'Название набора данных',
         size: 50,
         muiEditTextFieldProps: {
           required: true,
@@ -100,7 +101,7 @@ const ComponentsNameSet = () => {
     muiTableContainerProps: { sx: { maxHeight: '1000px' } },
     state: {
       isLoading,
-      isSaving: isCreatingComponentNameSet || isUpdatingComponentNameSet || isDeletingComponentNameSet,
+      isSaving: isCreatingBoilerTypeDataSet || isUpdatingBoilerTypeDataSet || isDeletingBoilerTypeDataSet,
       showAlertBanner: isError,
       showProgressBars: isRefetching || isLoading,
     },
@@ -115,7 +116,7 @@ const ComponentsNameSet = () => {
           variant="contained"
           color="primary"
           onClick={() => table.setCreatingRow(true)}>
-          Создать новый набор компонентов
+          Создать новый набор данных котла
         </Button>
       </Box>
     ),
@@ -123,8 +124,8 @@ const ComponentsNameSet = () => {
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip title="Изменить название">
           <IconButton onClick={() => {
-            componentNameSetName.value = row.original?.name ?? "";
-            componentNameSetId.value = row.original?.id ?? -1;
+            boilerTypeDataSetName.value = row.original?.name ?? "";
+            boilerTypeDataSetId.value = row.original?.id ?? -1;
             table.setEditingRow(row)
           }}>
             <EditIcon />
@@ -132,8 +133,8 @@ const ComponentsNameSet = () => {
         </Tooltip>
         <Tooltip title="Удалить">
           <IconButton color="error" onClick={() => {
-            componentNameSetName.value = row.original?.name ?? "";
-            componentNameSetId.value = row.original?.id ?? -1;
+            boilerTypeDataSetName.value = row.original?.name ?? "";
+            boilerTypeDataSetId.value = row.original?.id ?? -1;
             openDialog.value = true;
           }}>
             <DeleteIcon />
@@ -147,14 +148,14 @@ const ComponentsNameSet = () => {
         children: 'Ошибка при загрузке данных',
       }
       : undefined,
-    data: componentNameSet || {} as ComponentNameSetDto[],
+    data: boilerTypeDatasSet || {} as BoilerTypeAdditionalDataSetDto[],
     createDisplayMode: 'row', // ('modal', and 'custom' are also available)
     editDisplayMode: 'row', // ('modal', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
     onCreatingRowCancel: () => setValidationErrors({}),
-    onCreatingRowSave: handleCreateComponentNameSet,
+    onCreatingRowSave: handleCreateBoilerTypeDataSet,
     onEditingRowCancel: () => setValidationErrors({}),
-    onEditingRowSave: handleSaveComponentNameSet,
+    onEditingRowSave: handleSaveBoilerTypeDataSet,
     muiTablePaperProps: ({ table }) => ({
       style: {
         zIndex: table.getState().isFullScreen ? 3000 : undefined,
@@ -167,23 +168,23 @@ const ComponentsNameSet = () => {
       <Dialog
         open={openDialog.value}
         onClose={() => openDialog.value = false}
-        aria-labelledby="alert-dialog-delete_component_name_set_lab"
-        aria-describedby="alert-dialog-delete_component_name_set_description">
-        <DialogTitle id="alert-dialog-title_delete_component_name_set">
-          {"Удаление набора компонентов"}
+        aria-labelledby="alert-dialog-delete_boiler_type_set_lab"
+        aria-describedby="alert-dialog-delete_boiler_type_set_description">
+        <DialogTitle id="alert-dialog-title_delete_boiler_type_set">
+          {"Удаление набора данных котла"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description_component_name_set">
-            Вы уверены, что хотите удалить набор компонентов: {componentNameSetName.value}?
+            Вы уверены, что хотите удалить набор данных котла: {boilerTypeDataSetName.value}?
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{gap: '0.5em'}}>
           <Button color="error"
                   onClick={() => {
-                    deleteComponentNameSet(componentNameSetId.value);
+                    deleteBoilerTypeDataSet(boilerTypeDataSetId.value);
                     openDialog.value = false;
-                    componentNameSetName.value = "";
-                    componentNameSetId.value = -1;
+                    boilerTypeDataSetName.value = "";
+                    boilerTypeDataSetId.value = -1;
                   }}
                   startIcon={<DeleteIcon />}
                   sx={{maxWidth: '200px'}}
@@ -209,4 +210,10 @@ const ComponentsNameSet = () => {
 
 };
 
-export default ComponentsNameSet;
+export default BoilerTypeDataSet;
+
+export const config: ViewConfig = {
+  loginRequired: true,
+  rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
+  title: "Набор компонентов"
+};

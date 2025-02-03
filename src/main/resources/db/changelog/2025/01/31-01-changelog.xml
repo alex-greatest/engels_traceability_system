@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1738310005124-1" author="Alexander (generated)">
+        <createTable tableName="boiler_type_additional_data_template">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="pk_boiler_type_additional_data_template"/>
+            </column>
+            <column name="unit" type="VARCHAR(30)"/>
+            <column name="boiler_type_additional_data_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738310005124-2" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_type_additional_data_id"
+                                 onDelete="CASCADE"
+                                 baseTableName="boiler_type_additional_data_template"
+                                 constraintName="FK_BOILERTYPEADDITIONALDATATEMPLATE_ON_BOILERTYPEADDITIONALDATA"
+                                 referencedColumnNames="id" referencedTableName="boiler_type_additional_data"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,9 +1,9 @@
-package com.rena.application.controller.boiler;
+package com.rena.application.controller.boiler.type;
 
 import com.rena.application.entity.dto.boiler_type.BoilerTypeDto;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.service.HandlerErrorConstraintDB;
-import com.rena.application.service.boiler_type.BoilerTypeService;
+import com.rena.application.service.boiler.type.BoilerTypeService;
 import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
@@ -20,7 +20,7 @@ import java.util.List;
 @Validated
 @RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
 @Slf4j
-public class BoilerController {
+public class BoilerTypeController {
     private final BoilerTypeService boilerTypeService;
     private final HandlerErrorConstraintDB handlerErrorConstraintDB;
 
