@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface BoilerTypeAdditionalValueHistoryRepository extends JpaRepository<BoilerTypeAdditionalValueHistory, Long> {
+    Optional<BoilerTypeAdditionalValueHistory> findByBoilerTypeAdditionalValueAndIsActive(Long boilerTypeAdditionalValue,
+                                                                                          Boolean isActive);
     @Transactional
     @Modifying
     @Query("""
