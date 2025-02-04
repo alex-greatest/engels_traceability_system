@@ -36,8 +36,9 @@ public class ComponentNameSetService {
     @Transactional
     public void addComponent(ComponentNameSetDto componentNameSetDto) {
         ComponentNameSet componentNameSet = componentNameSetMapper.toEntity(componentNameSetDto);
-        componentNameSetHistoryService.addComponentNameSetHistory(null, componentNameSetDto.name(), true, 1);
         componentNameSetRepository.save(componentNameSet);
+        componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(),null,
+                componentNameSetDto.name(), true, 1);
     }
 
     @Transactional
@@ -45,16 +46,18 @@ public class ComponentNameSetService {
         ComponentNameSet componentNameSet = componentNameSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
         String oldNameNameSet = componentNameSet.getName();
-        componentNameSetHistoryService.addComponentNameSetHistory(oldNameNameSet, componentNameSetDto.name(), true, 2);
         componentNameSet.setName(componentNameSetDto.name());
         componentNameSetRepository.save(componentNameSet);
+        componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(), oldNameNameSet,
+                componentNameSetDto.name(), true, 2);
     }
 
     @Transactional
     public void deleteComponent(Long id) {
         ComponentNameSet componentNameSet = componentNameSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Набор компонентов не найден"));
-        componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getName(), componentNameSet.getName(), false, 3);
         componentNameSetRepository.delete(componentNameSet);
+        componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(), componentNameSet.getName(),
+                componentNameSet.getName(), false, 3);
     }
 }

@@ -20,14 +20,16 @@ public class ComponentTypeHistoryService {
     private final UserInfoService userInfoService;
     private final UserHistoryRepository userHistoryRepository;
 
-    public void addComponentTypeHistory(String oldNameComponentType, String nameComponentType, boolean isActive, int typeOperation) {
-        changeActiveStatusOld(oldNameComponentType, typeOperation);
+    public void addComponentTypeHistory(Long componentTypeId, String oldNameComponentType,
+                                        String nameComponentType, boolean isActive, int typeOperation) {
+        changeActiveStatusOld(componentTypeId, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
         UserHistory userHistory = userHistoryRepository.findByCodeAndIsActive(userInfo.code(), true).
                 orElseThrow(() -> new RecordNotFoundException("Не удалось сохранить историю. Пользователь не найден"));
         ComponentTypeHistory componentTypeHistory = new ComponentTypeHistory();
         componentTypeHistory.setTypeOperation(typeOperation);
         componentTypeHistory.setName(nameComponentType);
+        componentTypeHistory.setComponentTypeId(componentTypeId);
         componentTypeHistory.setOldName(oldNameComponentType != null && typeOperation == 2 ? oldNameComponentType : null);
         componentTypeHistory.setIsActive(isActive);
         componentTypeHistory.setUserHistory(userHistory);
@@ -35,12 +37,12 @@ public class ComponentTypeHistoryService {
         componentTypeHistoryRepository.save(componentTypeHistory);
     }
 
-    private void changeActiveStatusOld(String oldNameComponentType, int typeOperation)
+    private void changeActiveStatusOld(Long componentTypeId, int typeOperation)
     {
-        if (typeOperation == 1 || oldNameComponentType == null) {
+        if (typeOperation == 1 || componentTypeId == null) {
             return;
         }
-        componentTypeHistoryRepository.findByNameAndIsActive(oldNameComponentType, true).ifPresent((c) -> {
+        componentTypeHistoryRepository.findByComponentTypeIdAndIsActive(componentTypeId, true).ifPresent((c) -> {
             c.setIsActive(false);
             componentTypeHistoryRepository.save(c);
         });

@@ -11,9 +11,9 @@ import org.hibernate.type.SqlTypes;
 @Setter
 @Entity
 @Table(name = "component_set", indexes = {
-        @Index(name = "idx_component_set", columnList = "component_type_id"),
         @Index(name = "idx_component_name_set", columnList = "component_name_set_id"),
-        @Index(name = "idx_component_set_value", columnList = "value")
+        @Index(name = "idx_component_set_value", columnList = "value"),
+        @Index(name = "idx_component_set_component_type_id", columnList = "component_type_id")
 })
 public class ComponentSet {
     @Id

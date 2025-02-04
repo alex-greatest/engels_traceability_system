@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "boiler_type_additional_data_set_history", indexes = {
-        @Index(name = "idx_boiler_type_additional_data_set_history_name_is_active", columnList = "name, is_active")
+        @Index(name = "idx_boiler_type_additional_data_set_history_name_is_active", columnList = "name, is_active"),
+        @Index(name = "idx_boiler_type_additional_data_set_history_data_set_id", columnList = "boiler_type_addition_data_set_id")
 })
 public class BoilerTypeAdditionalDataSetHistory {
     @Id

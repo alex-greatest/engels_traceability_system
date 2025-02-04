@@ -20,12 +20,14 @@ public class ComponentNameSetHistoryService {
     private final UserInfoService userInfoService;
     private final UserHistoryRepository userHistoryRepository;
 
-    public void addComponentNameSetHistory(String oldNameNameSet, String nameNameSet, boolean isActive, int typeOperation) {
-        changeActiveStatusOld(oldNameNameSet, typeOperation);
+    public void addComponentNameSetHistory(Long componentNameSetId, String oldNameNameSet, String nameNameSet,
+                                           boolean isActive, int typeOperation) {
+        changeActiveStatusOld(componentNameSetId, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
         UserHistory userHistory = userHistoryRepository.findByCodeAndIsActive(userInfo.code(), true).
                 orElseThrow(() -> new RecordNotFoundException("Не удалось сохранить историю. Пользователь не найден"));
         ComponentNameSetHistory componentNameSetHistory = new ComponentNameSetHistory();
+        componentNameSetHistory.setComponentNameSetId(componentNameSetId);
         componentNameSetHistory.setName(nameNameSet);
         componentNameSetHistory.setTypeOperation(typeOperation);
         componentNameSetHistory.setOldName(oldNameNameSet != null && typeOperation == 2 ? oldNameNameSet : null);
@@ -35,12 +37,12 @@ public class ComponentNameSetHistoryService {
         componentNameSetHistoryRepository.save(componentNameSetHistory);
     }
 
-    private void changeActiveStatusOld(String oldNameNameSet, int typeOperation)
+    private void changeActiveStatusOld(Long componentNameSetId, int typeOperation)
     {
-        if (typeOperation == 1 || oldNameNameSet == null) {
+        if (typeOperation == 1 || componentNameSetId == null) {
             return;
         }
-        componentNameSetHistoryRepository.findByNameAndIsActive(oldNameNameSet, true).ifPresent((c) -> {
+        componentNameSetHistoryRepository.findByComponentNameSetIdAndIsActive(componentNameSetId, true).ifPresent((c) -> {
             c.setIsActive(false);
             componentNameSetHistoryRepository.save(c);
         });
