@@ -1,6 +1,6 @@
 package com.rena.application.repository.boiler.type;
 
-import com.rena.application.entity.model.boiler.BoilerTypeHistory;
+import com.rena.application.entity.model.boiler.type.BoilerTypeHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

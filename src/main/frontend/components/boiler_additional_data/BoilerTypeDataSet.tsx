@@ -29,7 +29,6 @@ import {
 } from 'Frontend/components/api/boiler_type_addition_data_set';
 import BoilerTypeAdditionalDataSetDto
   from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeAdditionalDataSetDto';
-import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 
 const BoilerTypeDataSet = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
@@ -211,9 +210,3 @@ const BoilerTypeDataSet = () => {
 };
 
 export default BoilerTypeDataSet;
-
-export const config: ViewConfig = {
-  loginRequired: true,
-  rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
-  title: "Набор компонентов"
-};

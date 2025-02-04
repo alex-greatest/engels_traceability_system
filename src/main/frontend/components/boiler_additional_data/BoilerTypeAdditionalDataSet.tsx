@@ -7,28 +7,31 @@ import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/
 import Box from '@mui/system/Box';
 import { emptyComponentNameSet, PropsDialog } from 'Frontend/components/api/helper';
 import { useSignal } from '@vaadin/hilla-react-signals';
-import { useComponentsNameSet } from 'Frontend/components/api/components_name_set';
 import CheckIcon from '@mui/icons-material/Check';
+import BoilerTypeAdditionalDataSetDto
+  from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeAdditionalDataSetDto';
+import { useBoilerDataSet } from 'Frontend/components/api/boiler_type_addition_data_set';
+import BoilerTypeAdditionalDataValue from 'Frontend/components/boiler_additional_data/BoilerTypeAdditionalDataValue';
 
-const ComponentsSet = (props: PropsDialog<ComponentNameSetDto>) => {
+const BoilerTypeAdditionalDataSet = (props: PropsDialog<BoilerTypeAdditionalDataSetDto>) => {
   const { func } = props;
-  const { data: componentsNameSet, isLoading: isLoadingComponentsNameSet, isError:  isErrorComponentsNameSet,
-    isRefetching: isRefetchingComponentsNameSet} = useComponentsNameSet();
-  const componentNameInputValue = useSignal<string>("");
-  const componentNameValue = useSignal<ComponentNameSetDto>(emptyComponentNameSet);
+  const { data: boilerDataSet, isLoading: isLoadingBoilerDataSet, isError: isErrorBoilerDataSet,
+    isRefetching: isRefetchingBoilerDataSet} = useBoilerDataSet();
+  const BoilerDataSetInputValue = useSignal<string>("");
+  const BoilerDataSetValue = useSignal<BoilerTypeAdditionalDataSetDto>(emptyComponentNameSet);
 
   const defaultProps = {
-    options: componentsNameSet ?? {} as ComponentNameSetDto[],
-    getOptionLabel: (option: ComponentNameSetDto) => option.name,
+    options: boilerDataSet ?? {} as BoilerTypeAdditionalDataSetDto[],
+    getOptionLabel: (option: BoilerTypeAdditionalDataSetDto) => option.name,
   };
 
-  if (isErrorComponentsNameSet) {
-    return (<div style={{color: 'red'}}>Не удалось загрузить набор компонентов</div>)
+  if (isErrorBoilerDataSet) {
+    return (<div style={{color: 'red'}}>Не удалось загрузить набор данных</div>)
   }
 
   return (
     <>
-      {isRefetchingComponentsNameSet || isLoadingComponentsNameSet ? <Loading /> :
+      {isRefetchingBoilerDataSet || isLoadingBoilerDataSet ? <Loading /> :
         <>
           <Stack sx={{marginTop: '2em'}}>
             <Container maxWidth={'xl'} sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%'}} >
@@ -37,7 +40,7 @@ const ComponentsSet = (props: PropsDialog<ComponentNameSetDto>) => {
                   {func !== undefined &&
                     <Button color="primary"
                             onClick={() => {
-                              func(componentNameValue.value);
+                              func(BoilerDataSetValue.value);
                             }}
                             startIcon={<CheckIcon />}
                             sx={{maxWidth: '200px'}}
@@ -47,16 +50,16 @@ const ComponentsSet = (props: PropsDialog<ComponentNameSetDto>) => {
                   }
                   <Autocomplete
                     {...defaultProps}
-                    value={componentNameValue.value}
+                    value={BoilerDataSetValue.value}
                     onChange={(_, newValue: ComponentNameSetDto | null) => {
-                      componentNameValue.value = newValue ?? emptyComponentNameSet;
+                      BoilerDataSetValue.value = newValue ?? emptyComponentNameSet;
                     }}
-                    inputValue={componentNameInputValue.value}
+                    inputValue={BoilerDataSetInputValue.value}
                     onInputChange={(_, newInputValue: string | null) => {
-                      componentNameInputValue.value = newInputValue ?? "";
+                      BoilerDataSetInputValue.value = newInputValue ?? "";
                     }}
-                    loading={isLoadingComponentsNameSet || isRefetchingComponentsNameSet}
-                    disabled={isLoadingComponentsNameSet || isRefetchingComponentsNameSet}
+                    loading={isLoadingBoilerDataSet || isRefetchingBoilerDataSet}
+                    disabled={isLoadingBoilerDataSet || isRefetchingBoilerDataSet}
                     size="small"
                     noOptionsText={"Не найдено"}
                     renderInput={(params) => <TextField label={"Выберите набор"} {...params} />}
@@ -64,7 +67,7 @@ const ComponentsSet = (props: PropsDialog<ComponentNameSetDto>) => {
                   />
                 </Box>
               </Box>
-              <ComponentsSetTable componentNameValue={componentNameValue}/>
+              <BoilerTypeAdditionalDataValue boilerDataSetValue={BoilerDataSetValue}/>
             </Container>
           </Stack>
         </>
@@ -73,4 +76,4 @@ const ComponentsSet = (props: PropsDialog<ComponentNameSetDto>) => {
     );
 };
 
-export default ComponentsSet;
+export default BoilerTypeAdditionalDataSet;

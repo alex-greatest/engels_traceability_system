@@ -2,7 +2,7 @@ package com.rena.application.service.boiler.type.additional;
 
 import com.rena.application.config.security.UserInfo;
 import com.rena.application.config.security.UserInfoService;
-import com.rena.application.entity.model.boiler.BoilerTypeAdditionalDataSetHistory;
+import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalDataSetHistory;
 import com.rena.application.entity.model.user.UserHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.boiler.type.additional.BoilerTypeAdditionalDataSetHistoryRepository;

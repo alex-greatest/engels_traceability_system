@@ -5,19 +5,20 @@ import {
   DialogContent,
   DialogTitle, Tooltip
 } from '@mui/material';
-import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
-import SetLayout from 'Frontend/views/components/set/@layout';
 import Box from '@mui/system/Box';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import BoilerTypeAdditionalDataSetDto
+  from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeAdditionalDataSetDto';
+import BoilerTypeDataSetLayout from 'Frontend/views/boiler_type/set/@layout';
 
 interface Props {
   dialogOpen: Signal<boolean>;
-  updaterComponentNameSet: Signal<(componentNameSet: ComponentNameSetDto) => void>;
+  updaterBoilerDataSet: Signal<(boilerTypeDataSet: BoilerTypeAdditionalDataSetDto) => void>;
 }
 
-const ComponentsSetDialog = (props: Props) => {
-  const { dialogOpen, updaterComponentNameSet } = props;
+const BoilerTypeAdditionalDialog = (props: Props) => {
+  const { dialogOpen, updaterBoilerDataSet } = props;
 
   return (
     <Dialog
@@ -27,7 +28,7 @@ const ComponentsSetDialog = (props: Props) => {
       <DialogTitle sx={{display: 'flex'}}>
         Набор компонентов
         <Box sx={{marginLeft: 'auto'}}>
-          <IconButton onClick={() => dialogOpen.value = false} aria-label="icon_close_component_set_dialog">
+          <IconButton onClick={() => dialogOpen.value = false} aria-label="icon_close_boiler_type_additional_set_dialog">
             <Tooltip title="Закрыть">
               <CloseIcon />
             </Tooltip>
@@ -35,8 +36,8 @@ const ComponentsSetDialog = (props: Props) => {
         </Box>
       </DialogTitle>
       <DialogContent>
-              <SetLayout key={"components_set_layout"} func={(componentNameSet: ComponentNameSetDto) => {
-                updaterComponentNameSet.value(componentNameSet);
+              <BoilerTypeDataSetLayout key={"boiler_type_additional_set_layout"} func={(boilerTypeDataSet: BoilerTypeAdditionalDataSetDto) => {
+                updaterBoilerDataSet.value(boilerTypeDataSet);
                 dialogOpen.value = false;
               }} />
       </DialogContent>
@@ -44,4 +45,4 @@ const ComponentsSetDialog = (props: Props) => {
   );
 }
 
-export default ComponentsSetDialog;
+export default BoilerTypeAdditionalDialog;

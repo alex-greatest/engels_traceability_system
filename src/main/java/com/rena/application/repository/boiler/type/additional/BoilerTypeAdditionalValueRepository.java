@@ -1,6 +1,6 @@
 package com.rena.application.repository.boiler.type.additional;
 
-import com.rena.application.entity.model.boiler.BoilerTypeAdditionalValue;
+import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,13 +17,13 @@ public interface BoilerTypeAdditionalValueRepository extends JpaRepository<Boile
     void addAdditionalValue(Long boilerAdditionalSetId);
 
     @Query(value = """
-           SELECT BoilerTypeAdditionalValue from BoilerTypeAdditionalValue b
+           SELECT b from BoilerTypeAdditionalValue b
            JOIN b.boilerTypeAdditionalDataSet
            JOIN b.boilerTypeAdditionalData where b.boilerTypeAdditionalDataSet.id = ?1""")
     List<BoilerTypeAdditionalValue> findAllBoilerTypeAdditionalValue(Long boilerTypeAdditionalDataSetId);
 
     @Query(value = """
-           SELECT BoilerTypeAdditionalValue from BoilerTypeAdditionalValue b
+           SELECT b from BoilerTypeAdditionalValue b
            JOIN b.boilerTypeAdditionalDataSet
            JOIN b.boilerTypeAdditionalData where b.id = ?1""")
     Optional<BoilerTypeAdditionalValue> findBoilerTypeAdditionalValueById(Long id);

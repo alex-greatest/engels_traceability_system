@@ -1,7 +1,7 @@
 package com.rena.application.config.mapper;
 
 import com.rena.application.entity.dto.boiler_type.BoilerTypeAdditionalValueDto;
-import com.rena.application.entity.model.boiler.BoilerTypeAdditionalValue;
+import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalValue;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

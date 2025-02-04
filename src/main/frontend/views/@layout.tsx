@@ -60,7 +60,7 @@ export default function MainLayout() {
                 <Icon icon="vaadin:users" slot="prefix" />
                 Пользователи
               </SideNavItem>
-              <SideNavItem path={'/boiler_type/set/name'} key={'components_set_key1'}>
+              <SideNavItem path={'/boiler_type/set'} key={'boiler_type_additional_set_key'}>
                 <Icon icon="vaadin:archives" slot="prefix" />
                 Набор компонентов
               </SideNavItem>

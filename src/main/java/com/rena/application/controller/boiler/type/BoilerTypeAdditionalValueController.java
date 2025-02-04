@@ -8,6 +8,7 @@ import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -23,7 +24,12 @@ public class BoilerTypeAdditionalValueController {
     private final BoilerTypeAdditionalValueService boilerTypeAdditionalValueService;
     private HandlerErrorConstraintDB handlerErrorConstraintDB;
 
-    public void updateAdditionalValue(@Nonnull @Valid List<BoilerTypeAdditionalValueDto> boilerTypeAdditionalDataSetDto) {
+    @Nonnull
+    public List<@Nonnull BoilerTypeAdditionalValueDto> getAllAdditionalValue(@Nonnull @NotNull Long boilerTypeAdditionalDataSetId) {
+        return boilerTypeAdditionalValueService.getAllValue(boilerTypeAdditionalDataSetId);
+    }
+
+    public void updateAdditionalValue(@Nonnull @Valid List<@Nonnull BoilerTypeAdditionalValueDto> boilerTypeAdditionalDataSetDto) {
         try {
             boilerTypeAdditionalValueService.updateAdditionalValue(boilerTypeAdditionalDataSetDto);
         }

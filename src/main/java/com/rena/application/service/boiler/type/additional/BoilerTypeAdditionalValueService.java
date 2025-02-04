@@ -2,7 +2,7 @@ package com.rena.application.service.boiler.type.additional;
 
 import com.rena.application.config.mapper.BoilerTypeAdditionalValueMapper;
 import com.rena.application.entity.dto.boiler_type.BoilerTypeAdditionalValueDto;
-import com.rena.application.entity.model.boiler.BoilerTypeAdditionalValue;
+import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalValue;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.boiler.type.additional.BoilerTypeAdditionalValueRepository;
 import jakarta.annotation.security.RolesAllowed;
@@ -39,6 +39,7 @@ public class BoilerTypeAdditionalValueService {
             boilerTypeAdditionalValueHistoryService.addBoilerTypeAdditionDataValueHistory(
                     boilerAdditionalValue.getBoilerTypeAdditionalDataSet().getId(),
                     boilerAdditionalValue.getBoilerTypeAdditionalData().getId(),
+                    boilerAdditionalValue.getId(),
                     oldValue, boilerTypeAdditionalValueDto.value(), boilerTypeAdditionalValueDto.unit(),
                     true, 2);
         });

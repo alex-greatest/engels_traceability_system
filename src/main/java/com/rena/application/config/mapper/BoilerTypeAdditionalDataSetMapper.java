@@ -1,7 +1,7 @@
 package com.rena.application.config.mapper;
 
 import com.rena.application.entity.dto.boiler_type.BoilerTypeAdditionalDataSetDto;
-import com.rena.application.entity.model.boiler.BoilerTypeAdditionalDataSet;
+import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalDataSet;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

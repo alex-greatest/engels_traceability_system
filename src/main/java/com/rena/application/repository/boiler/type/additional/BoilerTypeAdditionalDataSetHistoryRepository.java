@@ -1,6 +1,6 @@
 package com.rena.application.repository.boiler.type.additional;
 
-import com.rena.application.entity.model.boiler.BoilerTypeAdditionalDataSetHistory;
+import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalDataSetHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

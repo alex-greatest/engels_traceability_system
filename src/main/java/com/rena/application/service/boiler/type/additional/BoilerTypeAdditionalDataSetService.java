@@ -2,9 +2,8 @@ package com.rena.application.service.boiler.type.additional;
 
 import com.rena.application.config.mapper.BoilerTypeAdditionalDataSetMapper;
 import com.rena.application.entity.dto.boiler_type.BoilerTypeAdditionalDataSetDto;
-import com.rena.application.entity.model.boiler.BoilerTypeAdditionalDataSet;
+import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalDataSet;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.boiler.type.additional.BoilerTypeAdditionalDataSetHistoryRepository;
 import com.rena.application.repository.boiler.type.additional.BoilerTypeAdditionalDataSetRepository;
 import com.rena.application.repository.boiler.type.additional.BoilerTypeAdditionalValueHistoryRepository;
 import com.rena.application.repository.boiler.type.additional.BoilerTypeAdditionalValueRepository;
@@ -22,11 +21,10 @@ import java.util.List;
 @Slf4j
 public class BoilerTypeAdditionalDataSetService {
     private final BoilerTypeAdditionalDataSetRepository boilerTypeAdditionalDataSetRepository;
-    private final BoilerTypeAdditionalDataSetHistoryService boilerTypeAdditionalDataSetHistoryService;
     private final BoilerTypeAdditionalDataSetMapper boilerTypeAdditionalDataSetMapper;
     private final BoilerTypeAdditionalValueRepository boilerTypeAdditionalValueRepository;
     private final BoilerTypeAdditionalValueHistoryRepository boilerTypeAdditionalValueHistoryRepository;
-    private final BoilerTypeAdditionalDataSetHistoryRepository boilerTypeAdditionalDataSetHistoryRepository;
+    private final BoilerTypeAdditionalDataSetHistoryService boilerTypeAdditionalDataSetHistoryService;
 
     public List<BoilerTypeAdditionalDataSetDto> getAllDataSet() {
         List<BoilerTypeAdditionalDataSet> componentNameSets = boilerTypeAdditionalDataSetRepository.findAll();
@@ -45,13 +43,11 @@ public class BoilerTypeAdditionalDataSetService {
         var boilerTypeAdditionalDataSet = boilerTypeAdditionalDataSetMapper
                 .toEntity(boilerTypeAdditionalDataSetDto);
         boilerTypeAdditionalDataSetRepository.save(boilerTypeAdditionalDataSet);
-        var boilerTypeAdditionalDataSetHistory = boilerTypeAdditionalDataSetHistoryService.
-                addBoilerTypeAdditionDataNameSetHistory(boilerTypeAdditionalDataSet.getId(), null,
-                        boilerTypeAdditionalDataSet.getName(), true, 1);
+        var boilerDataSetHistory = boilerTypeAdditionalDataSetHistoryService.addBoilerTypeAdditionDataNameSetHistory(boilerTypeAdditionalDataSet.getId(),
+                null, boilerTypeAdditionalDataSet.getName(), true, 1);
         boilerTypeAdditionalValueRepository.addAdditionalValue(boilerTypeAdditionalDataSet.getId());
         boilerTypeAdditionalValueHistoryRepository.
-                addAdditionalValueHistory(boilerTypeAdditionalDataSetHistory.getId(),
-                        boilerTypeAdditionalDataSetHistory.getUserHistory().getId(),
+                addAdditionalValueHistory(boilerDataSetHistory.getUserHistory().getId(),
                         boilerTypeAdditionalDataSet.getId(), LocalDateTime.now());
     }
 
@@ -60,32 +56,19 @@ public class BoilerTypeAdditionalDataSetService {
         BoilerTypeAdditionalDataSet boilerTypeAdditionalDataSet = boilerTypeAdditionalDataSetRepository.
                 findById(boilerTypeAdditionalDataSetDto.id()).
                 orElseThrow(() -> new RecordNotFoundException("Набор данных котла не найден"));
-        var oldBoilerTypeAdditionalDataSetHistory = boilerTypeAdditionalDataSetHistoryRepository.
-                findByBoilerTypeAdditionDataSetIdAndIsActive(boilerTypeAdditionalDataSetDto.id(), true).
-                orElseThrow(() -> new RecordNotFoundException("Набор данных котла не найден"));
-        String oldNameNameSet = boilerTypeAdditionalDataSet.getName();
-        var newBoilerTypeAdditionalDataSetHistory = boilerTypeAdditionalDataSetHistoryService.
-                addBoilerTypeAdditionDataNameSetHistory(boilerTypeAdditionalDataSet.getId(),
-                oldNameNameSet, boilerTypeAdditionalDataSetDto.name(), true, 2);
+        String oldName = boilerTypeAdditionalDataSet.getName();
         boilerTypeAdditionalDataSet.setName(boilerTypeAdditionalDataSetDto.name());
         boilerTypeAdditionalDataSetRepository.save(boilerTypeAdditionalDataSet);
-        boilerTypeAdditionalValueHistoryRepository.updateDataSetId(oldBoilerTypeAdditionalDataSetHistory.getId(),
-                newBoilerTypeAdditionalDataSetHistory.getId());
+        boilerTypeAdditionalDataSetHistoryService.addBoilerTypeAdditionDataNameSetHistory(boilerTypeAdditionalDataSet.getId(),
+                oldName, boilerTypeAdditionalDataSet.getName(), true, 2);
     }
 
     @Transactional
     public void deleteDataSet(Long id) {
         var boilerTypeAdditionalDataSet = boilerTypeAdditionalDataSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Набор данных котла не найден"));
-        var oldBoilerTypeAdditionalDataSetHistory = boilerTypeAdditionalDataSetHistoryRepository.
-                findByBoilerTypeAdditionDataSetIdAndIsActive(id, true).
-                orElseThrow(() -> new RecordNotFoundException("Набор данных котла не найден"));
-        var newBoilerTypeAdditionalDataSetHistory = boilerTypeAdditionalDataSetHistoryService.
-                addBoilerTypeAdditionDataNameSetHistory(boilerTypeAdditionalDataSet.getId(),
-                null, boilerTypeAdditionalDataSet.getName(), false, 3);
         boilerTypeAdditionalDataSetRepository.delete(boilerTypeAdditionalDataSet);
-        boilerTypeAdditionalValueHistoryRepository.
-                deleteBoilerTypeAdditionalValueHistories(oldBoilerTypeAdditionalDataSetHistory.getId(),
-                        newBoilerTypeAdditionalDataSetHistory.getId());
+        boilerTypeAdditionalDataSetHistoryService.addBoilerTypeAdditionDataNameSetHistory(boilerTypeAdditionalDataSet.getId(),
+                null, boilerTypeAdditionalDataSet.getName(), true, 3);
     }
 }

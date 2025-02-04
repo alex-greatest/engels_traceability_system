@@ -6,10 +6,5 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
     <includeAll path="db/changelog/2024/12" context=""/>
     <includeAll path="db/changelog/2025/01" context=""/>
-    <include file="db/changelog/2025/02/02-01-changelog.xml"/>
-    <include file="db/changelog/2025/02/03-01-changelog.xml"/>
-    <include file="db/changelog/2025/02/03-02-changelog.xml"/>
-    <include file="db/changelog/2025/02/03-03-changelog.xml"/>
-    <include file="db/changelog/2025/02/03-04-changelog.xml"/>
-    <include file="db/changelog/2025/02/03-05-changelog.xml"/>
+    <includeAll path="db/changelog/2025/02" context=""/>
 </databaseChangeLog>

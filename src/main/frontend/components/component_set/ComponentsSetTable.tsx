@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import TextField from '@mui/material/TextField';
-import { QueryObserverResult, RefetchOptions, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Signal, useSignal } from '@vaadin/hilla-react-signals';
 import { MaterialReactTable, type MRT_ColumnDef, MRT_TableOptions, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
@@ -26,7 +26,7 @@ import {
 import ComponentTypeDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentTypeDto';
 import ComponentSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentSetDto';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { emptyComponentNameSet, errorMessageLength50, validateLength } from 'Frontend/components/api/helper';
+import { errorMessageLength50, validateLength } from 'Frontend/components/api/helper';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 

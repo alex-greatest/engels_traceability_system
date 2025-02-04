@@ -1,6 +1,5 @@
-package com.rena.application.entity.model.boiler;
+package com.rena.application.entity.model.boiler.type.additional;
 
-import com.rena.application.entity.model.user.UserHistory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,9 +12,10 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "boiler_type_additional_value_history", indexes = {
-        @Index(name = "idx_boiler_type_additional_value_history", columnList = "boiler_type_additional_data_set_history_id"),
-        @Index(name = "idx_boiler_type_additional_value_history_boiler_type_additional_id", columnList = "boiler_type_additional_data_id"),
-        @Index(name = "idx_boiler_type_additional_value_history_is_active", columnList = "is_active")
+        @Index(name = "idx_boiler_type_additional_value_history_is_active", columnList = "boiler_type_additional_value_id, is_active"),
+        @Index(name = "idx_boiler_type_additional_value_history_additional_data", columnList = "boiler_type_additional_data_id"),
+        @Index(name = "idx_boiler_type_additional_value_history_set", columnList = "boiler_type_additional_data_set_id"),
+        @Index(name = "idx_boiler_type_additional_value_history_user_id", columnList = "user_history_id")
 })
 public class BoilerTypeAdditionalValueHistory {
     @Id
@@ -25,7 +25,7 @@ public class BoilerTypeAdditionalValueHistory {
 
     @NotNull
     @Column(name = "boiler_type_additional_value_id", nullable = false)
-    private Long boilerTypeAdditionalValue;
+    private Long boilerTypeAdditionalValueId;
 
     @NotNull
     @Column(name = "value", length = 100, nullable = false)
@@ -41,13 +41,12 @@ public class BoilerTypeAdditionalValueHistory {
     private String unit;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "boiler_type_additional_data_id", nullable = false)
-    private BoilerTypeAdditionalData boilerTypeAdditionalData;
+    @Column(name = "boiler_type_additional_data_id", nullable = false)
+    private Long boilerTypeAdditionalDataId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "boiler_type_additional_data_set_history_id", nullable = false)
-    private BoilerTypeAdditionalDataSetHistory boilerTypeAdditionalDataSet;
+    @NotNull
+    @Column(name = "boiler_type_additional_data_set_id", nullable = false)
+    private Long boilerTypeAdditionalDataSetId;
 
     @NotNull
     @Column(name = "modified_date", nullable = false)
@@ -64,7 +63,6 @@ public class BoilerTypeAdditionalValueHistory {
     private Boolean isActive = false;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_history_id", nullable = false)
-    private UserHistory userHistory;
+    @Column(name = "user_history_id", nullable = false)
+    private Long userHistoryId;
 }

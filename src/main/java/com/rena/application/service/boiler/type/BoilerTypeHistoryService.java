@@ -2,11 +2,12 @@ package com.rena.application.service.boiler.type;
 
 import com.rena.application.config.security.UserInfo;
 import com.rena.application.config.security.UserInfoService;
-import com.rena.application.entity.model.boiler.BoilerTypeHistory;
+import com.rena.application.entity.model.boiler.type.BoilerTypeHistory;
 import com.rena.application.entity.model.component.ComponentNameSetHistory;
 import com.rena.application.entity.model.user.UserHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.boiler.type.BoilerTypeHistoryRepository;
+import com.rena.application.repository.boiler.type.additional.BoilerTypeAdditionalDataSetRepository;
 import com.rena.application.repository.component.ComponentNameSetHistoryRepository;
 import com.rena.application.repository.user.UserHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,13 @@ import java.time.LocalDateTime;
 public class BoilerTypeHistoryService {
     private final ComponentNameSetHistoryRepository componentNameSetHistoryRepository;
     private final BoilerTypeHistoryRepository boilerTypeHistoryRepository;
+    private final BoilerTypeAdditionalDataSetRepository boilerTypeAdditionalDataSetRepository;
     private final UserInfoService userInfoService;
     private final UserHistoryRepository userHistoryRepository;
 
-    public void addBoilerHistory(Long boilerId, String oldTypeName,
-                                    String componentNameSet, String model, String typeName,
-                                    boolean isActive, int typeOperation) {
+    public void addBoilerHistory(Long boilerId, Long boilerTypeAdditionalDataSetId,
+                                 String oldTypeName, String componentNameSet, String model,
+                                 String typeName, boolean isActive, int typeOperation) {
         changeActiveStatusOld(boilerId, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
         UserHistory userHistory = userHistoryRepository.findByCodeAndIsActive(userInfo.code(), true).
@@ -43,6 +45,7 @@ public class BoilerTypeHistoryService {
         boilerTypeHistory.setComponentNameSetHistory(componentNameSetHistory);
         boilerTypeHistory.setTypeOperation(typeOperation);
         boilerTypeHistory.setTypeName(typeName);
+        //boilerTypeHistory.setBoilerTypeAdditionalDataSetHistory();
         boilerTypeHistoryRepository.save(boilerTypeHistory);
     }
 

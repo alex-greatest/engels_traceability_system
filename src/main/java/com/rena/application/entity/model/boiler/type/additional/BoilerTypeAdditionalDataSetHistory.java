@@ -1,4 +1,4 @@
-package com.rena.application.entity.model.boiler;
+package com.rena.application.entity.model.boiler.type.additional;
 
 import com.rena.application.entity.model.user.UserHistory;
 import jakarta.persistence.*;

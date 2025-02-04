@@ -5,13 +5,14 @@ import {
   TabSheetTab
 } from '@vaadin/react-components';
 import { useSignal } from '@vaadin/hilla-react-signals';
-import ComponentsSet from 'Frontend/components/component_set/ComponentsSet';
-import ComponentsNameSet from 'Frontend/components/component_set/ComponentsNameSet';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import { PropsDialog } from 'Frontend/components/api/helper';
-import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
+import BoilerTypeAdditionalDataSetDto
+  from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeAdditionalDataSetDto';
+import BoilerTypeAdditionalDataSet from 'Frontend/components/boiler_additional_data/BoilerTypeAdditionalDataSet';
+import BoilerTypeDataSet from 'Frontend/components/boiler_additional_data/BoilerTypeDataSet';
 
-export default function SetLayout(props: PropsDialog<ComponentNameSetDto>) {
+export default function BoilerTypeDataSetLayout(props: PropsDialog<BoilerTypeAdditionalDataSetDto>) {
   const visitedTabs = useSignal(new Set<number>([0]));
 
   const selectedTabChanged = (event: TabSheetSelectedChangedEvent) => {
@@ -21,11 +22,11 @@ export default function SetLayout(props: PropsDialog<ComponentNameSetDto>) {
   return (
     <Suspense fallback={"Loading..."}>
       <TabSheet onSelectedChanged={selectedTabChanged}>
-        <TabSheetTab label="Создание компонетнов">
-          {visitedTabs.value.has(0) && <ComponentsSet func={props.func} />}
+        <TabSheetTab label="Работа с данными">
+          {visitedTabs.value.has(0) && <BoilerTypeAdditionalDataSet func={props.func} />}
         </TabSheetTab>
-        <TabSheetTab label="Создание набора компонентов">
-          {visitedTabs.value.has(1) && <ComponentsNameSet />}
+        <TabSheetTab label="Создание набора данных">
+          {visitedTabs.value.has(1) && <BoilerTypeDataSet />}
         </TabSheetTab>
       </TabSheet>
     </Suspense>
@@ -35,5 +36,5 @@ export default function SetLayout(props: PropsDialog<ComponentNameSetDto>) {
 export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
-  title: "Набор компонентов"
+  title: "Набор данных котла"
 };
