@@ -1,6 +1,5 @@
 package com.rena.application.entity.model.component;
 
-import com.rena.application.entity.model.user.UserHistory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -14,8 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "component_name_set_history", indexes = {
         @Index(name = "idx_component_name_set_history", columnList = "is_active, name"),
-        @Index(name = "idx_component_name_set_history_user_history_id", columnList = "user_history_id"),
-        @Index(name = "idx_component_name_set_history_component_name_set_id", columnList = "component_name_set_id")
+        @Index(name = "idx_component_name_set_history_component_name_set_id", columnList = "component_name_set_id"),
+        @Index(name = "idx_component_name_set_history_user_id", columnList = "user_history_id"),
+        @Index(name = "idx_component_name_set_history_type_operation", columnList = "type_operation")
 })
 public class ComponentNameSetHistory {
     @Id
@@ -51,7 +51,6 @@ public class ComponentNameSetHistory {
     private Boolean isActive = false;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_history_id", nullable = false)
-    private UserHistory userHistory;
+    @Column(name = "user_history_id", nullable = false)
+    private Long userId;
 }

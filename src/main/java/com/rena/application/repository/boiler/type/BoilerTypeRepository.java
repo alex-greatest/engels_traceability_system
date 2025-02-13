@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BoilerTypeRepository extends JpaRepository<BoilerType, Long> {
+    Optional<BoilerType> findByArticle(String article);
+
     @Query("select b from BoilerType b JOIN b.componentNameSet")
     List<BoilerType> findAllBoilers();
 

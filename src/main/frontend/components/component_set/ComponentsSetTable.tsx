@@ -29,6 +29,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { errorMessageLength50, validateLength } from 'Frontend/components/api/helper';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 interface Props {
   componentNameValue: Signal<ComponentNameSetDto>;
@@ -287,8 +288,9 @@ const ComponentsSetTable = (props: Props) => {
                   onClick={() => {
                     copyAllComponentSet(componentNameSetId);
                     openDialogCopyValues.value = false;
+                    resetEditing();
                   }}
-                  startIcon={<DeleteIcon />}
+                  startIcon={<ContentCopyIcon />}
                   sx={{maxWidth: '200px'}}
                   variant="contained">
             Копировать

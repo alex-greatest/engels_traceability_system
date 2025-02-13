@@ -47,13 +47,10 @@ const BoilersType = () => {
   const boilerTypeId = useSignal(-1);
   const componentSetOpenDialog = useSignal(false);
   const boilerDataSetOpenDialog = useSignal(false);
-
   const {data: componentsNameSet, isLoading: isLoadingComponentNameSet,
     isRefetching: isRefetchComponentNameSet} = useComponentsNameSet();
-
   const {data: boilerDataSets, isLoading: isLoadingBoilerDatSet,
     isRefetching: isRefetchingBoilerDatSet} = useBoilerDataSet();
-
   const {data: boilers, isError, isLoading, refetch, isRefetching } = useBoilers();
   const { mutateAsync: addBoilerType, isPending: isCreatingBoilerType } = boilerTypeAddMutation(queryClient);
   const { mutateAsync: editBoilerType, isPending: isUpdatingBoilerType } = boilerTypeEditMutation(queryClient);
@@ -66,7 +63,7 @@ const BoilersType = () => {
   const handleCreateBoilerType: MRT_TableOptions<BoilerTypeDto>['onCreatingRowSave'] = async ({values, table}) => {
     const componentNameSet = componentsNameSet?.find(c => c.name === values['componentNameSet.name']);
     const boilerTypeAdditionalDataSet = boilerDataSets?.find(c => c.name === values['boilerTypeAdditionalDataSet.name']);
-    const boilerType = {typeName: values.name, model: values.article,
+    const boilerType = {typeName: values.typeName, model: values.model, article: values.article,
       componentNameSet: componentNameSet || {name: ""},
       boilerTypeAdditionalDataSet: boilerTypeAdditionalDataSet || {name: ""}};
     const newValidationErrors = validateBoilerType(boilerType);
@@ -86,7 +83,7 @@ const BoilersType = () => {
   const handleSaveBoilerType: MRT_TableOptions<BoilerTypeDto>['onEditingRowSave'] = async ({values, table, row}) => {
     const componentNameSet = componentsNameSet?.find(c => c.name === values['componentNameSet.name']);
     const boilerTypeAdditionalDataSet = boilerDataSets?.find(c => c.name === values['boilerTypeAdditionalDataSet.name']);
-    const boilerType = {typeName: values.name, model: values.article,
+    const boilerType = {typeName: values.typeName, model: values.model, article: values.article,
       componentNameSet: componentNameSet || {name: ""},
       boilerTypeAdditionalDataSet: boilerTypeAdditionalDataSet || {name: ""}};
     const newValidationErrors = validateBoilerType(boilerType);
@@ -124,6 +121,21 @@ const BoilersType = () => {
         accessorKey: 'model', //access nested data with dot notation
         header: 'Модель',
         size: 50,
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors?.model,
+          helperText: validationErrors?.model,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              article: undefined,
+            }),
+        },
+      },
+      {
+        accessorKey: 'article', //access nested data with dot notation
+        header: 'Артикуль',
+        size: 30,
         muiEditTextFieldProps: {
           required: true,
           error: !!validationErrors?.article,
@@ -241,7 +253,7 @@ const BoilersType = () => {
       isSaving: isCreatingBoilerType || isUpdatingBoilerType || isDeletingBoilerType,
       showAlertBanner: isError,
       showProgressBars: isRefetching || isLoading || isLoadingComponentNameSet || isRefetchComponentNameSet
-        || isRefetchComponentNameSet || isLoadingBoilerDatSet,
+        || isRefetchComponentNameSet || isLoadingBoilerDatSet || isRefetchingBoilerDatSet,
     },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box sx={{display: 'flex', gap: '1em'}}>

@@ -18,9 +18,9 @@ public class UserHistoryService {
     private final UserHistoryRepository userHistoryRepository;
     private final UserInfoService userInfoService;
 
-    public void addUserHistory(Integer oldCode, String oldUsername, Integer code, User user, Role role,
-                               boolean isActive, int typeOperation) {
-        changeActiveStatusOld(oldCode, typeOperation);
+    public void addUserHistory(Long userId, Integer oldCode, String oldUsername,
+                               Integer code, User user, Role role, int typeOperation) {
+        changeActiveStatusOld(userId, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
         UserHistory userHistory = new UserHistory();
         userHistory.setCode(user.getCode());
@@ -30,19 +30,20 @@ public class UserHistoryService {
         userHistory.setModifiedDate(LocalDateTime.now());
         userHistory.setCodeChanged(userInfo.code());
         userHistory.setUsernameChanged(userInfo.name());
-        userHistory.setIsActive(isActive);
+        userHistory.setIsActive(true);
         userHistory.setTypeOperation(typeOperation);
         userHistory.setOldCode(oldCode != null && typeOperation == 2 ? oldCode : null);
         userHistory.setOldUsername(oldUsername != null && typeOperation == 2 ? oldUsername : null);
+        userHistory.setUserId(userId);
         userHistoryRepository.save(userHistory);
     }
 
-    private void changeActiveStatusOld(Integer oldCode, int typeOperation)
+    private void changeActiveStatusOld(Long userId, int typeOperation)
     {
-        if (typeOperation == 1 || oldCode == null) {
+        if (typeOperation == 1 || userId == null) {
             return;
         }
-        userHistoryRepository.findByCodeAndIsActive(oldCode, true).ifPresent((u) -> {
+        userHistoryRepository.findByUserIdAndIsActive(userId, true).ifPresent((u) -> {
             u.setIsActive(false);
             userHistoryRepository.save(u);
         });

@@ -38,7 +38,7 @@ public class ComponentNameSetService {
         ComponentNameSet componentNameSet = componentNameSetMapper.toEntity(componentNameSetDto);
         componentNameSetRepository.save(componentNameSet);
         componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(),null,
-                componentNameSetDto.name(), true, 1);
+                componentNameSetDto.name(), 1);
     }
 
     @Transactional
@@ -49,7 +49,7 @@ public class ComponentNameSetService {
         componentNameSet.setName(componentNameSetDto.name());
         componentNameSetRepository.save(componentNameSet);
         componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(), oldNameNameSet,
-                componentNameSetDto.name(), true, 2);
+                componentNameSetDto.name(), 2);
     }
 
     @Transactional
@@ -58,6 +58,6 @@ public class ComponentNameSetService {
                 orElseThrow(() -> new RecordNotFoundException("Набор компонентов не найден"));
         componentNameSetRepository.delete(componentNameSet);
         componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(), componentNameSet.getName(),
-                componentNameSet.getName(), false, 3);
+                componentNameSet.getName(), 3);
     }
 }

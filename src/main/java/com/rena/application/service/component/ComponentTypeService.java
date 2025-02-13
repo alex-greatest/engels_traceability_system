@@ -38,7 +38,7 @@ public class ComponentTypeService {
         ComponentType componentType = componentTypeMapper.toEntity(componentTypeDto);
         componentTypeRepository.save(componentType);
         componentTypeHistoryService.addComponentTypeHistory(componentType.getId(), null,
-                componentTypeDto.name(), true, 1);
+                componentTypeDto.name(), 1);
     }
 
     @Transactional
@@ -49,7 +49,7 @@ public class ComponentTypeService {
         componentType.setName(componentTypeDto.name());
         componentTypeRepository.save(componentType);
         componentTypeHistoryService.addComponentTypeHistory(componentType.getId(), oldComponentTypeName,
-                componentTypeDto.name(), true, 2);
+                componentTypeDto.name(), 2);
     }
 
     @Transactional
@@ -58,6 +58,6 @@ public class ComponentTypeService {
                 orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден"));
         componentTypeRepository.delete(componentType);
         componentTypeHistoryService.addComponentTypeHistory(componentType.getId(), componentType.getName(),
-                componentType.getName(), false, 3);
+                componentType.getName(), 3);
     }
 }

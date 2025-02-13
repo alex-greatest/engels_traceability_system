@@ -1,6 +1,5 @@
 package com.rena.application.entity.model.boiler.type.additional;
 
-import com.rena.application.entity.model.user.UserHistory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -14,7 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "boiler_type_additional_data_set_history", indexes = {
         @Index(name = "idx_boiler_type_additional_data_set_history_name_is_active", columnList = "name, is_active"),
-        @Index(name = "idx_boiler_type_additional_data_set_history_data_set_id", columnList = "boiler_type_addition_data_set_id")
+        @Index(name = "idx_boiler_type_additional_data_set_history_data_set_id", columnList = "boiler_type_addition_data_set_id"),
+        @Index(name = "idx_boiler_type_additional_data_set_history_user_id", columnList = "user_history_id"),
+        @Index(name = "idx_boiler_type_additional_data_set_history_type_operation", columnList = "type_operation")
 })
 public class BoilerTypeAdditionalDataSetHistory {
     @Id
@@ -50,7 +51,6 @@ public class BoilerTypeAdditionalDataSetHistory {
     private Boolean isActive = false;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_history_id", nullable = false)
-    private UserHistory userHistory;
+    @Column(name = "user_history_id", nullable = false)
+    private Long userId;
 }

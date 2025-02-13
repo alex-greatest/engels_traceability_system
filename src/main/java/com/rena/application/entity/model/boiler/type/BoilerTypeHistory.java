@@ -1,8 +1,5 @@
 package com.rena.application.entity.model.boiler.type;
 
-import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalDataSetHistory;
-import com.rena.application.entity.model.component.ComponentNameSetHistory;
-import com.rena.application.entity.model.user.UserHistory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -17,9 +14,11 @@ import java.time.LocalDateTime;
 @Table(name = "boiler_type_history", indexes = {
         @Index(name = "idx_boiler_type_history_article_model_is_active", columnList = "model, is_active"),
         @Index(name = "idx_boiler_type_history_name_type_name", columnList = "type_name"),
-        @Index(name = "idx_boiler_type_history_component_name_set", columnList = "component_name_set_history_id"),
-        @Index(name = "idx_boiler_type_history_user_history_id", columnList = "user_history_id"),
-        @Index(name = "idx_boiler_type_history_boiler_type_additional_set_id", columnList = "boiler_type_additional_data_set_history_id")
+        @Index(name = "idx_boiler_type_history_user_idd", columnList = "user_history_id"),
+        @Index(name = "idx_boiler_type_history_component_name_set_id", columnList = "component_name_set_id"),
+        @Index(name = "idx_boiler_type_history_boiler_set", columnList = "boiler_type_additional_data_set_id"),
+        @Index(name = "idx_boiler_type_history_type_operation", columnList = "type_operation"),
+        @Index(name = "idx_boiler_type_history_article", columnList = "article")
 })
 public class BoilerTypeHistory {
     @Id
@@ -46,14 +45,17 @@ public class BoilerTypeHistory {
     private String odlTypeName;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "component_name_set_history_id", nullable = false)
-    private ComponentNameSetHistory componentNameSetHistory;
+    @Column(name = "article", nullable = false, length = 30)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String article;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "boiler_type_additional_data_set_history_id", nullable = false)
-    private BoilerTypeAdditionalDataSetHistory boilerTypeAdditionalDataSetHistory;
+    @Column(name = "component_name_set_id", nullable = false)
+    private Long componentNameSetId;
+
+    @NotNull
+    @Column(name = "boiler_type_additional_data_set_id", nullable = false)
+    private Long boilerTypeAdditionalDataSetId;
 
     @NotNull
     @Column(name = "modified_date", nullable = false)
@@ -70,7 +72,6 @@ public class BoilerTypeHistory {
     private Boolean isActive = false;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_history_id", nullable = false)
-    private UserHistory userHistory;
+    @Column(name = "user_history_id", nullable = false)
+    private Long userId;
 }

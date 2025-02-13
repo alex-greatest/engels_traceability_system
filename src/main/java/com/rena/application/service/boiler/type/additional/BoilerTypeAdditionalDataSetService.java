@@ -47,7 +47,7 @@ public class BoilerTypeAdditionalDataSetService {
                 null, boilerTypeAdditionalDataSet.getName(), true, 1);
         boilerTypeAdditionalValueRepository.addAdditionalValue(boilerTypeAdditionalDataSet.getId());
         boilerTypeAdditionalValueHistoryRepository.
-                addAdditionalValueHistory(boilerDataSetHistory.getUserHistory().getId(),
+                addAdditionalValueHistory(boilerDataSetHistory.getUserId(),
                         boilerTypeAdditionalDataSet.getId(), LocalDateTime.now());
     }
 

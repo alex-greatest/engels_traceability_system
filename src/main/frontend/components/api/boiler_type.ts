@@ -3,7 +3,7 @@ import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config
 import { EndpointError } from '@vaadin/hilla-frontend';
 import BoilerTypeDto from 'Frontend/generated/com/rena/application/entity/dto/boiler_type/BoilerTypeDto';
 import {
-  errorMessageEmpty,
+  errorMessageEmpty, errorMessageLength30,
   errorMessageLength50,
   validateLength,
   validateRequired
@@ -104,6 +104,9 @@ export function validateBoilerType(boiler: BoilerTypeDto) {
       : '',
     componentNameSet: !validateRequired(boiler?.componentNameSet.name ?? "")
       ? errorMessageEmpty
+      : '',
+    article: !validateLength(boiler?.article ?? "")
+      ? errorMessageLength30
       : '',
   };
 }

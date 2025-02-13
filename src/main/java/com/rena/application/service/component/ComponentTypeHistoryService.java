@@ -20,8 +20,7 @@ public class ComponentTypeHistoryService {
     private final UserInfoService userInfoService;
     private final UserHistoryRepository userHistoryRepository;
 
-    public void addComponentTypeHistory(Long componentTypeId, String oldNameComponentType,
-                                        String nameComponentType, boolean isActive, int typeOperation) {
+    public void addComponentTypeHistory(Long componentTypeId, String oldNameComponentType, String nameComponentType, int typeOperation) {
         changeActiveStatusOld(componentTypeId, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
         UserHistory userHistory = userHistoryRepository.findByCodeAndIsActive(userInfo.code(), true).
@@ -31,8 +30,8 @@ public class ComponentTypeHistoryService {
         componentTypeHistory.setName(nameComponentType);
         componentTypeHistory.setComponentTypeId(componentTypeId);
         componentTypeHistory.setOldName(oldNameComponentType != null && typeOperation == 2 ? oldNameComponentType : null);
-        componentTypeHistory.setIsActive(isActive);
-        componentTypeHistory.setUserHistory(userHistory);
+        componentTypeHistory.setIsActive(true);
+        componentTypeHistory.setUserId(userHistory.getUserId());
         componentTypeHistory.setModifiedDate(LocalDateTime.now());
         componentTypeHistoryRepository.save(componentTypeHistory);
     }

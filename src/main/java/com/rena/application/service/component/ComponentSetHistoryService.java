@@ -21,7 +21,7 @@ public class ComponentSetHistoryService {
     private final UserHistoryRepository userHistoryRepository;
 
     public void addComponentHistory(Long componentSetId, Long componentTypeId, Long componentNameSetId,
-                                    Long oldComponentTypeId, String value, boolean isActive, int typeOperation) {
+                                    Long oldComponentTypeId, String value, int typeOperation) {
         changeActiveStatusOld(componentSetId, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
         UserHistory userHistory = userHistoryRepository.findByCodeAndIsActive(userInfo.code(), true).
@@ -34,8 +34,8 @@ public class ComponentSetHistoryService {
         componentSetHistory.setTypeOperation(typeOperation);
         componentSetHistory.setComponentTypeId(componentTypeId);
         componentSetHistory.setValue(value);
-        componentSetHistory.setIsActive(isActive);
-        componentSetHistory.setUserHistoryId(userHistory.getId());
+        componentSetHistory.setIsActive(true);
+        componentSetHistory.setUserHistoryId(userHistory.getUserId());
         componentSetHistory.setModifiedDate(LocalDateTime.now());
         componentSetHistoryRepository.save(componentSetHistory);
     }

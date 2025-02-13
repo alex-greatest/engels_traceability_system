@@ -35,7 +35,7 @@ public class BoilerTypeAdditionalValueHistoryService {
         boilerTypeAdditionalValueHistory.setOldValue(oldValue != null && typeOperation == 2 ? oldValue : null);
         boilerTypeAdditionalValueHistory.setUnit(unit);
         boilerTypeAdditionalValueHistory.setIsActive(isActive);
-        boilerTypeAdditionalValueHistory.setUserHistoryId(userHistory.getId());
+        boilerTypeAdditionalValueHistory.setUserHistoryId(userHistory.getUserId());
         boilerTypeAdditionalValueHistory.setModifiedDate(LocalDateTime.now());
         boilerTypeAdditionalValueHistory.setTypeOperation(typeOperation);
         boilerTypeAdditionalValueHistory.setBoilerTypeAdditionalValueId(boilerAdditionalValueId);

@@ -32,7 +32,7 @@ public class BoilerTypeAdditionalDataSetHistoryService {
         boilerTypeAdditionalSetHistory.setName(nameNameSet);
         boilerTypeAdditionalSetHistory.setOldName(oldNameNameSet != null && typeOperation == 2 ? oldNameNameSet : null);;
         boilerTypeAdditionalSetHistory.setIsActive(isActive);
-        boilerTypeAdditionalSetHistory.setUserHistory(userHistory);
+        boilerTypeAdditionalSetHistory.setUserId(userHistory.getUserId());
         boilerTypeAdditionalSetHistory.setModifiedDate(LocalDateTime.now());
         boilerTypeAdditionalSetHistory.setTypeOperation(typeOperation);
         return boilerTypeAdditionalDataSetHistoryRepository.save(boilerTypeAdditionalSetHistory);

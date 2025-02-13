@@ -14,13 +14,20 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "user_history", indexes = {
         @Index(name = "idx_user_history_role_id", columnList = "role_id"),
-        @Index(name = "idx_user_history_code", columnList = "code, is_active")
+        @Index(name = "idx_user_history_code", columnList = "code"),
+        @Index(name = "idx_user_history_is_active", columnList = "is_active"),
+        @Index(name = "idx_user_history_user_id", columnList = "user_id"),
+        @Index(name = "idx_user_history_type_operation", columnList = "type_operation")
 })
 public class UserHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @NotNull
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @NotNull
     @Column(name = "code", nullable = false)

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1739385296088-1" author="Alexander (generated)">
+        <createTable tableName="boiler_order">
+            <column name="order_number" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler_order"/>
+            </column>
+            <column name="boiler_type_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_boiler" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_boiler_print" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_boiler_made" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scan_code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739385296088-2" author="Alexander (generated)">
+        <createTable tableName="status">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_status"/>
+            </column>
+            <column name="name" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739385296088-3" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_status_name" tableName="status"/>
+    </changeSet>
+    <changeSet id="1739385296088-4" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_order_boiler_type_id" tableName="boiler_order">
+            <column name="boiler_type_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1739385296088-5" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_order_date" tableName="boiler_order">
+            <column name="date"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1739385296088-7" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_order_user_id" tableName="boiler_order">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1739385296088-8" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="boiler_order"
+                                 constraintName="FK_BOILER_ORDER_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status"/>
+
+        <createIndex indexName="idx_boiler_order_status_id" tableName="boiler_order">
+            <column name="status_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

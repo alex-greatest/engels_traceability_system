@@ -57,7 +57,7 @@ public class ComponentSetService {
         componentSetRepository.save(componentSet);
         componentSetHistoryService.addComponentHistory(componentSet.getId(), componentType.getId(),
                 componentNameSet.getId(), null,
-                componentSetDto.value(), true, 1);
+                componentSetDto.value(), 1);
     }
 
     @Transactional
@@ -76,7 +76,7 @@ public class ComponentSetService {
             componentSetRepository.save(componentSet);
             componentSetHistoryService.addComponentHistory(componentSet.getId(), newComponentType.getId(),
                     componentSet.getComponentNameSet().getId(), oldComponentType.getId(),
-                    componentSetResponse.value(), true, 2);
+                    componentSetResponse.value(), 2);
         });
     }
 
@@ -85,8 +85,7 @@ public class ComponentSetService {
         ComponentSet componentSet = componentSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
         componentSetHistoryService.addComponentHistory(componentSet.getId(), componentSet.getComponentType().getId(),
-                componentSet.getComponentNameSet().getId(), null, componentSet.getValue(),
-                false, 3);
+                componentSet.getComponentNameSet().getId(), null, componentSet.getValue(), 3);
         componentSetRepository.delete(componentSet);
     }
 
@@ -102,7 +101,7 @@ public class ComponentSetService {
             componentSet.setValue("0");
             componentSetRepository.save(componentSet);
             componentSetHistoryService.addComponentHistory(componentSet.getId(), componentType.getId(), componentNameSet.getId(),
-                    null, componentSet.getValue(), true, 1);
+                    null, componentSet.getValue(), 1);
         });
     }
 }

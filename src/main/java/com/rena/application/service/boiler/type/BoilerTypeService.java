@@ -43,32 +43,38 @@ public class BoilerTypeService {
         boilerType.setComponentNameSet(componentNameSet);
         boilerType.setBoilerTypeAdditionalDataSet(boilerTypeAdditionalDataSet);
         boilerTypeRepository.save(boilerType);
-        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), boilerTypeAdditionalDataSet.getId(),
-                null, boilerType.getComponentNameSet().getName(), boilerType.getModel(),
-                boilerType.getTypeName(), true, 1);
+        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), componentNameSet.getId(), boilerTypeDto.article(),
+                boilerTypeAdditionalDataSet.getId(), null, boilerType.getModel(), boilerType.getTypeName(), 1);
     }
 
     @Transactional
     public void updateBoiler(BoilerTypeDto boilerTypeDto) {
         BoilerType boilerType = boilerTypeRepository.findBoilerById(boilerTypeDto.id()).
-                orElseThrow(() -> new RecordNotFoundException("Котёл не найден"));
+                orElseThrow(() -> new RecordNotFoundException("Тип котла не найден"));
         ComponentNameSet componentNameSetNew = componentNameSetRepository.findById(boilerTypeDto.componentNameSet().id()).
                 orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
+        BoilerTypeAdditionalDataSet boilerTypeAdditionalDataSet = boilerTypeAdditionalDataSetRepository.
+                findById(boilerTypeDto.boilerTypeAdditionalDataSet().id()).
+                orElseThrow(() -> new RecordNotFoundException("Набор данных котла не найден"));
         String oldTypeName = boilerType.getTypeName();
-        /*boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), oldTypeName, componentNameSetNew.getName(),
-                boilerTypeDto.model(), boilerTypeDto.typeName(), true, 2);*/
         boilerType.setComponentNameSet(componentNameSetNew);
         boilerType.setModel(boilerTypeDto.model());
         boilerType.setTypeName(boilerTypeDto.typeName());
+        boilerType.setArticle(boilerType.getArticle());
         boilerTypeRepository.save(boilerType);
+        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), componentNameSetNew.getId(),
+                boilerTypeDto.article(), boilerTypeAdditionalDataSet.getId(), oldTypeName, boilerType.getModel(),
+                boilerType.getTypeName(),2);
     }
 
     @Transactional
     public void deleteComponent(Long id) {
         BoilerType boilerType = boilerTypeRepository.findBoilerById(id).
-                orElseThrow(() -> new RecordNotFoundException("Котёл не найден"));
-        /*boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), null,
-                boilerType.getComponentNameSet().getName(), boilerType.getModel(), boilerType.getTypeName(), false, 3);*/
+                orElseThrow(() -> new RecordNotFoundException("Тип котла не найден"));
         boilerTypeRepository.delete(boilerType);
+        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), boilerType.getComponentNameSet().getId(),
+                boilerType.getArticle(),
+                boilerType.getBoilerTypeAdditionalDataSet().getId(), null, boilerType.getModel(),
+                boilerType.getTypeName(), 3);
     }
 }

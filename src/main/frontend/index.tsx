@@ -18,6 +18,9 @@ import {AuthProvider} from "Frontend/components/config/auth/auth";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
 import { Loading } from 'Frontend/components/config/Loading';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/ru';
 
 const Context = createContext(null);
 
@@ -29,7 +32,9 @@ function App() {
         <AuthProvider>
             <Context.Provider value={null}>
                 <Suspense fallback={<Loading />}>
-                    <RouterProvider router={router} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+                        <RouterProvider router={router} />
+                    </LocalizationProvider>
                 </Suspense>
                 <ToastContainer />
             </Context.Provider>

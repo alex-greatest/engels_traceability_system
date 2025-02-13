@@ -1,4 +1,4 @@
-package com.rena.application.controller.boiler.type;
+package com.rena.application.controller.boiler.type.additional;
 
 import com.rena.application.entity.dto.boiler_type.BoilerTypeAdditionalValueDto;
 import com.rena.application.exceptions.DbException;

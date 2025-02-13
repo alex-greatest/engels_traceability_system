@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
         @Index(name = "idx_component_set_history_is_active", columnList = "component_set_id, is_active"),
         @Index(name = "idx_component_set_history_name_set_id", columnList = "component_name_set_id"),
         @Index(name = "idx_component_set_history_old_set", columnList = "old_component_type_id"),
-        @Index(name = "idx_component_set_history_user_history_id", columnList = "user_history_id")
+        @Index(name = "idx_component_set_history_user_history_id", columnList = "user_history_id"),
+        @Index(name = "idx_component_set_history_type_operation", columnList = "type_operation")
 })
 public class ComponentSetHistory {
     @Id

@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
         @Index(name = "idx_boiler_type_additional_value_history_is_active", columnList = "boiler_type_additional_value_id, is_active"),
         @Index(name = "idx_boiler_type_additional_value_history_additional_data", columnList = "boiler_type_additional_data_id"),
         @Index(name = "idx_boiler_type_additional_value_history_set", columnList = "boiler_type_additional_data_set_id"),
-        @Index(name = "idx_boiler_type_additional_value_history_user_id", columnList = "user_history_id")
+        @Index(name = "idx_boiler_type_additional_value_history_user_id", columnList = "user_history_id"),
+        @Index(name = "idx_boiler_type_additional_value_history_type_operation", columnList = "type_operation")
 })
 public class BoilerTypeAdditionalValueHistory {
     @Id

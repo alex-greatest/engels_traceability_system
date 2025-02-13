@@ -14,11 +14,17 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "user_", indexes = {
         @Index(name = "idx_user__role_id", columnList = "role_id")
 }, uniqueConstraints = {
-        @UniqueConstraint(name = "uc_user__username", columnNames = {"username"})
+        @UniqueConstraint(name = "uc_user__username", columnNames = {"username"}),
+        @UniqueConstraint(name = "uc_user__code", columnNames = {"code"})
 })
 public class User {
     @Id
-    @Column(name = "code", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @NotNull
+    @Column(name = "code", unique = true, nullable = false)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer code;
 

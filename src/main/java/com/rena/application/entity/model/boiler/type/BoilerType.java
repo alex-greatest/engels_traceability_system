@@ -17,7 +17,8 @@ import org.hibernate.type.SqlTypes;
         @Index(name = "idx_boiler_type_boiler_type_additional_data_set_id", columnList = "boiler_type_additional_data_set_id")
 }, uniqueConstraints = {
         @UniqueConstraint(name = "uc_boiler_type_name_type_name", columnNames = {"type_name"}),
-        @UniqueConstraint(name = "uc_boiler_type_model", columnNames = {"model"})
+        @UniqueConstraint(name = "uc_boiler_type_model", columnNames = {"model"}),
+        @UniqueConstraint(name = "uc_boiler_type_article", columnNames = {"article"})
 })
 public class BoilerType {
     @Id
@@ -29,6 +30,11 @@ public class BoilerType {
     @Column(name = "type_name", nullable = false, unique = true, length = 50)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String typeName;
+
+    @NotNull
+    @Column(name = "article", nullable = false, unique = true, length = 30)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String article;
 
     @NotNull
     @Column(name = "model", nullable = false, unique = true, length = 50)

@@ -18,7 +18,8 @@ export default function MainLayout() {
   const currentTitle = useViewConfig()?.title;
   const navigate = useNavigate();
   const location = useLocation();
-  const isCollapsed = useSignal(true);
+  const isCollapsedComponent = useSignal(true);
+  const isCollapsedBoilerType = useSignal(true);
   const { logout } = useAuth();
 
   useEffect(() => {
@@ -60,16 +61,24 @@ export default function MainLayout() {
                 <Icon icon="vaadin:users" slot="prefix" />
                 Пользователи
               </SideNavItem>
-              <SideNavItem path={'/boiler_type/set'} key={'boiler_type_additional_set_key'}>
-                <Icon icon="vaadin:archives" slot="prefix" />
-                Набор компонентов
+              <SideNavItem path={'/shifts'} key={"shifts"}>
+                <Icon icon="vaadin:shift-arrow" slot="prefix" />
+                Смены
               </SideNavItem>
-              <SideNavItem path={'/boiler_type'} key={"boiler_type"}>
-                <Icon icon="vaadin:cube" slot="prefix" />
-                Типы котлов
-              </SideNavItem>
-              <SideNav onCollapsedChanged={(event) => isCollapsed.value = event.detail.value }
-                       style={{ width: '100%' }} collapsible collapsed={isCollapsed.value}>
+              <SideNav onCollapsedChanged={(event) => isCollapsedBoilerType.value = event.detail.value }
+                       style={{ width: '100%' }} collapsible collapsed={isCollapsedBoilerType.value}>
+                <span slot="label">Типы котлов</span>
+                <SideNavItem path={'/boiler_type'} key={"boiler_type"}>
+                  <Icon icon="vaadin:cube" slot="prefix" />
+                  Котлы
+                </SideNavItem>
+                <SideNavItem path={'/boiler_type/set'} key={'boiler_type_additional_set_key'}>
+                  <Icon icon="vaadin:archives" slot="prefix" />
+                  Набор данных
+                </SideNavItem>
+              </SideNav>
+              <SideNav onCollapsedChanged={(event) => isCollapsedComponent.value = event.detail.value }
+                       style={{ width: '100%' }} collapsible collapsed={isCollapsedComponent.value}>
                 <span slot="label">Компоненты</span>
                 <SideNavItem path={'/components/type'} key={'components_type_key'}>
                   <Icon icon="vaadin:compile" slot="prefix" />
