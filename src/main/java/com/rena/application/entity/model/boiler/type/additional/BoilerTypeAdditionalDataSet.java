@@ -23,4 +23,8 @@ public class BoilerTypeAdditionalDataSet {
     @Column(name = "name", nullable = false, unique = true, length = 100)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String name;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private Integer version;
 }

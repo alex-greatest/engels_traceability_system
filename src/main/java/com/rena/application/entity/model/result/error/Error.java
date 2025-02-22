@@ -34,4 +34,8 @@ public class Error {
     @NotNull
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private Integer version;
 }

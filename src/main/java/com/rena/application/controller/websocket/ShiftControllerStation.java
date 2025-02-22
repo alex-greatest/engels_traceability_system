@@ -1,7 +1,7 @@
 package com.rena.application.controller.websocket;
 
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.service.ShiftService;
+import com.rena.application.service.shift.ShiftService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,19 +13,38 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class ShiftControllerStation {
     private final SimpMessagingTemplate messagingTemplate;
-    private final ShiftService userService;
+    private final ShiftService shiftService;
 
     @MessageMapping("/shift/get_info/request")
-    public void getUserInfo(String stationName) {
+    public void getShift(String stationName) {
         try {
-            var shifts = userService.getAllShifts();
-            messagingTemplate.convertAndSend(String.format("/message/%s/shift/get_info/response", stationName), shifts);
+            var shift = shiftService.getCurrentShift();
+            messagingTemplate.convertAndSend(String.format("/message/%s/shift/get_info/response", stationName), shift.getNumber());
         } catch (RecordNotFoundException e) {
+            log.error("Смены", e);
             messagingTemplate.convertAndSend(String.format("/message/%s/shift/get_info/errors", stationName),
-                    "Оператор не найден");
+                    e.getMessage());
         } catch (Exception e) {
             log.error("Смены", e);
-            messagingTemplate.convertAndSend(String.format("/message/%s/shift/get_info/errors", stationName), "Неизвестная ошибка");
+            messagingTemplate.convertAndSend(String.format("/message/%s/shift/get_info/errors", stationName),
+                    "Неизвестная ошибка");
+        }
+    }
+
+    @MessageMapping("/shift/made/boiler/get_info/request")
+    public void getAmountMadeBoiler(String stationName) {
+        try {
+            var amountBoilerMade = shiftService.getAmountBoilerMade(stationName);
+            messagingTemplate.convertAndSend(String.format("/message/%s/shift/amount/made/boiler/get_info/response", stationName),
+                    amountBoilerMade);
+        } catch (RecordNotFoundException e) {
+            log.error("Смены", e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/shift/amount/made/boiler/get_info/errors", stationName),
+                    e.getMessage());
+        } catch (Exception e) {
+            log.error("Смены", e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/shift/amount/made/boiler/get_info/errors", stationName),
+                    "Неизвестная ошибка");
         }
     }
 }

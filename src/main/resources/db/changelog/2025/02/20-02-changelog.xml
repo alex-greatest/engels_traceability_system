@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1740049439876-1" author="Alexander (generated)">
+        <addColumn tableName="setting">
+            <column name="amount_boiler_in_month" type="INT"/>
+            <column name="prev_shift" type="INT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1740049439876-2" author="Alexander (generated)">
+        <addNotNullConstraint columnName="amount_boiler_in_month" tableName="setting"/>
+    </changeSet>
+    <changeSet id="1740049439876-3" author="Alexander (generated)">
+        <addColumn tableName="boiler_order">
+            <column name="amount_boiler_made" type="INT"/>
+            <column name="amount_boiler_order" type="INT"/>
+            <column name="amount_boiler_print" type="INT"/>
+            <column name="number_shift_created" type="INT"/>
+            <column name="order_number" type="INT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1740049439876-4" author="Alexander (generated)">
+        <addNotNullConstraint columnName="amount_boiler_made" tableName="boiler_order"/>
+    </changeSet>
+    <changeSet id="1740049439876-5" author="Alexander (generated)">
+        <addColumn tableName="shift_station">
+            <column name="amount_boiler_made" type="INT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1740049439876-6" author="Alexander (generated)">
+        <addNotNullConstraint columnName="amount_boiler_made" tableName="shift_station"/>
+    </changeSet>
+    <changeSet id="1740049439876-8" author="Alexander (generated)">
+        <addNotNullConstraint columnName="amount_boiler_order" tableName="boiler_order"/>
+    </changeSet>
+    <changeSet id="1740049439876-10" author="Alexander (generated)">
+        <addNotNullConstraint columnName="amount_boiler_print" tableName="boiler_order"/>
+    </changeSet>
+    <changeSet id="1740049439876-11" author="Alexander (generated)">
+        <addColumn tableName="shift">
+            <column name="number" type="INT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1740049439876-12" author="Alexander (generated)">
+        <addNotNullConstraint columnName="number" tableName="shift"/>
+    </changeSet>
+    <changeSet id="1740049439876-14" author="Alexander (generated)">
+        <addNotNullConstraint columnName="number_shift_created" tableName="boiler_order"/>
+    </changeSet>
+    <changeSet id="1740049439876-16" author="Alexander (generated)">
+        <addNotNullConstraint columnName="order_number" tableName="boiler_order"/>
+    </changeSet>
+    <changeSet id="1740049439876-18" author="Alexander (generated)">
+        <addNotNullConstraint columnName="prev_shift" tableName="setting"/>
+    </changeSet>
+    <changeSet id="1740049439876-19" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="number" constraintName="uc_shift_number" tableName="shift"/>
+    </changeSet>
+    <changeSet id="1740049439876-20" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_order_number_shift_created" tableName="boiler_order">
+            <column name="number_shift_created"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1740049439876-21" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_order_order_number" tableName="boiler_order">
+            <column name="order_number"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

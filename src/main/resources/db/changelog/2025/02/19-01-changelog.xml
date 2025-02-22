@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1739948774712-1" author="Alexander (generated)">
+        <createTable tableName="shift_station">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_shift_station"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_boiler_made" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739948774712-2" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="shift_station"
+                                 constraintName="FK_SHIFT_STATION_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1739948774712-3" author="Alexander (generated)">
+        <dropColumn columnName="amount_boiler_print" tableName="shift_boiler"/>
+    </changeSet>
+
+</databaseChangeLog>

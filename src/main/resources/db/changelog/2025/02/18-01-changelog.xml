@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1739873747919-1" author="Alexander (generated)">
+        <addColumn tableName="setting">
+            <column name="last_zeroing" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1739873747919-2" author="Alexander (generated)">
+        <addNotNullConstraint columnName="last_zeroing" tableName="setting"/>
+    </changeSet>
+
+</databaseChangeLog>

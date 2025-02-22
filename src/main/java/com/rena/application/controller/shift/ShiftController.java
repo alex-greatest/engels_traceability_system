@@ -1,9 +1,9 @@
 package com.rena.application.controller.shift;
 
-import com.rena.application.entity.dto.ShiftDto;
+import com.rena.application.entity.dto.shift.ShiftDto;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.service.HandlerErrorConstraintDB;
-import com.rena.application.service.ShiftService;
+import com.rena.application.service.shift.ShiftService;
 import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
@@ -39,7 +39,7 @@ public class ShiftController {
         }
     }
 
-    public void updateShift(@Nonnull @NotNull Long oldShiftNumber,
+    public void updateShift(@Nonnull @NotNull Integer oldShiftNumber,
                             @Nonnull @Valid ShiftDto shiftDto) {
         try {
             shiftService.updateShift(oldShiftNumber, shiftDto);
@@ -51,7 +51,7 @@ public class ShiftController {
         }
     }
 
-    public void deleteShift(@Nonnull @NotNull Long shiftNumber) {
+    public void deleteShift(@Nonnull @NotNull Integer shiftNumber) {
         try {
             shiftService.deleteShift(shiftNumber);
         } catch (DataAccessException e) {

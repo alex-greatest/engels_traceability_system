@@ -27,6 +27,7 @@ public class UserAuthorization {
             var user = userService.getUser(userCodeWebsocket.code());
             messagingTemplate.convertAndSend(String.format("/message/%s/user/get_info/response", userCodeWebsocket.station()), user);
         } catch (RecordNotFoundException e) {
+            log.error("Получение данных оператора", e);
             messagingTemplate.convertAndSend(String.format("/message/%s/user/get_info/errors", userCodeWebsocket.station()),
                     "Оператор не найден");
         } catch (Exception e) {

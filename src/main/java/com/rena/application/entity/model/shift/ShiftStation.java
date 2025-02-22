@@ -1,15 +1,16 @@
-package com.rena.application.entity.model.result.error;
+package com.rena.application.entity.model.shift;
 
 import com.rena.application.entity.model.result.common.Station;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "error_template")
-public class ErrorTemplate {
+@Table(name = "shift_station")
+public class ShiftStation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,11 +20,7 @@ public class ErrorTemplate {
     @JoinColumn(name = "station_id", nullable = false)
     private Station station;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "error_step_id", nullable = false)
-    private ErrorStep errorStep;
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "error_message_id", nullable = false)
-    private ErrorMessage errorMessage;
+    @NotNull
+    @Column(name = "amount_boiler_made", nullable = false)
+    private Integer amountBoilerMade;
 }
