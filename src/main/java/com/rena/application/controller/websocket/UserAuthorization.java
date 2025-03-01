@@ -1,9 +1,8 @@
 package com.rena.application.controller.websocket;
 
-import com.rena.application.config.mapper.UserMapper;
+import com.rena.application.entity.dto.user.UserRequestAuthorization;
 import com.rena.application.entity.model.user.UserCodeWebsocket;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.user.UserRepository;
 import com.rena.application.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class UserAuthorization {
     private final SimpMessagingTemplate messagingTemplate;
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final UserService userService;
 
     @MessageMapping("/user/get_info/request")
@@ -33,6 +30,22 @@ public class UserAuthorization {
         } catch (Exception e) {
             log.error("Получение данных оператора", e);
             messagingTemplate.convertAndSend(String.format("/message/%s/user/get_info/errors", userCodeWebsocket.station()),
+                    "Неизвестная ошибка");
+        }
+    }
+
+    @MessageMapping("/user/authorization/request")
+    public void getUserAuthorization(@Payload UserRequestAuthorization userRequestAuthorization) {
+        try {
+            var user = userService.getUserAuthorization(userRequestAuthorization);
+            messagingTemplate.convertAndSend(String.format("/message/%s/user/authorization/response", userRequestAuthorization.station()), user);
+        } catch (RecordNotFoundException e) {
+            log.error("Получение данных оператора", e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/user/authorization/errors", userRequestAuthorization.station()),
+                    e.getMessage());
+        } catch (Exception e) {
+            log.error("Получение данных оператора", e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/user/authorization/errors", userRequestAuthorization.station()),
                     "Неизвестная ошибка");
         }
     }

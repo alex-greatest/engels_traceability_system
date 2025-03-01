@@ -1,6 +1,7 @@
 package com.rena.application.service.result;
 
 import com.rena.application.entity.model.result.error.Error;
+import com.rena.application.entity.model.user.UserHistory;
 import com.rena.application.repository.result.error.ErrorRepository;
 import com.rena.application.repository.result.error.ErrorTemplateRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,12 @@ public class ErrorService {
     private final ErrorTemplateRepository errorTemplateRepository;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void addError(String message, String station, String step, Long userId, Long boilerId) {
+    public void addError(String message, String station, String step, UserHistory userHistory, Long boilerId) {
         errorTemplateRepository.findByStation_NameAndErrorMessage_Name(station, message, step).ifPresent((errorTemplate) -> {
             var error = new Error();
             error.setErrorTemplate(errorTemplate);
             error.setBoilerId(boilerId);
-            error.setUserId(userId);
+            error.setUserHistory(userHistory);
             error.setDateCreate(LocalDateTime.now());
             errorRepository.save(error);
         });

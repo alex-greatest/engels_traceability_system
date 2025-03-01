@@ -8,7 +8,7 @@ export function useBoilerTypeAdditionalValue(id: number, url: string) {
     queryKey: ['boiler_additional_value', url],
     queryFn: () => BoilerTypeAdditionalValueController.getAllAdditionalValue(id),
     staleTime: 1000 * 60 * 5,
-    enabled: !isNaN(id)
+    enabled: id !== undefined && !isNaN(id)
   })
 }
 

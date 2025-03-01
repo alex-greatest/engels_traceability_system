@@ -19,7 +19,6 @@ import java.util.List;
 public class ComponentNameSetService {
     private final ComponentNameSetRepository componentNameSetRepository;
     private final ComponentNameSetMapper componentNameSetMapper;
-    private final ComponentNameSetHistoryService componentNameSetHistoryService;
 
     public List<ComponentNameSetDto> getAllComponents() {
         List<ComponentNameSet> componentNameSets = componentNameSetRepository.findAll();
@@ -37,19 +36,14 @@ public class ComponentNameSetService {
     public void addComponent(ComponentNameSetDto componentNameSetDto) {
         ComponentNameSet componentNameSet = componentNameSetMapper.toEntity(componentNameSetDto);
         componentNameSetRepository.save(componentNameSet);
-        componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(),null,
-                componentNameSetDto.name(), 1);
     }
 
     @Transactional
     public void updateComponent(Long id, ComponentNameSetDto componentNameSetDto) {
         ComponentNameSet componentNameSet = componentNameSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
-        String oldNameNameSet = componentNameSet.getName();
         componentNameSet.setName(componentNameSetDto.name());
         componentNameSetRepository.save(componentNameSet);
-        componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(), oldNameNameSet,
-                componentNameSetDto.name(), 2);
     }
 
     @Transactional
@@ -57,7 +51,5 @@ public class ComponentNameSetService {
         ComponentNameSet componentNameSet = componentNameSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Набор компонентов не найден"));
         componentNameSetRepository.delete(componentNameSet);
-        componentNameSetHistoryService.addComponentNameSetHistory(componentNameSet.getId(), componentNameSet.getName(),
-                componentNameSet.getName(), 3);
     }
 }

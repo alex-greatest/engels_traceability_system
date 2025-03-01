@@ -19,7 +19,6 @@ import java.util.List;
 public class BoilerTypeAdditionalValueService {
     private final BoilerTypeAdditionalValueRepository boilerTypeAdditionalValueRepository;
     private final BoilerTypeAdditionalValueMapper boilerTypeAdditionalValueMapper;
-    private final BoilerTypeAdditionalValueHistoryService boilerTypeAdditionalValueHistoryService;
 
     public List<BoilerTypeAdditionalValueDto> getAllValue(Long boilerAdditionalDataSet) {
         List<BoilerTypeAdditionalValue> boilerTypeAdditionalValues = boilerTypeAdditionalValueRepository.
@@ -33,15 +32,8 @@ public class BoilerTypeAdditionalValueService {
             var boilerAdditionalValue = boilerTypeAdditionalValueRepository.
                     findBoilerTypeAdditionalValueById(boilerTypeAdditionalValueDto.id()).
                     orElseThrow(() -> new RecordNotFoundException("Значение не найдено"));
-            String oldValue = boilerAdditionalValue.getValue();
             boilerAdditionalValue.setValue(boilerTypeAdditionalValueDto.value());
             boilerAdditionalValue.setUnit(boilerTypeAdditionalValueDto.unit());
-            boilerTypeAdditionalValueHistoryService.addBoilerTypeAdditionDataValueHistory(
-                    boilerAdditionalValue.getBoilerTypeAdditionalDataSet().getId(),
-                    boilerAdditionalValue.getBoilerTypeAdditionalData().getId(),
-                    boilerAdditionalValue.getId(),
-                    oldValue, boilerTypeAdditionalValueDto.value(), boilerTypeAdditionalValueDto.unit(),
-                    true, 2);
         });
     }
 }

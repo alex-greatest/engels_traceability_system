@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1740406190493-1" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_type_history_article_model" tableName="boiler_type_history">
+            <column name="model"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1740406190493-2" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="boiler_type_history"
+                                  constraintName="fk_boiler_type_history_on_boiler_type_additional_data_set"/>
+    </changeSet>
+    <changeSet id="1740406190493-3" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="boiler_type_history"
+                                  constraintName="fk_boiler_type_history_on_component_name_set"/>
+    </changeSet>
+    <changeSet id="1740406190493-4" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="jv_commit_property" constraintName="jv_commit_property_commit_fk"/>
+    </changeSet>
+    <changeSet id="1740406190493-5" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="jv_global_id" constraintName="jv_global_id_owner_id_fk"/>
+    </changeSet>
+    <changeSet id="1740406190493-6" author="Alexander (generated)">
+        <dropIndex indexName="idx_boiler_type_history_model_is_active" tableName="boiler_type_history"/>
+
+        <dropForeignKeyConstraint baseTableName="jv_snapshot" constraintName="jv_snapshot_commit_fk"/>
+    </changeSet>
+    <changeSet id="1740406190493-7" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="jv_snapshot" constraintName="jv_snapshot_global_id_fk"/>
+    </changeSet>
+    <changeSet id="1740406190493-8" author="Alexander (generated)">
+        <dropTable cascadeConstraints="true" tableName="jv_commit"/>
+    </changeSet>
+    <changeSet id="1740406190493-9" author="Alexander (generated)">
+        <dropTable cascadeConstraints="true" tableName="jv_commit_property"/>
+    </changeSet>
+    <changeSet id="1740406190493-10" author="Alexander (generated)">
+        <dropTable cascadeConstraints="true" tableName="jv_global_id"/>
+    </changeSet>
+    <changeSet id="1740406190493-11" author="Alexander (generated)">
+        <dropTable cascadeConstraints="true" tableName="jv_snapshot"/>
+    </changeSet>
+    <changeSet id="1740406190493-13" author="Alexander (generated)">
+        <dropColumn columnName="boiler_type_additional_data_set_id" tableName="boiler_type_history"/>
+
+        <dropColumn columnName="component_name_set_id" tableName="boiler_type_history"/>
+
+        <dropColumn columnName="is_active" tableName="boiler_type_history"/>
+
+        <dropColumn columnName="old_type_name" tableName="boiler_type_history"/>
+    </changeSet>
+    <changeSet id="1740406190493-17" author="Alexander (generated)">
+        <dropSequence sequenceName="jv_commit_pk_seq"/>
+    </changeSet>
+    <changeSet id="1740406190493-18" author="Alexander (generated)">
+        <dropSequence sequenceName="jv_global_id_pk_seq"/>
+    </changeSet>
+    <changeSet id="1740406190493-19" author="Alexander (generated)">
+        <dropSequence sequenceName="jv_snapshot_pk_seq"/>
+    </changeSet>
+
+</databaseChangeLog>

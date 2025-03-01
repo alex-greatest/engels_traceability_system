@@ -105,8 +105,8 @@ export function validateBoilerType(boiler: BoilerTypeDto) {
     componentNameSet: !validateRequired(boiler?.componentNameSet.name ?? "")
       ? errorMessageEmpty
       : '',
-    article: !validateLength(boiler?.article ?? "")
-      ? errorMessageLength30
+    article: boiler?.article !== undefined && boiler?.article.length !== 10
+      ? "Артикул должен содержать 10 символов"
       : '',
   };
 }

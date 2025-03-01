@@ -29,10 +29,11 @@ import {
   useShifts,
   validateShift
 } from 'Frontend/components/api/shift';
-import ShiftDto from 'Frontend/generated/com/rena/application/entity/dto/ShiftDto';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import { TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import ShiftDto from 'Frontend/generated/com/rena/application/entity/dto/shift/ShiftDto';
+import Users from 'Frontend/views/users/@index';
 
 const Shifts = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});

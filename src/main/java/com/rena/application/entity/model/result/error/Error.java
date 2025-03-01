@@ -1,5 +1,6 @@
 package com.rena.application.entity.model.result.error;
 
+import com.rena.application.entity.model.user.UserHistory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,8 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "error", indexes = {
         @Index(name = "idx_error_date_create", columnList = "date_create"),
-        @Index(name = "idx_error_user_id", columnList = "user_id"),
-        @Index(name = "idx_error_boiler_id", columnList = "boiler_id")
+        @Index(name = "idx_error_boiler_id", columnList = "boiler_id"),
+        @Index(name = "idx_error_user_history_id", columnList = "user_history_id")
 })
 public class Error {
     @Id
@@ -31,9 +32,9 @@ public class Error {
     @JoinColumn(name = "error_template_id", nullable = false)
     private ErrorTemplate errorTemplate;
 
-    @NotNull
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_history_id", nullable = false)
+    private UserHistory userHistory;
 
     @Version
     @Column(name = "version", nullable = false)

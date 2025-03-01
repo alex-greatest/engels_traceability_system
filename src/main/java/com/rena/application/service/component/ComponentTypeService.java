@@ -19,7 +19,6 @@ import java.util.List;
 public class ComponentTypeService {
     private final ComponentTypeRepository componentTypeRepository;
     private final ComponentTypeMapper componentTypeMapper;
-    private final ComponentTypeHistoryService componentTypeHistoryService;
 
     public List<ComponentTypeDto> getAllComponents() {
         List<ComponentType> componentType = componentTypeRepository.findAll();
@@ -37,8 +36,6 @@ public class ComponentTypeService {
     public void addComponent(ComponentTypeDto componentTypeDto) {
         ComponentType componentType = componentTypeMapper.toEntity(componentTypeDto);
         componentTypeRepository.save(componentType);
-        componentTypeHistoryService.addComponentTypeHistory(componentType.getId(), null,
-                componentTypeDto.name(), 1);
     }
 
     @Transactional
@@ -48,8 +45,6 @@ public class ComponentTypeService {
         String oldComponentTypeName = componentType.getName();
         componentType.setName(componentTypeDto.name());
         componentTypeRepository.save(componentType);
-        componentTypeHistoryService.addComponentTypeHistory(componentType.getId(), oldComponentTypeName,
-                componentTypeDto.name(), 2);
     }
 
     @Transactional
@@ -57,7 +52,5 @@ public class ComponentTypeService {
         ComponentType componentType = componentTypeRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден"));
         componentTypeRepository.delete(componentType);
-        componentTypeHistoryService.addComponentTypeHistory(componentType.getId(), componentType.getName(),
-                componentType.getName(), 3);
     }
 }

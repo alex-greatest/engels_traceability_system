@@ -16,7 +16,7 @@ export function useComponentSet(id: number, url: string) {
     queryKey: ['components_set', url],
     queryFn: () => ComponentSetController.getAllComponentSet(id),
     staleTime: 1000 * 60 * 5,
-    enabled: !isNaN(id)
+    enabled: id !== undefined && !isNaN(id)
   })
 }
 

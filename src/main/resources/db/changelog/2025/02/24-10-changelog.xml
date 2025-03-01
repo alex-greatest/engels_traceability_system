@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1740395455341-1" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="component_name_set_history"
+                                  constraintName="fk_component_name_set_history_on_user_history"/>
+    </changeSet>
+    <changeSet id="1740395455341-2" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="component_set_history"
+                                  constraintName="fk_component_set_history_on_user_history"/>
+    </changeSet>
+    <changeSet id="1740395455341-3" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="component_type_history"
+                                  constraintName="fk_component_type_history_on_user_history"/>
+    </changeSet>
+    <changeSet id="1740395455341-4" author="Alexander (generated)">
+        <dropTable cascadeConstraints="true" tableName="component_name_set_history"/>
+    </changeSet>
+    <changeSet id="1740395455341-5" author="Alexander (generated)">
+        <dropTable cascadeConstraints="true" tableName="component_set_history"/>
+    </changeSet>
+    <changeSet id="1740395455341-6" author="Alexander (generated)">
+        <dropTable cascadeConstraints="true" tableName="component_type_history"/>
+    </changeSet>
+
+</databaseChangeLog>

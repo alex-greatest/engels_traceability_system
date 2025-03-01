@@ -3,10 +3,7 @@ package com.rena.application.service.user;
 import com.rena.application.config.mapper.UserMapper;
 import com.rena.application.config.security.UserInfo;
 import com.rena.application.config.security.UserInfoService;
-import com.rena.application.entity.dto.user.UserRequest;
-import com.rena.application.entity.dto.user.UserRequestPassword;
-import com.rena.application.entity.dto.user.UserRequestUpdate;
-import com.rena.application.entity.dto.user.UserResponse;
+import com.rena.application.entity.dto.user.*;
 import com.rena.application.entity.model.user.Role;
 import com.rena.application.entity.model.user.User;
 import com.rena.application.exceptions.DbException;
@@ -70,7 +67,7 @@ public class UserService {
         user.setRole(role);
         userRepository.save(user);
         userHistoryService.addUserHistory(user.getId(), null, null, user.getCode(),
-                user, role, 1);
+                user, role, 1, true);
     }
 
     @Transactional
@@ -85,7 +82,7 @@ public class UserService {
         user.setUsername(userRequest.username());
         user.setRole(role);
         userHistoryService.addUserHistory(user.getId(),
-                oldCode, oldUsername, code, user, role, 2);
+                oldCode, oldUsername, code, user, role, 2, true);
         userRepository.save(user);
     }
 
@@ -94,7 +91,7 @@ public class UserService {
         User user = userRepository.findByCode(code).orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
         user.setPassword(bCryptPasswordEncoder.encode(userRequest.password()));
         userHistoryService.addUserHistory(user.getId(),
-                code, null, code, user, user.getRole(), 4);
+                code, null, code, user, user.getRole(), 4, true);
         userRepository.save(user);
     }
 
@@ -102,7 +99,22 @@ public class UserService {
     public void deleteUser(Integer code) {
         User user = userRepository.findByCode(code).orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
         userHistoryService.addUserHistory(user.getId(), code, null, code,
-                user, user.getRole(), 3);
+                user, user.getRole(), 3, false);
         userRepository.delete(user);
     }
+
+    public UserResponse getUserAuthorization(UserRequestAuthorization userRequestAuthorization) {
+        User user = userRepository.findByUsernameAuthorization(userRequestAuthorization.login()).
+                orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        String newRoleName = user.getRole().getName().replace("ROLE_", "");
+        user.getRole().setName(newRoleName);
+        if (!user.getRole().getName().equals("Администратор")) {
+            throw new RecordNotFoundException("Пользователь не является администратором");
+        }
+        if (!bCryptPasswordEncoder.matches(userRequestAuthorization.password(), user.getPassword())) {
+            throw new RecordNotFoundException("Неверный пароль");
+        }
+        return userMapper.toDto(user);
+    }
+
 }

@@ -1,12 +1,14 @@
 package com.rena.application.repository.boiler.type.additional;
 
 import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalValue;
+import org.javers.spring.annotation.JaversSpringDataAuditable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
+@JaversSpringDataAuditable
 public interface BoilerTypeAdditionalValueRepository extends JpaRepository<BoilerTypeAdditionalValue, Long> {
     @Modifying
     @Query(value = """

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1740421330060-1" author="Alexander (generated)">
+        <createIndex indexName="IX_pk_jv_commit_property" tableName="jv_commit_property" unique="true">
+            <column name="property_name"/>
+            <column name="commit_fk"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1740421330060-9" author="Alexander (generated)">
+        <dropSequence sequenceName="jv_commit_pk_seq"/>
+    </changeSet>
+    <changeSet id="1740421330060-10" author="Alexander (generated)">
+        <dropSequence sequenceName="jv_global_id_pk_seq"/>
+    </changeSet>
+    <changeSet id="1740421330060-11" author="Alexander (generated)">
+        <dropSequence sequenceName="jv_snapshot_pk_seq"/>
+    </changeSet>
+
+</databaseChangeLog>

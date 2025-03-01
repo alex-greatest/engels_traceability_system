@@ -23,7 +23,7 @@ import java.util.List;
 public class BoilerTypeService {
     private final BoilerTypeRepository boilerTypeRepository;
     private final BoilerTypeMapper boilerTypeMapper;
-    private final BoilerTypeHistoryService boilerTypeHistoryService;
+    private final BoilerCycleService boilerCycleService;
     private final BoilerTypeAdditionalDataSetRepository boilerTypeAdditionalDataSetRepository;
     private final ComponentNameSetRepository componentNameSetRepository;
 
@@ -43,8 +43,8 @@ public class BoilerTypeService {
         boilerType.setComponentNameSet(componentNameSet);
         boilerType.setBoilerTypeAdditionalDataSet(boilerTypeAdditionalDataSet);
         boilerTypeRepository.save(boilerType);
-        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), componentNameSet.getId(), boilerTypeDto.article(),
-                boilerTypeAdditionalDataSet.getId(), null, boilerType.getModel(), boilerType.getTypeName(), 1);
+        boilerCycleService.addBoilerCycle(boilerType.getId(), boilerType.getArticle(), boilerType.getModel(),
+                boilerType.getTypeName(), 1, true);
     }
 
     @Transactional
@@ -56,15 +56,14 @@ public class BoilerTypeService {
         BoilerTypeAdditionalDataSet boilerTypeAdditionalDataSet = boilerTypeAdditionalDataSetRepository.
                 findById(boilerTypeDto.boilerTypeAdditionalDataSet().id()).
                 orElseThrow(() -> new RecordNotFoundException("Набор данных котла не найден"));
-        String oldTypeName = boilerType.getTypeName();
         boilerType.setComponentNameSet(componentNameSetNew);
         boilerType.setModel(boilerTypeDto.model());
         boilerType.setTypeName(boilerTypeDto.typeName());
         boilerType.setArticle(boilerType.getArticle());
+        boilerType.setBoilerTypeAdditionalDataSet(boilerTypeAdditionalDataSet);
         boilerTypeRepository.save(boilerType);
-        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), componentNameSetNew.getId(),
-                boilerTypeDto.article(), boilerTypeAdditionalDataSet.getId(), oldTypeName, boilerType.getModel(),
-                boilerType.getTypeName(),2);
+        boilerCycleService.addBoilerCycle(boilerType.getId(), boilerType.getArticle(), boilerType.getModel(),
+                boilerType.getTypeName(), 2, true);
     }
 
     @Transactional
@@ -72,9 +71,7 @@ public class BoilerTypeService {
         BoilerType boilerType = boilerTypeRepository.findBoilerById(id).
                 orElseThrow(() -> new RecordNotFoundException("Тип котла не найден"));
         boilerTypeRepository.delete(boilerType);
-        boilerTypeHistoryService.addBoilerHistory(boilerType.getId(), boilerType.getComponentNameSet().getId(),
-                boilerType.getArticle(),
-                boilerType.getBoilerTypeAdditionalDataSet().getId(), null, boilerType.getModel(),
-                boilerType.getTypeName(), 3);
+        boilerCycleService.addBoilerCycle(boilerType.getId(), boilerType.getArticle(), boilerType.getModel(),
+                boilerType.getTypeName(), 3, false);
     }
 }

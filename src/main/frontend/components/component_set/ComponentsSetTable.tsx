@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { useQueryClient } from '@tanstack/react-query';
-import { Signal, useSignal } from '@vaadin/hilla-react-signals';
+import { Signal, useSignal, useSignalEffect } from '@vaadin/hilla-react-signals';
 import { MaterialReactTable, type MRT_ColumnDef, MRT_TableOptions, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import Box from '@mui/material/Box';
@@ -59,15 +59,17 @@ const ComponentsSetTable = (props: Props) => {
     getOptionLabel: (option: ComponentTypeDto) => option.name,
   };
 
+  useSignalEffect(() => {
+    if (componentNameValue.value.id !== undefined && !isNaN(Number(componentNameValue.value.id))) {
+      isEnableEditing.value = false;
+      setTimeout(() => isEnableEditing.value = true);
+    }
+  });
+
   const resetEditing = () => {
     isEnableEditing.value = false;
-    refetch().finally(() => {
-      setEditedComponentSet({});
-      setValidationErrors({});
-      setTimeout(() => {
-        refetch().finally(() => isEnableEditing.value = true)
-      }, 1000);
-    });
+    setTimeout(() => isEnableEditing.value = true, 1000);
+    refetch().then();
   }
 
   const handleCreateComponentSet: MRT_TableOptions<ComponentSetDto>['onCreatingRowSave'] = async ({values, table}) => {
@@ -192,9 +194,11 @@ const ComponentsSetTable = (props: Props) => {
     renderTopToolbarCustomActions: ({ table }) => (
       <Box sx={{display: 'flex', gap: '1em'}}>
         <Tooltip arrow title="Обновить данные">
-          <IconButton onClick={resetEditing}>
-            <RefreshIcon />
-          </IconButton>
+          <span>
+            <IconButton disabled={isNaN(componentNameSetId) || componentNameSetId === null} onClick={resetEditing}>
+              <RefreshIcon />
+            </IconButton>
+          </span>
         </Tooltip>
         <Button
           disabled={isNaN(componentNameSetId)}

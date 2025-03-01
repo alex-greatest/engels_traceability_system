@@ -30,7 +30,6 @@ public class ComponentSetService {
     private final ComponentTypeMapper componentTypeMapper;
     private final ComponentSetMapper componentSetMapper;
     private final ComponentNameSetMapper componentNameSetMapper;
-    private final ComponentSetHistoryService componentSetHistoryService;
 
     @Transactional
     public ComponentSetList getAllComponentsSet(Long componentNameSetId) {
@@ -55,9 +54,6 @@ public class ComponentSetService {
         componentSet.setComponentType(componentType);
         componentSet.setComponentNameSet(componentNameSet);
         componentSetRepository.save(componentSet);
-        componentSetHistoryService.addComponentHistory(componentSet.getId(), componentType.getId(),
-                componentNameSet.getId(), null,
-                componentSetDto.value(), 1);
     }
 
     @Transactional
@@ -74,9 +70,6 @@ public class ComponentSetService {
             componentSet.setComponentType(newComponentType);
             componentSet.setValue(componentSetResponse.value());
             componentSetRepository.save(componentSet);
-            componentSetHistoryService.addComponentHistory(componentSet.getId(), newComponentType.getId(),
-                    componentSet.getComponentNameSet().getId(), oldComponentType.getId(),
-                    componentSetResponse.value(), 2);
         });
     }
 
@@ -84,8 +77,6 @@ public class ComponentSetService {
     public void deleteComponentSet(Long id) {
         ComponentSet componentSet = componentSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
-        componentSetHistoryService.addComponentHistory(componentSet.getId(), componentSet.getComponentType().getId(),
-                componentSet.getComponentNameSet().getId(), null, componentSet.getValue(), 3);
         componentSetRepository.delete(componentSet);
     }
 
@@ -100,8 +91,6 @@ public class ComponentSetService {
             componentSet.setComponentNameSet(componentNameSet);
             componentSet.setValue("0");
             componentSetRepository.save(componentSet);
-            componentSetHistoryService.addComponentHistory(componentSet.getId(), componentType.getId(), componentNameSet.getId(),
-                    null, componentSet.getValue(), 1);
         });
     }
 }

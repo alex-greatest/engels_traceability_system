@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Signal, useSignal } from '@vaadin/hilla-react-signals';
+import { Signal, useSignal, useSignalEffect } from '@vaadin/hilla-react-signals';
 import { MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import Box from '@mui/material/Box';
@@ -39,15 +39,17 @@ const BoilerTypeAdditionalDataValue = (props: Props) => {
   const isCreatingRowBoilerDataSet = useSignal<boolean>(false);
   const isEnableEditing = useSignal<boolean>(true);
 
+  useSignalEffect(() => {
+    if (boilerDataSetValue.value.id !== undefined && !isNaN(Number(boilerDataSetValue.value.id))) {
+      isEnableEditing.value = false;
+      setTimeout(() => isEnableEditing.value = true);
+    }
+  });
+
   const resetEditing = () => {
     isEnableEditing.value = false;
-    refetch().finally(() => {
-      setBoilerAdditionalValue({});
-      setValidationErrors({});
-      setTimeout(() => {
-        refetch().finally(() => isEnableEditing.value = true)
-      }, 1000);
-    });
+    setTimeout(() => isEnableEditing.value = true, 1000);
+    refetch().then();
   }
 
   const handleEditComponentSet = async () => {

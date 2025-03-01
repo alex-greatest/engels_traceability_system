@@ -2,7 +2,7 @@ import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config/notification';
 import { EndpointError } from '@vaadin/hilla-frontend';
 import { ShiftController } from 'Frontend/generated/endpoints';
-import ShiftDto from 'Frontend/generated/com/rena/application/entity/dto/ShiftDto';
+import ShiftDto from 'Frontend/generated/com/rena/application/entity/dto/shift/ShiftDto';
 
 export function useShifts() {
   return useQuery({

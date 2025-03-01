@@ -19,7 +19,7 @@ public class UserHistoryService {
     private final UserInfoService userInfoService;
 
     public void addUserHistory(Long userId, Integer oldCode, String oldUsername,
-                               Integer code, User user, Role role, int typeOperation) {
+                               Integer code, User user, Role role, int typeOperation, boolean isActive) {
         changeActiveStatusOld(userId, typeOperation);
         UserInfo userInfo = userInfoService.getUserInfo();
         UserHistory userHistory = new UserHistory();
@@ -30,7 +30,7 @@ public class UserHistoryService {
         userHistory.setModifiedDate(LocalDateTime.now());
         userHistory.setCodeChanged(userInfo.code());
         userHistory.setUsernameChanged(userInfo.name());
-        userHistory.setIsActive(true);
+        userHistory.setIsActive(isActive);
         userHistory.setTypeOperation(typeOperation);
         userHistory.setOldCode(oldCode != null && typeOperation == 2 ? oldCode : null);
         userHistory.setOldUsername(oldUsername != null && typeOperation == 2 ? oldUsername : null);

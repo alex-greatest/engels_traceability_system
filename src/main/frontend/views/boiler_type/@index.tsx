@@ -108,8 +108,8 @@ const BoilersType = () => {
         size: 50,
         muiEditTextFieldProps: {
           required: true,
-          error: !!validationErrors?.name,
-          helperText: validationErrors?.name,
+          error: !!validationErrors?.typeName,
+          helperText: validationErrors?.typeName,
           onFocus: () =>
             setValidationErrors({
               ...validationErrors,
