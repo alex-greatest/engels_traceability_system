@@ -1,9 +1,8 @@
 package com.rena.application.service.shift;
 
-import com.rena.application.config.mapper.ShiftsMapper;
+import com.rena.application.config.mapper.component.common.ShiftsMapper;
 import com.rena.application.entity.dto.shift.ShiftDto;
 import com.rena.application.entity.model.shift.Shift;
-import com.rena.application.entity.model.shift.ShiftStation;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.SettingRepository;
@@ -15,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;

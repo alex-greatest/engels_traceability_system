@@ -3,7 +3,7 @@ package com.rena.application.controller.component;
 import com.rena.application.entity.dto.component.ComponentNameSetDto;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.service.HandlerErrorConstraintDB;
-import com.rena.application.service.component.ComponentNameSetService;
+import com.rena.application.service.component.set.ComponentNameSetService;
 import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;

@@ -1,11 +1,12 @@
 package com.rena.application.entity.dto.component;
 
+import com.rena.application.entity.model.component.binding.ComponentBinding;
 import com.vaadin.hilla.Nonnull;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * DTO for {@link com.rena.application.entity.model.component.ComponentBinding}
+ * DTO for {@link ComponentBinding}
  */
 public record ComponentBindingDto(Long id,
                                   @NotNull @Nonnull ComponentTypeDto componentType,

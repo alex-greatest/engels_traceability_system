@@ -4,7 +4,7 @@ import com.rena.application.entity.dto.component.ComponentSetDto;
 import com.rena.application.entity.dto.component.ComponentSetList;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.service.HandlerErrorConstraintDB;
-import com.rena.application.service.component.ComponentSetService;
+import com.rena.application.service.component.set.ComponentSetService;
 import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.Nonnull;
 import jakarta.annotation.security.RolesAllowed;

@@ -1,6 +1,6 @@
 package com.rena.application.service.user;
 
-import com.rena.application.config.mapper.RoleMapper;
+import com.rena.application.config.mapper.component.common.RoleMapper;
 import com.rena.application.config.security.UserInfo;
 import com.rena.application.config.security.UserInfoService;
 import com.rena.application.entity.dto.user.RoleDTO;

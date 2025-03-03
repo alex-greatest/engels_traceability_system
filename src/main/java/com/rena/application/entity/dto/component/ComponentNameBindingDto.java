@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 /**
  * DTO for {@link ComponentNameSet}
  */
-public record ComponentNameSetDto(Long id,
-                                  @Nonnull @NotBlank @Size(message = "Длина должна быть больше 1 и меньше 50 символов", min = 1, max = 50)
-                                  String name) {
+public record ComponentNameBindingDto(Long id,
+                                      @Nonnull @NotBlank @Size(message = "Длина должна быть больше 1 и меньше 50 символов", min = 1, max = 50)
+                                      String name) {
 }

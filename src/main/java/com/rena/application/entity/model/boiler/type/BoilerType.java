@@ -1,7 +1,7 @@
 package com.rena.application.entity.model.boiler.type;
 
 import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalDataSet;
-import com.rena.application.entity.model.component.ComponentNameSet;
+import com.rena.application.entity.model.component.set.ComponentNameSet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

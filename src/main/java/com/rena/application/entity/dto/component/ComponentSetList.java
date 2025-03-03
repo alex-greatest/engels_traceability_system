@@ -1,7 +1,7 @@
 package com.rena.application.entity.dto.component;
 
 import java.util.List;
-import com.rena.application.entity.model.component.ComponentSet;
+import com.rena.application.entity.model.component.set.ComponentSet;
 import com.vaadin.hilla.Nonnull;
 
 /**
