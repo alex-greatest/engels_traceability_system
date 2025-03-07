@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1741079431593-1" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="component_binding"
+                                  constraintName="fk_component_binding_on_component_name_binding"/>
+    </changeSet>
+    <changeSet id="1741079431593-12" author="Alexander (generated)">
+        <dropColumn columnName="component_name_binding_id" tableName="component_binding"/>
+    </changeSet>
+
+</databaseChangeLog>

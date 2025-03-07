@@ -1,101 +1,119 @@
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { showErrorMessage, showSuccessMessage } from 'Frontend/components/config/notification';
 import { EndpointError } from '@vaadin/hilla-frontend';
-import { ComponentBindingController, ComponentTypeController } from 'Frontend/generated/endpoints';
-import ComponentTypeDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentTypeDto';
-import { errorMessageEmpty, validateRequired } from 'Frontend/components/api/helper';
+import {
+  ComponentBindingController,
+  ComponentTypeController
+} from 'Frontend/generated/endpoints';
+import {
+  errorMessageEmpty,
+  validateRequired
+} from 'Frontend/components/api/helper';
+import ComponentBindingResponse from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentBindingResponse';
+import ComponentBindingRequest
+  from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentBindingRequest';
 
-export function useComponentsBinding(nameStation: string) {
+export function useComponentsBinding(idNameSet: number, nameStation: string) {
   return useQuery({
-    queryKey: ['components_binding', nameStation],
-    queryFn: () => ComponentBindingController.getAllBindingComponents(nameStation),
-    staleTime: 1000 * 60 * 5,
-    enabled: Boolean(nameStation)
+    queryKey: ['components_binding', nameStation, idNameSet],
+    queryFn: () => ComponentBindingController.getAllBindingComponents(nameStation, idNameSet),
+    staleTime: 0,
+    enabled: idNameSet !== undefined && !isNaN(idNameSet)
   })
 }
 
-export const componentAddMutation = (queryClient: QueryClient) => useMutation({
-  mutationFn: ComponentTypeController.addComponent,
-  onMutate: async (newComponentType) => {
-    await queryClient.cancelQueries({ queryKey: ['components_type'] });
-    const previous = queryClient.getQueryData<ComponentTypeDto[]>(['components_type']);
-    queryClient.setQueryData<ComponentTypeDto[]>(['components_type'], old => [...(old as ComponentTypeDto[]), (newComponentType as ComponentTypeDto)]);
+export function useComponentsTypeSet(idNameSet: number, nameStation: string) {
+  return useQuery({
+    queryKey: ['component_type_set', nameStation],
+    queryFn: () => ComponentTypeController.getAllComponentsTypeSet(idNameSet),
+    staleTime: 0,
+    enabled: !isNaN(idNameSet) && Boolean(nameStation)
+  })
+}
+
+export const componentBindingAddMutation = (queryClient: QueryClient,
+                                            idNameSet: number,
+                                            nameStation: string) => useMutation({
+  mutationFn: ComponentBindingController.addComponentBinding,
+  onMutate: async (newComponentSet) => {
+    await queryClient.cancelQueries({ queryKey: ['components_binding', nameStation, idNameSet] });
+    const previous = queryClient.getQueryData<ComponentBindingResponse[]>(['components_binding', nameStation, idNameSet]);
+    queryClient.setQueryData<ComponentBindingResponse[]>(['components_binding', nameStation, idNameSet],
+      old => {
+        if (!old) return old;
+        return {
+          ...old,
+        componentBindingResponse: {id: newComponentSet.id, componentType: newComponentSet.componentType, order: newComponentSet.order},
+        };
+      });
     return { previous }
   },
   onSuccess: () => {
-    showSuccessMessage("components_type_add_success", "Тип компонента успешно добавлен");
+    showSuccessMessage("components_binding_add_success", "Привязка успешно добавлена");
   },
   onError: (error, _, context) => {
     if (context?.previous) {
-      queryClient.setQueryData<ComponentTypeDto[]>(['components_type'], context.previous)
+      queryClient.setQueryData<ComponentBindingResponse[]>(['components_binding', nameStation, idNameSet], context.previous)
     }
     if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
-      showErrorMessage("components_type_add_error", error.message);
+      showErrorMessage("components_binding_add_error", error.message);
     } else {
-      showErrorMessage("components_type_add_error", "Неизвестная ошибка");
+      showErrorMessage("components_binding_add_error", "Неизвестная ошибка");
     }
-  },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ["components_type"] }).then();
   }
 });
 
-export const componentEditMutation = (queryClient: QueryClient) => useMutation({
-  mutationFn: ({ id, component }: { id: number; component: ComponentTypeDto }) =>
-    ComponentTypeController.updateComponent(id, component),
-  onMutate: async (newComponentType) => {
-    await queryClient.cancelQueries({ queryKey: ['components_type'] });
-    const previous = queryClient.getQueryData<ComponentTypeDto[]>(['components_type']);
-    queryClient.setQueryData<ComponentTypeDto[]>(['components_type'], old => [...(old as ComponentTypeDto[]),
-      (newComponentType.component as ComponentTypeDto)]);
-    return { previous }
-  },
+export const componentBindingEditMutation = (queryClient: QueryClient) => useMutation({
+  mutationFn:  ComponentBindingController.updateComponentBinding,
   onSuccess: () => {
-    showSuccessMessage("components_type_edit_success", "Тип компонента обновлен");
+    showSuccessMessage("components_binding_edit_success", "Привязка(ы) обновлен(ы)");
   },
-  onError: (error, _, context) => {
-    if (context?.previous) {
-      queryClient.setQueryData<ComponentTypeDto[]>(['components_type'], context.previous)
-    }
+  onError: (error) => {
     if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
-      showErrorMessage("components_type_edit_error", error.message);
+      showErrorMessage("components_binding_edit_error", error.message);
     } else {
-      showErrorMessage("components_type_edit_error", "Неизвестная ошибка");
+      showErrorMessage("components_binding_edit_error", "Неизвестная ошибка");
     }
   },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ["components_type"] }).then();
-  }
 })
 
-export const componentDelete = (queryClient: QueryClient) => useMutation({
-  mutationFn: ComponentTypeController.deleteComponent,
-  onMutate: async (newComponentType) => {
-    await queryClient.cancelQueries({ queryKey: ['components_type'] });
-    const previous = queryClient.getQueryData<ComponentTypeDto[]>(['components_type']);
-    queryClient.setQueryData<ComponentTypeDto[]>(['components_type'], old => old?.filter((t) => t.id !== newComponentType));
+export const componentBindingDelete = (
+                                    queryClient: QueryClient,
+                                    idNameSet: number,
+                                    nameStation: string) => useMutation({
+  mutationFn: ComponentBindingController.deleteComponentBinding,
+  onMutate: async (newComponentSet) => {
+    await queryClient.cancelQueries({ queryKey: ['components_binding', nameStation, idNameSet] });
+    const previous = queryClient.getQueryData<ComponentBindingResponse[]>(['components_binding', nameStation, idNameSet]);
+    queryClient.setQueryData<ComponentBindingResponse[]>(['components_binding', nameStation, idNameSet], old => {
+      if (!old) return old;
+      return {
+        ...old,
+        componentsSet: old.filter((t) => t.id !== newComponentSet)
+      };
+    });
     return { previous }
   },
   onSuccess: () => {
-    showSuccessMessage("components_type_delete_success", "Тип компонента успешно удалён");
+    showSuccessMessage("components_binding_delete_success", "Компонент успешно удалён");
   },
   onError: (error, _, context) => {
-    queryClient.setQueryData<ComponentTypeDto[]>(['components_type'], context?.previous);
+    queryClient.setQueryData<ComponentBindingResponse[]>(['components_binding', nameStation, idNameSet], context?.previous);
     if (error instanceof EndpointError && error.type?.includes("com.rena.application.exceptions")) {
-      showErrorMessage("components_type_delete_error", error.message);
+      showErrorMessage("components_binding_delete_error", error.message);
     } else {
-      showErrorMessage("components_type_delete_error", "Неизвестная ошибка");
+      showErrorMessage("components_binding_delete_error", "Неизвестная ошибка");
     }
-  },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ["components_type"] }).then();
   }
 });
 
-export function validateComponent(componentType: ComponentTypeDto) {
+export function validateComponentBinding(componentBinding: ComponentBindingRequest) {
   return {
-    name: !validateRequired(componentType?.name ?? "")
+    'mrt-row-create_componentType.name': !validateRequired(componentBinding.componentType?.name ?? "")
       ? errorMessageEmpty
-      : '',
+      : undefined,
+    order: (componentBinding.order ?? 0) <= 0 || !componentBinding.order
+      ? "Порядок должен быть больше 0"
+      : undefined,
   };
 }

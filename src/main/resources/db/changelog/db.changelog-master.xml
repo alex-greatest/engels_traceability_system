@@ -7,8 +7,5 @@
     <includeAll path="db/changelog/2024/12" context=""/>
     <includeAll path="db/changelog/2025/01" context=""/>
     <includeAll path="db/changelog/2025/02" context=""/>
-    <include file="db/changelog/2025/03/01-01-changelog.xml"/>
-    <include file="db/changelog/2025/03/01-02-changelog.xml"/>
-    <include file="db/changelog/2025/03/03-01-changelog.xml"/>
-    <include file="db/changelog/2025/03/03-02-changelog.xml"/>
+    <includeAll path="db/changelog/2025/03" context=""/>
 </databaseChangeLog>

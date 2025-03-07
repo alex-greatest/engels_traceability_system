@@ -23,7 +23,7 @@ public class ComponentSet {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "component_name_set_id")
     private ComponentNameSet componentNameSet;
 

@@ -15,8 +15,9 @@ public class HandlerErrorConstraintDB {
             "uc_boiler_type_additional_data_set", "Набор данных котла с таким именем уже существует",
             "fk_boiler_type_on_boiler_type_additional_data_set", "Набор нельзя удалить, он привязан к котлу",
             "fk_boiler_type_on_component_name_set", "Набор нельзя удалить, он привязан к котлу",
-            "UQ_reference_tag_result_reference_id_tag_result_id", "Тег с таким именем уже существует",
-            "UQ_tag_result_unique", "Тег с таким именем уже существует");
+            "uc_binding_order", "Компонент с таким порядком уже существует",
+            "uc_binding_name_set", "Компонент с таким названием уже существует в наборе",
+            "fk_component_set_on_component_type", "Тип компонента нельзя удалить, он привязан к набору");
 
     public String findMessageError(String message) {
         return CONSTRAINS_MAP.entrySet().stream()

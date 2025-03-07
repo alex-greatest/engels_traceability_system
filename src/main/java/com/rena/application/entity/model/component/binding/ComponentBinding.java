@@ -1,6 +1,7 @@
 package com.rena.application.entity.model.component.binding;
 
 import com.rena.application.entity.model.component.ComponentType;
+import com.rena.application.entity.model.component.set.ComponentNameSet;
 import com.rena.application.entity.model.result.common.Station;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,8 +11,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "component_binding", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_component_binding_component_unique", columnNames = {"component_binding_id", "station_id", "component_type_id"}),
-        @UniqueConstraint(name = "uc_component_binding_order_unique", columnNames = {"component_binding_id", "station_id", "order"})
+        @UniqueConstraint(name = "uc_binding_name_set", columnNames = {"component_name_set_id", "component_type_id"}),
+        @UniqueConstraint(name = "uc_binding_order", columnNames = {"component_name_set_id", "station_id", "order_component"})
 })
 public class ComponentBinding {
     @Id
@@ -19,9 +20,9 @@ public class ComponentBinding {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "component_binding_id", nullable = false)
-    private ComponentBinding componentBinding;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "component_name_set_id", nullable = false)
+    private ComponentNameSet componentNameSet;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "station_id", nullable = false)
@@ -31,6 +32,6 @@ public class ComponentBinding {
     @JoinColumn(name = "component_type_id", nullable = false)
     private ComponentType componentType;
 
-    @Column(name = "order", nullable = false)
+    @Column(name = "order_component", nullable = false)
     private Integer order;
 }

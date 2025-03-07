@@ -28,14 +28,13 @@ import {
   shiftEditMutation,
   useShifts,
   validateShift
-} from 'Frontend/components/api/shift';
+} from '../../components/api/shift';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import { TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import ShiftDto from 'Frontend/generated/com/rena/application/entity/dto/shift/ShiftDto';
-import Users from 'Frontend/views/users/@index';
+import ShiftDto from '../../generated/com/rena/application/entity/dto/shift/ShiftDto';
 
-const Shifts = () => {
+export default function ShiftsView() {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
   const queryClient = useQueryClient();
   const openDialog = useSignal(false);
@@ -277,10 +276,8 @@ const Shifts = () => {
 
 };
 
-export default Shifts;
-
 export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
-  title: "Смены"
+  title: "Настройка смен"
 };

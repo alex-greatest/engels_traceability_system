@@ -2,7 +2,6 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import { Autocomplete, Button, Container, Stack } from '@mui/material';
 import { Loading } from 'Frontend/components/config/Loading';
-import ComponentsSetTable from 'Frontend/components/component_set/ComponentsSetTable';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 import Box from '@mui/system/Box';
 import { emptyComponentNameSet, PropsDialog } from 'Frontend/components/api/helper';

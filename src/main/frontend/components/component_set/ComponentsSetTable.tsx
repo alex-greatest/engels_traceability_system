@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { useQueryClient } from '@tanstack/react-query';
 import { Signal, useSignal, useSignalEffect } from '@vaadin/hilla-react-signals';
@@ -11,7 +11,7 @@ import {
   CircularProgress,
   Dialog, DialogActions,
   DialogContent, DialogContentText,
-  DialogTitle,
+  DialogTitle, Stack,
   Tooltip,
   Typography
 } from '@mui/material';
@@ -30,6 +30,7 @@ import { errorMessageLength50, validateLength } from 'Frontend/components/api/he
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { Context } from 'Frontend/index';
 
 interface Props {
   componentNameValue: Signal<ComponentNameSetDto>;
@@ -37,6 +38,9 @@ interface Props {
 
 const ComponentsSetTable = (props: Props) => {
   const { componentNameValue } = props;
+  const isAddNewComponentType = useContext(Context).isAddNewComponentType;
+  const isComponentSetUpdated = useContext(Context).isComponentSetUpdated;
+  const isComponentSetDeleted = useContext(Context).isComponentSetDeleted;
   const componentNameSetId = Number(componentNameValue.value.id);
   const url = componentNameValue.value.id?.toString() ?? ""
   const queryClient = useQueryClient();
@@ -46,9 +50,10 @@ const ComponentsSetTable = (props: Props) => {
   const componentSetId = useSignal(-1);
   const { data: componentsSetList, isError, isLoading, refetch, isRefetching } = useComponentSet(componentNameSetId, url);
   const { mutateAsync: addComponentSet, isPending: isCreatingComponentSet } = componentSetAddMutation(queryClient, url);
-  const { mutateAsync: editComponentSet, isPending: isEditComponentSet } = componentSetEditMutation(queryClient, url);
-  const { mutate: deleteComponentSet, isPending: isDeletingComponentSet } = componentSetDelete(queryClient, url);
-  const { mutate: copyAllComponentSet, isPending: isCopyAllComponentSet } = componentSetCopyAllComponentsSetMutation(queryClient, url);
+  const { mutateAsync: editComponentSet, isPending: isEditComponentSet, isSuccess: isSuccessUpdateComponentSet  } = componentSetEditMutation(queryClient, url);
+  const { mutate: deleteComponentSet, isPending: isDeletingComponentSet, isSuccess: isSuccessDeleteComponentSet } = componentSetDelete(queryClient, url);
+  const { mutate: copyAllComponentSet, isPending: isCopyAllComponentSet } =
+    componentSetCopyAllComponentsSetMutation(queryClient, url);
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
   const [editedComponentSet, setEditedComponentSet] = useState<Record<string, ComponentSetDto>>({});
   const isCreatingRowComponentSet = useSignal<boolean>(false);
@@ -66,8 +71,20 @@ const ComponentsSetTable = (props: Props) => {
     }
   });
 
+  useEffect(() => {
+    if (isSuccessDeleteComponentSet) {
+      isComponentSetDeleted.value = true;
+    }
+    if (isSuccessUpdateComponentSet) {
+      isComponentSetUpdated.value = true;
+    }
+  }, [isSuccessDeleteComponentSet, isSuccessUpdateComponentSet]);
+
   const resetEditing = () => {
     isEnableEditing.value = false;
+    isCreatingRowComponentSet.value = false;
+    setEditedComponentSet({});
+    setValidationErrors({});
     setTimeout(() => isEnableEditing.value = true, 1000);
     refetch().then();
   }
@@ -86,6 +103,7 @@ const ComponentsSetTable = (props: Props) => {
     table.setCreatingRow(null);
     isCreatingRowComponentSet.value = false;
     resetEditing();
+    isAddNewComponentType.value = true;
   };
 
   const handleEditComponentSet = async () => {
@@ -93,6 +111,7 @@ const ComponentsSetTable = (props: Props) => {
     await editComponentSet(Object.values(editedComponentSet));
     setEditedComponentSet({});
     resetEditing();
+    isAddNewComponentType.value = true;
   };
 
   const componentsSetColumn = useMemo<MRT_ColumnDef<ComponentSetDto>[]>(
@@ -182,7 +201,7 @@ const ComponentsSetTable = (props: Props) => {
     enablePagination: false,
     enableStickyHeader: true,
     enableStickyFooter: true,
-    muiTableContainerProps: { sx: { maxHeight: '1000px' } },
+    muiTableContainerProps: { sx: { maxHeight: '300px' } },
     onCreatingRowCancel: () => {setValidationErrors({}); isCreatingRowComponentSet.value = false;},
     onCreatingRowSave: handleCreateComponentSet,
     state: {
@@ -292,6 +311,7 @@ const ComponentsSetTable = (props: Props) => {
                   onClick={() => {
                     copyAllComponentSet(componentNameSetId);
                     openDialogCopyValues.value = false;
+                    isAddNewComponentType.value = true;
                     resetEditing();
                   }}
                   startIcon={<ContentCopyIcon />}
@@ -345,9 +365,10 @@ const ComponentsSetTable = (props: Props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Box sx={{marginTop: '3em'}}>
+      <Stack sx={{marginTop: '.5em'}}>
+        <Typography component="div" sx={{fontSize: '20px'}}> Создание компонентов </Typography>
         <MaterialReactTable table={table} />
-      </Box>
+      </Stack>
     </>
   );
 };

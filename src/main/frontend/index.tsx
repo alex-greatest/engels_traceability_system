@@ -21,8 +21,10 @@ import { Loading } from 'Frontend/components/config/Loading';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/ru';
+import createState, { StateApp } from 'Frontend/components/config/state';
 
-const Context = createContext(null);
+const state = createState();
+export const Context = createContext<StateApp>(state);
 
 const queryClient = new QueryClient()
 
@@ -30,7 +32,7 @@ function App() {
     return (
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-            <Context.Provider value={null}>
+            <Context.Provider value={state}>
                 <Suspense fallback={<Loading />}>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
                         <RouterProvider router={router} />

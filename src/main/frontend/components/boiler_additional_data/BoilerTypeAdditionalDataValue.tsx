@@ -48,6 +48,9 @@ const BoilerTypeAdditionalDataValue = (props: Props) => {
 
   const resetEditing = () => {
     isEnableEditing.value = false;
+    isCreatingRowBoilerDataSet.value = false;
+    setBoilerAdditionalValue({});
+    setValidationErrors({});
     setTimeout(() => isEnableEditing.value = true, 1000);
     refetch().then();
   }

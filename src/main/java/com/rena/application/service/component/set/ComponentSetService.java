@@ -1,8 +1,8 @@
 package com.rena.application.service.component.set;
 
 import com.rena.application.config.mapper.component.ComponentTypeMapper;
-import com.rena.application.config.mapper.ComponentNameSetMapper;
-import com.rena.application.config.mapper.ComponentSetMapper;
+import com.rena.application.config.mapper.component.set.ComponentNameSetMapper;
+import com.rena.application.config.mapper.component.set.ComponentSetMapper;
 import com.rena.application.entity.dto.component.ComponentSetDto;
 import com.rena.application.entity.dto.component.ComponentSetList;
 import com.rena.application.entity.model.component.set.ComponentSet;
@@ -12,6 +12,7 @@ import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.component.set.ComponentNameSetRepository;
 import com.rena.application.repository.component.set.ComponentTypeRepository;
 import com.rena.application.repository.component.set.ComponentSetRepository;
+import com.rena.application.service.component.binding.ComponentBindingService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class ComponentSetService {
     private final ComponentTypeMapper componentTypeMapper;
     private final ComponentSetMapper componentSetMapper;
     private final ComponentNameSetMapper componentNameSetMapper;
+    private final ComponentBindingService componentBindingService;
 
     @Transactional
     public ComponentSetList getAllComponentsSet(Long componentNameSetId) {
@@ -62,14 +64,16 @@ public class ComponentSetService {
             String componentTypeNameNew = componentSetResponse.componentType().name();
             ComponentSet componentSet = componentSetRepository.findByIdComponentSet(componentSetResponse.id()).
                     orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
+            ComponentType oldComponentType = componentSet.getComponentType();
             ComponentType newComponentType = componentTypeRepository.findComponentTypeByName(componentTypeNameNew).
-                    orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден"));
-            String oldComponentTypeName = componentSet.getComponentType().getName();
-            ComponentType oldComponentType = componentTypeRepository.findComponentTypeByName(oldComponentTypeName).
                     orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден"));
             componentSet.setComponentType(newComponentType);
             componentSet.setValue(componentSetResponse.value());
             componentSetRepository.save(componentSet);
+            var componentsSet = componentSetRepository.findAllComponentsByTypeName(oldComponentType.getName());
+            if (componentsSet.isEmpty()) {
+                componentBindingService.deleteComponentBinding(oldComponentType);
+            }
         });
     }
 
@@ -78,6 +82,10 @@ public class ComponentSetService {
         ComponentSet componentSet = componentSetRepository.findById(id).
                 orElseThrow(() -> new RecordNotFoundException("Компонент не найден"));
         componentSetRepository.delete(componentSet);
+        var componentsSet = componentSetRepository.findAllComponentsByTypeName(componentSet.getComponentType().getName());
+        if (componentsSet.isEmpty()) {
+            componentBindingService.deleteComponentBinding(componentSet.getComponentType());
+        }
     }
 
     @Transactional

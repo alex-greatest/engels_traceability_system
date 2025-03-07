@@ -1,6 +1,6 @@
 package com.rena.application.service.component.set;
 
-import com.rena.application.config.mapper.ComponentNameSetMapper;
+import com.rena.application.config.mapper.component.set.ComponentNameSetMapper;
 import com.rena.application.entity.dto.component.ComponentNameSetDto;
 import com.rena.application.entity.model.component.set.ComponentNameSet;
 import com.rena.application.exceptions.RecordNotFoundException;

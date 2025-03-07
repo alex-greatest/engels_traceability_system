@@ -83,7 +83,7 @@ const BoilersType = () => {
   const handleSaveBoilerType: MRT_TableOptions<BoilerTypeDto>['onEditingRowSave'] = async ({values, table, row}) => {
     const componentNameSet = componentsNameSet?.find(c => c.name === values['componentNameSet.name']);
     const boilerTypeAdditionalDataSet = boilerDataSets?.find(c => c.name === values['boilerTypeAdditionalDataSet.name']);
-    const boilerType = {typeName: values.typeName, model: values.model, article: values.article,
+    const boilerType = {id: row.original.id, typeName: values.typeName, model: values.model, article: values.article,
       componentNameSet: componentNameSet || {name: ""},
       boilerTypeAdditionalDataSet: boilerTypeAdditionalDataSet || {name: ""}};
     const newValidationErrors = validateBoilerType(boilerType);
@@ -134,7 +134,7 @@ const BoilersType = () => {
       },
       {
         accessorKey: 'article', //access nested data with dot notation
-        header: 'Артикуль',
+        header: 'Артикул',
         size: 30,
         muiEditTextFieldProps: {
           required: true,
@@ -275,6 +275,7 @@ const BoilersType = () => {
         <Tooltip title="Изменить">
           <IconButton onClick={() => {
             componentNameValueSelected.value = row.original.componentNameSet;
+            boilerSetDataValueSelected.value = row.original.boilerTypeAdditionalDataSet;
             table.setEditingRow(row)
           }}>
             <EditIcon />

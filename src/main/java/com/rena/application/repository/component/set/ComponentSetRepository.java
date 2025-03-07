@@ -14,4 +14,10 @@ public interface ComponentSetRepository extends JpaRepository<ComponentSet, Long
 
     @Query("select c from ComponentSet c JOIN c.componentType JOIN c.componentNameSet where c.componentNameSet.id = ?1")
     List<ComponentSet> findAllComponentsById(Long id);
+
+    @Query("select distinct(c.componentType.name) from ComponentSet c JOIN c.componentType JOIN c.componentNameSet where c.componentNameSet.id = ?1")
+    List<String> findAllDistinctComponentsById(Long id);
+
+    @Query("select c from ComponentSet c JOIN c.componentType JOIN c.componentNameSet where c.componentType.name = ?1")
+    List<ComponentSet> findAllComponentsByTypeName(String name);
 }

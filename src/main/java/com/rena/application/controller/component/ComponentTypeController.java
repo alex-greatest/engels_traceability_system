@@ -30,6 +30,11 @@ public class ComponentTypeController {
     }
 
     @Nonnull
+    public List<@Nonnull ComponentTypeDto> getAllComponentsTypeSet(Long nameSetId) {
+        return componentTypeService.getAllComponentsTypeSet(nameSetId);
+    }
+
+    @Nonnull
     public ComponentTypeDto getComponent(@Nonnull @NotNull Long id)
     {
         return componentTypeService.getComponent(id);

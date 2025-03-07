@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import TextField from '@mui/material/TextField';
-import { Autocomplete, Button, Container, Stack } from '@mui/material';
+import { Autocomplete, Button, Container, Stack, Typography } from '@mui/material';
 import { Loading } from 'Frontend/components/config/Loading';
 import ComponentsSetTable from 'Frontend/components/component_set/ComponentsSetTable';
 import ComponentNameSetDto from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentNameSetDto';
 import Box from '@mui/system/Box';
 import { emptyComponentNameSet, PropsDialog } from 'Frontend/components/api/helper';
-import { useSignal } from '@vaadin/hilla-react-signals';
 import { useComponentsNameSet } from 'Frontend/components/api/components_name_set';
 import CheckIcon from '@mui/icons-material/Check';
+import ComponentsBinding from 'Frontend/components/component_binding/ComponentsBinding';
+import { Context } from 'Frontend/index';
 
 const ComponentsSet = (props: PropsDialog<ComponentNameSetDto>) => {
   const { func } = props;
   const { data: componentsNameSet, isLoading: isLoadingComponentsNameSet, isError:  isErrorComponentsNameSet,
     isRefetching: isRefetchingComponentsNameSet} = useComponentsNameSet();
-  const componentNameInputValue = useSignal<string>("");
-  const componentNameValue = useSignal<ComponentNameSetDto>(emptyComponentNameSet);
+  const componentNameInputValue = useContext(Context).componentNameInputValue;
+  const componentNameValue = useContext(Context).componentNameValue;
 
   const defaultProps = {
     options: componentsNameSet ?? {} as ComponentNameSetDto[],
@@ -30,9 +31,9 @@ const ComponentsSet = (props: PropsDialog<ComponentNameSetDto>) => {
     <>
       {isRefetchingComponentsNameSet || isLoadingComponentsNameSet ? <Loading /> :
         <>
-          <Stack sx={{marginTop: '2em'}}>
+          <Stack sx={{marginTop: '.2em'}}>
             <Container maxWidth={'xl'} sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%'}} >
-              <Box sx={{width: '100%', display: 'flex', marginTop: '1em', marginLeft: 'auto'}}>
+              <Box sx={{width: '100%', display: 'flex', marginLeft: 'auto'}}>
                 <Box sx={{display: 'flex', marginLeft: 'auto', gap: '1em'}}>
                   {func !== undefined &&
                     <Button color="primary"
@@ -64,7 +65,10 @@ const ComponentsSet = (props: PropsDialog<ComponentNameSetDto>) => {
                   />
                 </Box>
               </Box>
-              <ComponentsSetTable componentNameValue={componentNameValue}/>
+              <Stack sx={{marginTop: '3em'}}>
+                <ComponentsSetTable componentNameValue={componentNameValue}/>
+                <ComponentsBinding componentNameValue={componentNameValue}/>
+              </Stack>
             </Container>
           </Stack>
         </>
