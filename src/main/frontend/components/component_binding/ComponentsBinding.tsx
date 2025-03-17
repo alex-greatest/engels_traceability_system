@@ -38,7 +38,6 @@ import ComponentBindingResponse
   from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentBindingResponse';
 import ComponentBindingRequest
   from 'Frontend/generated/com/rena/application/entity/dto/component/ComponentBindingRequest';
-import { ComponentBindingController } from 'Frontend/generated/endpoints';
 
 interface Props {
   componentNameValue: Signal<ComponentNameSetDto>;
@@ -51,7 +50,7 @@ const ComponentsBinding = (props: Props) => {
   const isComponentSetDeleted = useContext(Context).isComponentSetDeleted;
   const isComponentSetUpdated = useContext(Context).isComponentSetUpdated;
   const componentNameSetId = Number(componentNameValue.value.id);
-  const stationNameValue = useSignal<string>("Рабочее место 1");
+  const stationNameValue = useSignal<string>("wp2");
   const openDialog = useSignal(false);
   const componentBindingName = useSignal("");
   const componentBindingId = useSignal(-1);
@@ -341,10 +340,9 @@ const ComponentsBinding = (props: Props) => {
               sx={{backgroundColor: '#1A39601A', minWidth: '300px'}}
               onChange={(event) => stationNameValue.value = event.target.value}
             >
-              <MenuItem value={"Рабочее место 1"}>Рабочее место 1</MenuItem>
-              <MenuItem value={"Рабочее место 2"}>Рабочее место 2</MenuItem>
-              <MenuItem value={"Рабочее место 3"}>Рабочее место 3</MenuItem>
-              <MenuItem value={"Рабочее место 4"}>Рабочее место 4</MenuItem>
+              <MenuItem value={"wp2"}>Рабочее место 5</MenuItem>
+              <MenuItem value={"wp3"}>Рабочее место 8</MenuItem>
+              <MenuItem value={"wp4"}>Рабочее место 12</MenuItem>
             </Select>
           </FormControl>
         </Box>

@@ -132,7 +132,7 @@ public class BoilerOrderWpOneService {
                     orElseThrow(() -> new RecordNotFoundException("Последний заказ не найден"));
             return new BoilerOrderResponseWpOne(boilerOrder.getId(), true,
                     boilerOrder.getOrderNumber(), boilerOrder.getBoilerTypeCycle().getArticle(),
-                    boilerOrder.getAmountBoilerMade(), boilerOrder.getAmountBoilerPrint(),
+                    boilerOrder.getAmountBoilerOrder(), boilerOrder.getAmountBoilerPrint(),
                     boilerOrder.getScanCode(), boilerOrder.getModifiedDate());
         }
         throw new RecordNotFoundException("Последний заказ не найден");

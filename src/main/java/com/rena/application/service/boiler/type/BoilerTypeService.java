@@ -1,6 +1,6 @@
 package com.rena.application.service.boiler.type;
 
-import com.rena.application.config.mapper.BoilerTypeMapper;
+import com.rena.application.config.mapper.type.BoilerTypeMapper;
 import com.rena.application.entity.dto.boiler_type.BoilerTypeDto;
 import com.rena.application.entity.model.boiler.type.BoilerType;
 import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalDataSet;

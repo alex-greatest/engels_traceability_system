@@ -2,8 +2,8 @@ package com.rena.application.service.result.station.wp.one;
 
 import com.rena.application.entity.dto.result.station.wp.one.WpOneRequest;
 import com.rena.application.entity.dto.result.station.wp.one.WpOneResponse;
-import com.rena.application.entity.model.result.station.wp.one.Boiler;
-import com.rena.application.entity.model.result.station.wp.one.Operation;
+import com.rena.application.entity.model.result.common.Boiler;
+import com.rena.application.entity.model.result.common.Operation;
 import com.rena.application.entity.model.result.common.Station;
 import com.rena.application.entity.model.result.common.Status;
 import com.rena.application.entity.model.result.station.wp.one.order.BoilerOrder;
@@ -11,7 +11,7 @@ import com.rena.application.entity.model.user.UserHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.exceptions.result.boiler.BoilerOrderNotFoundException;
 import com.rena.application.exceptions.result.boiler.BoilerTypeNotFoundException;
-import com.rena.application.repository.result.station.wp.one.order.BoilerRepository;
+import com.rena.application.repository.result.common.BoilerRepository;
 import com.rena.application.repository.result.common.OperationRepository;
 import com.rena.application.repository.result.common.StationRepository;
 import com.rena.application.repository.result.common.StatusRepository;
@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 @Service
 @Validated
 @Slf4j
-public class WpOneService {
+public class TraceabilityOneService {
     private final SettingRepository settingRepository;
     private final BoilerOrderRepository boilerOrderRepository;
     private final BoilerRepository boilerRepository;
@@ -70,15 +70,15 @@ public class WpOneService {
 
     private void saveTraceabilityData(UserHistory user, Status status, BoilerOrder boilerOrder, String serialNumber, Integer numberShift) {
         var now = LocalDateTime.now();
-        var boiler = createBoiler(boilerOrder, user, status, serialNumber, now);
         var station = stationRepository.getReferenceById(1L);
+        var boiler = createBoiler(boilerOrder, user, status, serialNumber, station, now);
         createOperation(boiler, user, status, station, now, numberShift);
         boilerOrder.setAmountBoilerPrint(boilerOrder.getAmountBoilerPrint() + 1);
         boilerOrderRepository.save(boilerOrder);
     }
 
     private Boiler createBoiler(BoilerOrder boilerOrder, UserHistory userHistory, Status status,
-                                String serialNumber, LocalDateTime now) {
+                                String serialNumber, Station station, LocalDateTime now) {
         var boiler = new Boiler();
         boiler.setBoilerOrder(boilerOrder);
         boiler.setUserHistory(userHistory);
@@ -86,6 +86,7 @@ public class WpOneService {
         boiler.setSerialNumber(serialNumber);
         boiler.setBoilerTypeCycle(boilerOrder.getBoilerTypeCycle());
         boiler.setDateCreate(now);
+        boiler.setLastStation(station);
         return boilerRepository.save(boiler);
     }
 
@@ -98,6 +99,7 @@ public class WpOneService {
         operation.setStatus(status);
         operation.setStation(station);
         operation.setNumberShift(numberShift);
+        operation.setIsLast(true);
         operationRepository.save(operation);
     }
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1741861661755-1" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="boiler"
+                                 constraintName="FK_BOILER_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1741861661755-6" author="Alexander (generated)">
+        <dropTable cascadeConstraints="true" tableName="component_binding_name"/>
+    </changeSet>
+    <changeSet id="1741861661755-11" author="Alexander (generated)">
+        <dropColumn columnName="component_binding_id" tableName="component_binding"/>
+    </changeSet>
+
+</databaseChangeLog>

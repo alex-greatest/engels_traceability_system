@@ -3,7 +3,7 @@ package com.rena.application.service.result.station.wp.one;
 import com.rena.application.config.mapper.boiler.BoilerMapper;
 import com.rena.application.entity.dto.result.station.wp.one.boiler.BoilerRequestWpOne;
 import com.rena.application.entity.dto.result.station.wp.one.boiler.BoilerResponseWpOne;
-import com.rena.application.repository.result.station.wp.one.order.BoilerRepository;
+import com.rena.application.repository.result.common.BoilerRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

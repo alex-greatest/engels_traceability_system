@@ -1,7 +1,6 @@
-package com.rena.application.entity.model.result.station.wp.one;
+package com.rena.application.entity.model.result.common;
 
 import com.rena.application.entity.model.boiler.type.BoilerTypeCycle;
-import com.rena.application.entity.model.result.common.Status;
 import com.rena.application.entity.model.result.station.wp.one.order.BoilerOrder;
 import com.rena.application.entity.model.user.UserHistory;
 import jakarta.persistence.*;
@@ -40,7 +39,11 @@ public class Boiler {
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "station_id", nullable = false)
+    private Station lastStation;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_history_id", nullable = false)
     private UserHistory userHistory;
 
@@ -48,7 +51,7 @@ public class Boiler {
     @Column(name = "version", nullable = false)
     private Integer version;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "boiler_order_id", nullable = false)
     private BoilerOrder boilerOrder;
 }

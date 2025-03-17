@@ -4,8 +4,7 @@ import { AppLayout, Button, DrawerToggle, Icon, SideNav, SideNavItem, Tooltip } 
 import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'Frontend/components/config/auth/auth';
-
-
+import '@vaadin/vaadin-lumo-styles/vaadin-iconset';
 const documentTitleSignal = signal('');
 effect(() => {
   document.title = documentTitleSignal.value;
@@ -20,6 +19,7 @@ export default function MainLayout() {
   const location = useLocation();
   const isCollapsedComponent = useSignal(true);
   const isCollapsedBoilerType = useSignal(true);
+  const isCollapsedSettings = useSignal(true);
   const { logout } = useAuth();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function MainLayout() {
   }, [currentTitle]);
 
   return (
-    <AppLayout primarySection="drawer">
+    <AppLayout primarySection="drawer" style={{ '--vaadin-app-layout-drawer-width': '280px' }}>
       <div slot="drawer" className="flex flex-col justify-between h-full p-m">
         <header className="flex flex-col gap-m">
             <div className="ml-m">
@@ -56,44 +56,57 @@ export default function MainLayout() {
                 </svg>
             </div>
 
-            <SideNav color={"--lumo-primary-color"} onNavigate={({path}) => navigate(path!)} location={location}>
-              <SideNavItem path={'/users'} key={"users"}>
+          <SideNav color={"--lumo-primary-color"} onNavigate={({path}) => navigate(path!)} location={location}>
+            <SideNavItem path={'/results/boiler/order'} key={"boiler_order"} style={{ fontSize: '18px' }}>
+              <Icon icon="lumo:ordered-list" slot="prefix" />
+              Заказы
+            </SideNavItem>
+            <SideNavItem path={'/results/boiler'} key={"boiler"} style={{ fontSize: '18px' }}>
+              <Icon icon="vaadin:abacus" slot="prefix" />
+              Котлы
+            </SideNavItem>
+            <SideNav onCollapsedChanged={(event) => isCollapsedSettings.value = event.detail.value }
+                     style={{ width: '100%' }} collapsible collapsed={isCollapsedSettings.value}>
+              <span slot="label" style={{ fontSize: '18px' }}>Настройки</span>
+              <SideNavItem path={'/users'} key={"users"} style={{ paddingLeft: '1rem', fontSize: '18px'}}>
                 <Icon icon="vaadin:users" slot="prefix" />
                 Пользователи
               </SideNavItem>
-              <SideNavItem path={'/shifts'} key={"shifts"}>
+              <SideNavItem path={'/shifts'} key={"shifts"} style={{ paddingLeft: '1rem', fontSize: '18px'}}>
                 <Icon icon="vaadin:shift-arrow" slot="prefix" />
                 Смены
               </SideNavItem>
               <SideNav onCollapsedChanged={(event) => isCollapsedBoilerType.value = event.detail.value }
                        style={{ width: '100%' }} collapsible collapsed={isCollapsedBoilerType.value}>
-                <span slot="label">Типы котлов</span>
-                <SideNavItem path={'/boiler_type'} key={"boiler_type"}>
+                <span slot="label" style={{ paddingLeft: '1rem', fontSize: '18px'}}>Типы котлов</span>
+                <SideNavItem path={'/boiler_type'} key={"boiler_type"} style={{ paddingLeft: '2rem', fontSize: '18px'}}>
                   <Icon icon="vaadin:cube" slot="prefix" />
                   Котлы
                 </SideNavItem>
-                <SideNavItem path={'/boiler_type/set'} key={'boiler_type_additional_set_key'}>
+                <SideNavItem path={'/boiler_type/set'} key={'boiler_type_additional_set_key'}
+                             style={{ paddingLeft: '2rem', fontSize: '18px'}}>
                   <Icon icon="vaadin:archives" slot="prefix" />
                   Набор данных
                 </SideNavItem>
               </SideNav>
               <SideNav onCollapsedChanged={(event) => isCollapsedComponent.value = event.detail.value }
                        style={{ width: '100%' }} collapsible collapsed={isCollapsedComponent.value}>
-                <span slot="label">Компоненты</span>
-                <SideNavItem path={'/components/type'} key={'components_type_key'}>
+                <span style={{ paddingLeft: '1rem', fontSize: '18px'}} slot="label">Компоненты</span>
+                <SideNavItem path={'/components/type'} key={'components_type_key'} style={{ paddingLeft: '2rem', fontSize: '18px'}}>
                   <Icon icon="vaadin:compile" slot="prefix" />
                   Типы компонентов
                 </SideNavItem>
-                <SideNavItem path={'/components/set'} key={'components_set_key'}>
+                <SideNavItem path={'/components/set'} key={'components_set_key'} style={{ paddingLeft: '2rem', fontSize: '18px'}}>
                   <Icon icon="vaadin:archives" slot="prefix" />
                   Набор компонентов
                 </SideNavItem>
               </SideNav>
             </SideNav>
+          </SideNav>
         </header>
       </div>
 
-        <DrawerToggle slot="navbar" aria-label="Menu toggle"></DrawerToggle>
+      <DrawerToggle slot="navbar" aria-label="Menu toggle"></DrawerToggle>
       <h1 slot="navbar" style={{ width: '100%', alignItems: 'center' }} className="text-l m-0 flex">
         {documentTitleSignal}
         <div style={{ marginLeft: 'auto', marginRight: '2em' }}>
