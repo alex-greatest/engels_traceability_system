@@ -16,7 +16,7 @@ public interface ComponentBindingRepository extends JpaRepository<ComponentBindi
     void deleteByComponentType(ComponentType componentType);
 
     @Query("select c from ComponentBinding c JOIN c.station JOIN " +
-            "c.componentNameSet JOIN c.componentType where c.station.description = ?1 and c.componentNameSet.id = ?2")
+            "c.componentNameSet JOIN c.componentType where c.station.name = ?1 and c.componentNameSet.id = ?2 order by c.order")
     List<ComponentBinding> findByStation_Name(String nameStation, Long idNameSet);
 
     @Query("select c from ComponentBinding c JOIN c.station JOIN " +

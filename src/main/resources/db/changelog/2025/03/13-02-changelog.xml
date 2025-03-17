@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="1741115865421-6" author="Alexander (generated)">
-        <dropTable cascadeConstraints="true" tableName="component_binding_name"/>
+    <changeSet id="1741862036621-1" author="Alexander (generated)">
+        <addNotNullConstraint columnDataType="BIGINT" columnName="station_id" tableName="boiler" validate="true"/>
     </changeSet>
 
 </databaseChangeLog>

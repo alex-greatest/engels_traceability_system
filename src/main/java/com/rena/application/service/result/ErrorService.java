@@ -17,11 +17,11 @@ public class ErrorService {
     private final ErrorTemplateRepository errorTemplateRepository;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void addError(String message, String station, String step, UserHistory userHistory, Long boilerId) {
+    public void addError(String message, String station, String step, UserHistory userHistory, String serialNumber) {
         errorTemplateRepository.findByStation_NameAndErrorMessage_Name(station, message, step).ifPresent((errorTemplate) -> {
             var error = new Error();
             error.setErrorTemplate(errorTemplate);
-            error.setBoilerId(boilerId);
+            error.setSerialNumber(serialNumber);
             error.setUserHistory(userHistory);
             error.setDateCreate(LocalDateTime.now());
             errorRepository.save(error);

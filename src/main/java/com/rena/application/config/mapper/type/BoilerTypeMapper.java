@@ -1,6 +1,7 @@
-package com.rena.application.config.mapper;
+package com.rena.application.config.mapper.type;
 
 import com.rena.application.entity.dto.boiler_type.BoilerTypeDto;
+import com.rena.application.entity.dto.boiler_type.BoilerTypeStation;
 import com.rena.application.entity.model.boiler.type.BoilerType;
 import org.mapstruct.*;
 import java.util.List;
@@ -15,4 +16,8 @@ public interface BoilerTypeMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     BoilerType partialUpdate(BoilerTypeDto boilerTypeDto, @MappingTarget BoilerType boilerType);
+
+    BoilerType toEntity(BoilerTypeStation boilerTypeStation);
+
+    BoilerTypeStation toBoilerTypeDto1(BoilerType boilerType);
 }

@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "error", indexes = {
         @Index(name = "idx_error_date_create", columnList = "date_create"),
-        @Index(name = "idx_error_boiler_id", columnList = "boiler_id"),
-        @Index(name = "idx_error_user_history_id", columnList = "user_history_id")
+        @Index(name = "idx_error_user_history_id", columnList = "user_history_id"),
+        @Index(name = "idx_error_serial_number", columnList = "serial_number")
 })
 public class Error {
     @Id
@@ -21,8 +21,8 @@ public class Error {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "boiler_id")
-    private Long boilerId;
+    @Column(name = "serial_number")
+    private String serialNumber;
 
     @NotNull
     @Column(name = "date_create", nullable = false)

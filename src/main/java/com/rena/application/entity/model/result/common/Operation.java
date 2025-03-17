@@ -1,7 +1,5 @@
-package com.rena.application.entity.model.result.station.wp.one;
+package com.rena.application.entity.model.result.common;
 
-import com.rena.application.entity.model.result.common.Station;
-import com.rena.application.entity.model.result.common.Status;
 import com.rena.application.entity.model.user.UserHistory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "operation", indexes = {
         @Index(name = "idx_operation_date_create", columnList = "date_create"),
         @Index(name = "idx_operation", columnList = "boiler_serial_number"),
-        @Index(name = "idx_operation_user_history_id", columnList = "user_history_id")
+        @Index(name = "idx_operation_user_history_id", columnList = "user_history_id"),
+        @Index(name = "idx_operation_is_last", columnList = "is_last")
 })
 public class Operation {
     @Id
@@ -26,6 +25,9 @@ public class Operation {
     @NotNull
     @Column(name = "date_create", nullable = false)
     private LocalDateTime dateCreate;
+
+    @Column(name = "date_update")
+    private LocalDateTime dateUpdate;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "status_id", nullable = false)
@@ -50,4 +52,11 @@ public class Operation {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "boiler_serial_number", nullable = false)
     private Boiler boiler;
+
+    @Column(name = "reason_for_stopping")
+    private String reasonForStopping;
+
+    @NotNull
+    @Column(name = "is_last", nullable = false)
+    private Boolean isLast = false;
 }

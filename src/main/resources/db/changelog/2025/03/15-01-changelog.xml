@@ -5,11 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="1741274026976-2" author="Alexander (generated)">
-        <dropUniqueConstraint constraintName="uc_binding_name_set" tableName="component_binding"/>
-
-        <addUniqueConstraint columnNames="component_name_set_id, component_type_id" constraintName="uc_binding_name_set"
-                             tableName="component_binding"/>
+    <changeSet id="1742040075520-1" author="Alexander (generated)">
+        <dropForeignKeyConstraint baseTableName="component" constraintName="fk_component_on_boiler_serial_number"/>
+    </changeSet>
+    <changeSet id="1742040075520-10" author="Alexander (generated)">
+        <dropColumn columnName="version" tableName="component"/>
     </changeSet>
 
 </databaseChangeLog>

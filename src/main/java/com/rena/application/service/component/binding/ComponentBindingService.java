@@ -10,7 +10,6 @@ import com.rena.application.repository.component.binding.ComponentBindingReposit
 import com.rena.application.repository.component.set.ComponentNameSetRepository;
 import com.rena.application.repository.component.set.ComponentTypeRepository;
 import com.rena.application.repository.result.common.StationRepository;
-import com.vaadin.hilla.signals.ValueSignal;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +42,7 @@ public class ComponentBindingService {
                 findComponentTypeByName(componentBindingRequest.componentType().name()).
                 orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден"));
         var station = stationRepository.
-                findByDescription(componentBindingRequest.stationName()).
+                findByName(componentBindingRequest.stationName()).
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         var componentBinding = new ComponentBinding();
         componentBinding.setComponentType(componentType);
