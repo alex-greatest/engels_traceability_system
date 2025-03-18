@@ -1,4 +1,4 @@
-package com.rena.application.repository.result.station.wp.one.order;
+package com.rena.application.repository.result.station.wp;
 
 import java.time.LocalDateTime;
 import java.util.List;

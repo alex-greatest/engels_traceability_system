@@ -3,7 +3,7 @@ package com.rena.application.service.result.print;
 import com.rena.application.config.mapper.result.BoilerOrderMapper;
 import com.rena.application.entity.dto.result.print.BoilerOrderDto;
 import com.rena.application.entity.model.result.station.wp.one.order.BoilerOrder;
-import com.rena.application.repository.result.station.wp.one.order.BoilerOrderRepository;
+import com.rena.application.repository.result.station.wp.BoilerOrderRepository;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

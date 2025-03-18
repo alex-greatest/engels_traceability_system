@@ -11,7 +11,7 @@ import com.rena.application.exceptions.result.boiler.BoilerOrderReadyNotFoundExc
 import com.rena.application.exceptions.result.boiler.BoilerTypeNotFoundException;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.boiler.type.BoilerTypeCycleRepository;
-import com.rena.application.repository.result.station.wp.one.order.BoilerOrderRepository;
+import com.rena.application.repository.result.station.wp.BoilerOrderRepository;
 import com.rena.application.repository.result.common.StatusRepository;
 import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.user.UserHistoryRepository;

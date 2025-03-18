@@ -1,6 +1,6 @@
 package com.rena.application.service.boiler.type.additional;
 
-import com.rena.application.config.mapper.BoilerTypeAdditionalValueMapper;
+import com.rena.application.config.mapper.type.BoilerTypeAdditionalValueMapper;
 import com.rena.application.entity.dto.boiler_type.BoilerTypeAdditionalValueDto;
 import com.rena.application.entity.model.boiler.type.additional.BoilerTypeAdditionalValue;
 import com.rena.application.exceptions.RecordNotFoundException;

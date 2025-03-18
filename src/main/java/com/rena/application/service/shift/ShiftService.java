@@ -36,7 +36,7 @@ public class ShiftService {
     @Transactional
     public void addShift(ShiftDto shiftDto) {
         Shift shift = shiftsMapper.toEntity(shiftDto);
-        shiftRepository.findByNumber(shiftDto.number()).ifPresent((s) -> {throw new DbException("Смена с таким номером уже существует");});
+        shiftRepository.findByNumber(shiftDto.number()).ifPresent((_) -> {throw new DbException("Смена с таким номером уже существует");});
         shiftRepository.save(shift);
     }
 

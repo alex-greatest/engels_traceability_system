@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo, useEffect, useState } from 'react';
 import {
   MaterialReactTable, type MRT_ColumnDef,
   useMaterialReactTable
@@ -10,6 +10,8 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import HistoryIcon from '@mui/icons-material/History';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import Box from '@mui/material/Box';
 import { useBoilersByDateRange } from 'Frontend/components/api/boiler';
@@ -24,9 +26,41 @@ export default function Boilers() {
   const endDateTimeBoiler = useContext(Context).endDateTimeBoiler;
   const submitedStartDate = useSignal(startDateTimeBoiler.value);
   const submitedEndDate = useSignal(endDateTimeBoiler.value);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Получаем текущую страницу из URL-параметров или localStorage
+  const urlParams = new URLSearchParams(location.search);
+  const savedPage = localStorage.getItem('boilersPage');
+  const currentPage = parseInt(urlParams.get('page') || savedPage || '0', 10);
+  
+  // Добавляем состояние для пагинации
+  const [pagination, setPagination] = useState({
+    pageIndex: currentPage,
+    pageSize: 10,
+  });
+  
+  // Функция для обновления URL при изменении страницы
+  const handlePageChange = useCallback((pageIndex: number) => {
+    const newUrlParams = new URLSearchParams(location.search);
+    newUrlParams.set('page', pageIndex.toString());
+    
+    // Сохраняем номер страницы в localStorage
+    localStorage.setItem('boilersPage', pageIndex.toString());
+    
+    navigate(`${location.pathname}?${newUrlParams.toString()}`, { replace: true });
+  }, [location, navigate]);
   
   const { data: boilers, isError, isLoading, refetch, isRefetching } =
     useBoilersByDateRange(submitedStartDate.value, submitedEndDate.value);
+
+  // Эффект для синхронизации пагинации с URL
+  useEffect(() => {
+    setPagination(prev => ({
+      ...prev,
+      pageIndex: currentPage
+    }));
+  }, [currentPage]);
 
   const handleDateChange = () => {
     submitedStartDate.value = startDateTimeBoiler.value;
@@ -134,14 +168,30 @@ export default function Boilers() {
   );
 
   const table = useMaterialReactTable({
+    // Отключаем автоматический сброс пагинации при изменении данных
+    autoResetAll: false,
+    autoResetPageIndex: false,
     initialState: {
       showColumnFilters: true,
       density: 'compact',
+      pagination,
     },
     columns: boilerColumns,
     localization: MRT_Localization_RU,
     positionActionsColumn: 'last',
     enableRowActions: true,
+    renderRowActions: ({ row }) => (
+      <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+        <Tooltip title="История операций">
+          <IconButton 
+            onClick={() => navigate(`/results/boiler/operation/${row.original.serialNumber}`)}
+            color="primary"
+          >
+            <HistoryIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ),
     paginationDisplayMode: 'pages',
     enableStickyHeader: true,
     enableStickyFooter: true,
@@ -151,6 +201,15 @@ export default function Boilers() {
       isLoading,
       showAlertBanner: isError,
       showProgressBars: isRefetching || isLoading,
+      pagination,
+    },
+    // Обновляем обработчик изменения пагинации
+    onPaginationChange: (updater) => {
+      const newPagination = typeof updater === 'function' 
+        ? updater(pagination) 
+        : updater;
+      setPagination(newPagination);
+      handlePageChange(newPagination.pageIndex);
     },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box sx={{ display: 'flex', gap: '1em' }}>
@@ -221,4 +280,4 @@ export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
   title: "Котлы"
-}; 
+};

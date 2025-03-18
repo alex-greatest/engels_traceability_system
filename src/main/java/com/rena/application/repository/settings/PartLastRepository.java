@@ -1,6 +1,5 @@
 package com.rena.application.repository.settings;
 
-import com.rena.application.entity.model.result.common.Station;
 import com.rena.application.entity.model.settings.PartLast;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

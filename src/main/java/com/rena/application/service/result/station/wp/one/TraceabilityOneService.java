@@ -15,7 +15,7 @@ import com.rena.application.repository.result.common.BoilerRepository;
 import com.rena.application.repository.result.common.OperationRepository;
 import com.rena.application.repository.result.common.StationRepository;
 import com.rena.application.repository.result.common.StatusRepository;
-import com.rena.application.repository.result.station.wp.one.order.BoilerOrderRepository;
+import com.rena.application.repository.result.station.wp.BoilerOrderRepository;
 import com.rena.application.repository.settings.SettingRepository;
 import com.rena.application.repository.user.UserHistoryRepository;
 import com.rena.application.service.result.ErrorService;
