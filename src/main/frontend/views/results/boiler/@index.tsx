@@ -78,6 +78,14 @@ export default function Boilers() {
         accessorKey: 'status.name',
         header: 'Последний результат',
         size: 100,
+        filterVariant: 'select',
+        filterFn: 'equals',
+        filterSelectOptions: [
+          { label: 'OK', value: 'OK' },
+          { label: 'NOK', value: 'NOK' },
+          { label: 'В работе', value: 'IN_PROGRESS' },
+          { label: 'Прервана', value: 'INTERRUPTED' }
+        ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           let displayText = value;
@@ -141,6 +149,14 @@ export default function Boilers() {
       {
         accessorKey: 'lastStation.name',
         header: 'Последняя станция',
+        filterVariant: 'select',
+        filterFn: 'equals',
+        filterSelectOptions: [
+          { text: 'Рабочее место 1', value: 'wp1' },
+          { text: 'wp2', value: 'wp2' },
+          { text: 'wp3', value: 'wp3' },
+          { text: 'wp4', value: 'wp4' }
+        ],
         size: 150,
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();

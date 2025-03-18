@@ -7,59 +7,40 @@ import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import { Container, Box, Tooltip } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useOperationsBySerial } from 'Frontend/components/api/operation';
+import { useParams } from 'react-router-dom';
+import { useComponentsByOperationId } from 'Frontend/components/api/components_result_print';
 import dayjs from 'dayjs';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 
-export default function OperationsResults() {
-  const { serialNumber } = useParams<{ serialNumber: string }>();
-  const navigate = useNavigate();
+export default function ComponentsResults() {
+  const { operationId } = useParams<{ operationId: string }>();
   
-  const { data: operations, isError, isLoading, refetch, isRefetching } =
-    useOperationsBySerial(serialNumber || '');
+  const { data: components, isError, isLoading, refetch, isRefetching } =
+    useComponentsByOperationId(Number(operationId));
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        size: 80,
+        accessorKey: 'name',
+        header: 'Наименование',
+        size: 200,
       },
       {
-        accessorKey: 'stationName',
-        header: 'Станция',
-        size: 150,
-        filterVariant: 'select',
-        filterFn: 'equals',
-        filterSelectOptions: [
-          { label: 'Рабочее место 1', value: 'wp1' },
-          { label: 'Рабочее место 5', value: 'wp2' },
-          { label: 'Рабочее место 8', value: 'wp3' },
-          { label: 'Рабочее место 12', value: 'wp4' }
-        ],
-        Cell: ({ cell }) => {
-          const value = cell.getValue<string>();
-          switch (value) {
-            case 'wp1': return 'Рабочее место 1';
-            case 'wp2': return 'Рабочее место 5';
-            case 'wp3': return 'Рабочее место 8';
-            case 'wp4': return 'Рабочее место 12';
-            default: return value;
-          }
-        },
+        accessorKey: 'value',
+        header: 'Значение',
+        size: 100,
       },
       {
         accessorKey: 'status',
-        header: 'Статус', 
+        header: 'Статус',
         size: 100,
         filterVariant: 'select',
-        filterFn: 'equals',
+        filterFn: 'equals', 
         filterSelectOptions: [
-          { label: 'OK', value: 'OK' },
-          { label: 'NOK', value: 'NOK' },
-          { label: 'В работе', value: 'IN_PROGRESS' },
-          { label: 'Прервана', value: 'INTERRUPTED' }
+          { text: 'OK', value: 'OK' },
+          { text: 'NOK', value: 'NOK' },
+          { text: 'В работе', value: 'IN_PROGRESS' },
+          { text: 'Прервана', value: 'INTERRUPTED' }
         ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
@@ -99,7 +80,7 @@ export default function OperationsResults() {
       {
         accessorKey: 'dateCreate',
         header: 'Дата',
-        size: 150,
+        size: 100,
         Cell: ({ cell }) => dayjs(cell.getValue<string>()).format('YYYY-MM-DD HH:mm'),
       }
     ],
@@ -139,16 +120,7 @@ export default function OperationsResults() {
         children: 'Ошибка при загрузке данных',
       }
       : undefined,
-    data: operations || [],
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: () => navigate(`/results/boiler/components/${row.original.id}`),
-      sx: {
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: 'rgba(0, 0, 0, 0.04)',
-        },
-      },
-    }),
+    data: components || [],
   });
 
   return (
@@ -161,5 +133,5 @@ export default function OperationsResults() {
 export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
-  title: "Операции"
-};
+  title: "Компоненты"
+}; 

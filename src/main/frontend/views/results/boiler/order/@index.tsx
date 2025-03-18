@@ -44,11 +44,13 @@ export default function BoilerOrders() {
         accessorKey: 'status.name',
         header: 'Результат',
         size: 100,
+        filterVariant: 'select',
+        filterFn: 'equals',
         filterSelectOptions: [
-          { text: 'OK', value: 'OK' },
-          { text: 'NOK', value: 'NOK' },
-          { text: 'В работе', value: 'IN_PROGRESS' },
-          { text: 'Прервана', value: 'INTERRUPTED' },
+          { label: 'OK', value: 'OK' },
+          { label: 'NOK', value: 'NOK' },
+          { label: 'В работе', value: 'IN_PROGRESS' },
+          { label: 'Прервана', value: 'INTERRUPTED' },
         ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();

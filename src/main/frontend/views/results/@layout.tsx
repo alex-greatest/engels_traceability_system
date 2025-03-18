@@ -11,6 +11,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/results/boiler': 'Котлы',
   '/results/boiler/order': 'Заказы',
   '/results/boiler/operation': 'Операции',
+  '/results/boiler/components': 'Компоненты',
 };
 
 // Компонент-обертка для удобной навигации
@@ -42,15 +43,16 @@ export default function ResultsLayout() {
     // Определяем наличие особых сегментов
     const isOrderPage = pathnames.includes('order');
     const isOperationPage = pathnames.includes('operation');
+    const isComponentsPage = pathnames.includes('components');
     
-    // Находим серийный номер, исключая служебные сегменты (results, boiler, operation, order)
+    // Находим серийный номер и ID операции, исключая служебные сегменты
     const serialNumber = pathnames.find(segment => 
       segment.match(/^[A-Z0-9]+$/i) && 
-      !['results', 'boiler', 'operation', 'order'].includes(segment)
+      !['results', 'boiler', 'operation', 'order', 'components'].includes(segment)
     );
     
     // Для страниц верхнего уровня (Котлы и Заказы) не показываем хлебные крошки
-    if ((isOrderPage && !serialNumber) || (pathnames.includes('boiler') && !isOperationPage && !serialNumber)) {
+    if ((isOrderPage && !serialNumber) || (pathnames.includes('boiler') && !isOperationPage && !isComponentsPage && !serialNumber)) {
       return [];
     }
     
@@ -78,10 +80,46 @@ export default function ResultsLayout() {
         </Typography>
       );
       
-      // 3. Серийный номер (некликабельно), отображаем только сам номер
+      // 3. Серийный номер (некликабельно)
       crumbs.push(
         <Typography key="serial" sx={{ color: 'text.primary', ...breadcrumbItemStyle }}>
           {serialNumber}
+        </Typography>
+      );
+    }
+    
+    // Страница компонентов
+    if (isComponentsPage) {
+      // 1. Ссылка на котлы
+      crumbs.push(
+        <LinkRouter 
+          underline="hover" 
+          color="inherit" 
+          to="/results/boiler" 
+          key="boilers"
+          sx={{ cursor: 'pointer', ...breadcrumbItemStyle }}
+        >
+          Котлы
+        </LinkRouter>
+      );
+      
+      // 2. Ссылка на операции
+      crumbs.push(
+        <LinkRouter 
+          underline="hover" 
+          color="inherit" 
+          to={`/results/boiler/operation/${serialNumber}`}
+          key="operations"
+          sx={{ cursor: 'pointer', ...breadcrumbItemStyle }}
+        >
+          Операции
+        </LinkRouter>
+      );
+      
+      // 3. Компоненты (некликабельно)
+      crumbs.push(
+        <Typography key="components" sx={{ color: 'text.primary', ...breadcrumbItemStyle }}>
+          Компоненты
         </Typography>
       );
     }
