@@ -4,8 +4,9 @@ import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import { Box, Container, Tooltip } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useParams, useNavigate } from 'react-router-dom';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { useNavigate, useParams } from 'react-router-dom';
+import ComponentsDetailPanel from 'Frontend/components/ComponentsDetailPanel';
 import { useOperationsBySerial } from 'Frontend/components/api/operation';
 import dayjs from 'dayjs';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
@@ -13,7 +14,6 @@ import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 export default function OperationsResults() {
   const { serialNumber } = useParams<{ serialNumber: string }>();
   const navigate = useNavigate();
-  
   const { data: operations, isError, isLoading, refetch, isRefetching } =
     useOperationsBySerial(serialNumber || '');
 
@@ -125,35 +125,42 @@ export default function OperationsResults() {
       density: 'compact',
       sorting: [{ id: 'dateCreate', desc: true }],
     },
+    enableExpanding: true,
+    getRowCanExpand: (row) => showComponentsIcon(row.original.stationName),
+    renderDetailPanel: ({ row }) => (
+      <>
+      { showComponentsIcon(row.original.stationName) &&  <ComponentsDetailPanel operationId={row.original.id} /> }
+      </>
+    ),
+    enableRowActions: true,
+    positionActionsColumn: 'first',
+    renderRowActions: ({ row }) => (
+      <>
+        { showComponentsIcon(row.original.stationName) && 
+          <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+            <Tooltip title="Компоненты">
+              <IconButton
+                onClick={() => navigate(`/results/boiler/components/${row.original.id}`, {
+                  state: {
+                    station: getStationName(row.original.stationName),
+                    serialNumber: serialNumber
+                  }
+                })}
+                color="primary"
+              >
+                <OpenInNewIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        }
+      </>
+    ),
     columns,
     localization: MRT_Localization_RU,
     paginationDisplayMode: 'pages',
     enableStickyHeader: true,
     enableStickyFooter: true,
     enablePagination: true,
-    enableRowActions: true,
-    positionActionsColumn: 'first',
-    renderRowActions: ({ row }) => (
-      <>
-        { showComponentsIcon(row.original.stationName) && 
-                <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-                <Tooltip title="Компоненты">
-                  <IconButton
-                    onClick={() => navigate(`/results/boiler/components/${row.original.id}`, {
-                      state: {
-                        station: getStationName(row.original.stationName),
-                        serialNumber: serialNumber
-                      }
-                    })}
-                    color="primary"
-                  >
-                    <OpenInNewIcon />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-      }
-      </>
-    ),
     muiTableContainerProps: { sx: { maxHeight: '650px' } },
     state: {
       isLoading,
