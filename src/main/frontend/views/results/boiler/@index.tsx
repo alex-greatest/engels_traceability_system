@@ -194,7 +194,9 @@ export default function Boilers() {
       <Box sx={{ display: 'flex', gap: '0.5rem' }}>
         <Tooltip title="История операций">
           <IconButton 
-            onClick={() => navigate(`/results/boiler/operation/${row.original.serialNumber}`)}
+            onClick={() => navigate(`/results/boiler/operation/${row.original.serialNumber}`, {
+              state: { from: 'boilers' }
+            })}
             color="primary"
           >
             <HistoryIcon />

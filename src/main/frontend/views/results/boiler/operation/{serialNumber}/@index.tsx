@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react';
-import {
-  MaterialReactTable, type MRT_ColumnDef,
-  useMaterialReactTable
-} from 'material-react-table';
+import { MaterialReactTable, type MRT_ColumnDef, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
-import { Container, Box, Tooltip } from '@mui/material';
+import { Box, Container, Tooltip } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useOperationsBySerial } from 'Frontend/components/api/operation';
 import dayjs from 'dayjs';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
@@ -33,8 +30,7 @@ export default function OperationsResults() {
 
   function showComponentsIcon(nameStation: string): boolean {
     const allowedStations = ['wp2', 'wp3', 'wp4'];
-    const shouldShow = allowedStations.includes(nameStation);
-    return shouldShow;
+    return allowedStations.includes(nameStation);
   }
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(() => [

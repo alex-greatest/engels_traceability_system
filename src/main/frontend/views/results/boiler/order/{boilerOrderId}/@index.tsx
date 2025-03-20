@@ -9,17 +9,19 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import HistoryIcon from '@mui/icons-material/History';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import Box from '@mui/material/Box';
 import { useBoilersByOrderId } from 'Frontend/components/api/boiler';
 import dayjs from 'dayjs';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import BoilerResult from 'Frontend/generated/com/rena/application/entity/dto/result/print/BoilerResult';
 
 export default function BoilersOfOrderResults() {
   const { boilerOrderId } = useParams();
   const orderId = boilerOrderId ? parseInt(boilerOrderId) : 0;
+  const navigate = useNavigate();
 
   const { data: boilers, isError, isLoading, refetch, isRefetching } =
     useBoilersByOrderId(orderId);
@@ -115,7 +117,21 @@ export default function BoilersOfOrderResults() {
     columns: boilersColumns,
     localization: MRT_Localization_RU,
     positionActionsColumn: 'first',
-    enableRowActions: false,
+    enableRowActions: true,
+    renderRowActions: ({ row }) => (
+      <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+        <Tooltip title="История операций">
+          <IconButton 
+            onClick={() => navigate(`/results/boiler/operation/${row.original.serialNumber}`, {
+              state: { from: 'order', boilerOrderId: orderId }
+            })}
+            color="primary"
+          >
+            <HistoryIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ),
     paginationDisplayMode: 'pages',
     enableStickyHeader: true,
     enableStickyFooter: true,
@@ -154,11 +170,6 @@ export default function BoilersOfOrderResults() {
 
   return (
     <Container maxWidth={'xl'} sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', marginTop: '2em' }}>
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '1em' }}>
-        <Box>
-          <h2>Котлы заказа №{orderId}</h2>
-        </Box>
-      </Box>
       <MaterialReactTable table={table} />
     </Container>
   );
@@ -168,4 +179,4 @@ export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
   title: "Котлы заказа"
-}; 
+};

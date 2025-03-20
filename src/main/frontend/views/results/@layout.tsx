@@ -57,7 +57,7 @@ export default function ResultsLayout() {
     const crumbs = [];
 
     // Добавляем ссылку на котлы для всех дочерних страниц
-    if (isOperationPage || isComponentsPage || (isOrderPage && !boilerOrderId)) {
+    if ((isOperationPage && !location.state?.from) || isComponentsPage || (isOrderPage && !boilerOrderId)) {
       crumbs.push(
         <LinkRouter
           underline="hover"
@@ -73,30 +73,87 @@ export default function ResultsLayout() {
 
     // Страница заказа
     if (isOrderPage && boilerOrderId) {
-      crumbs.push(
-        <LinkRouter
-          underline="hover"
-          color="inherit"
-          to="/results/boiler/order"
-          key="orders"
-          sx={{ cursor: 'pointer', ...breadcrumbItemStyle }}
-        >
-          Заказ
-        </LinkRouter>
-      );
-      
-      crumbs.push(
-        <Typography
-          key="orderId"
-          sx={{ ...breadcrumbItemStyle, fontWeight: 'bold' }}
-        >
-          Котлы заказа {boilerOrderId}
-        </Typography>
-      );
+      // Если мы на странице операций и пришли из заказа, добавляем ссылку на заказ
+      if (location.state?.from === 'order' && location.state?.boilerOrderId) {
+        crumbs.push(
+          <LinkRouter
+            underline="hover"
+            color="inherit"
+            to={`/results/boiler/order/${location.state.boilerOrderId}`}
+            key="order"
+            sx={{ cursor: 'pointer', ...breadcrumbItemStyle }}
+          >
+            Котлы заказа {location.state.boilerOrderId}
+          </LinkRouter>
+        );
+      } else {
+        crumbs.push(
+          <LinkRouter
+            underline="hover"
+            color="inherit"
+            to="/results/boiler/order"
+            key="orders"
+            sx={{ cursor: 'pointer', ...breadcrumbItemStyle }}
+          >
+            Заказ
+          </LinkRouter>
+        );
+        
+        crumbs.push(
+          <Typography
+            key="orderId"
+            sx={{ ...breadcrumbItemStyle, fontWeight: 'bold' }}
+          >
+            Котлы заказа {boilerOrderId}
+          </Typography>
+        );
+      }
     }
 
     // Страница операций
     if (isOperationPage && serialNumber) {
+      // Проверяем, откуда мы пришли на страницу операций
+      if (location.state?.from === 'order' && location.state?.boilerOrderId) {
+        // Добавляем ссылку на страницу заказов
+        crumbs.push(
+          <LinkRouter
+            underline="hover"
+            color="inherit"
+            to="/results/boiler/order"
+            key="orders-list"
+            sx={{ cursor: 'pointer', ...breadcrumbItemStyle }}
+          >
+            Заказы
+          </LinkRouter>
+        );
+        
+        // Уже существующая логика для перехода от заказа
+        crumbs.push(
+          <LinkRouter
+            underline="hover"
+            color="inherit"
+            to={`/results/boiler/order/${location.state.boilerOrderId}`}
+            key="order"
+            sx={{ cursor: 'pointer', ...breadcrumbItemStyle }}
+          >
+            Котлы заказа {location.state.boilerOrderId}
+          </LinkRouter>
+        );
+      } else if (location.state?.from === 'boilers') {
+        // Новая логика для перехода со страницы всех котлов
+        crumbs.push(
+          <LinkRouter
+            underline="hover"
+            color="inherit"
+            to="/results/boiler"
+            key="boilers-back"
+            sx={{ cursor: 'pointer', ...breadcrumbItemStyle }}
+          >
+            Котлы
+          </LinkRouter>
+        );
+      }
+      
       crumbs.push(
         <Typography
           key="serial"
