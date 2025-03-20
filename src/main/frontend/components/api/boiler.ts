@@ -27,14 +27,14 @@ export function useBoilersByDateRange(startDate: string, endDate: string) {
 }
 
 /**
- * Hook для получения котлов по серийному номеру
- * @param serialNumber - серийный номер для поиска
+ * Hook для получения котлов по идентификатору заказа
+ * @param boilerOrderId - идентификатор заказа котла
  */
-/*export function useBoilersBySerialNumber(serialNumber: string) {
+export function useBoilersByOrderId(boilerOrderId: number) {
   return useQuery({
-    queryKey: ['boilers', 'serialNumber', serialNumber],
-    queryFn: () => BoilerResultController.getBoilerBySerialNumber(serialNumber),
+    queryKey: ['boilers', 'orderId', boilerOrderId],
+    queryFn: () => BoilerResultController.getBoilerById(boilerOrderId),
     staleTime: 1000 * 60 * 5, // 5 минут
-    enabled: !!serialNumber, // Запрос выполняется только если серийный номер указан
+    enabled: !!boilerOrderId, // Запрос выполняется только если указан orderId
   });
-} */
+}

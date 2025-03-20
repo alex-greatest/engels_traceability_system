@@ -7,6 +7,7 @@ import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import { Container, Box, Tooltip } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useOperationsBySerial } from 'Frontend/components/api/operation';
 import dayjs from 'dayjs';
@@ -19,8 +20,24 @@ export default function OperationsResults() {
   const { data: operations, isError, isLoading, refetch, isRefetching } =
     useOperationsBySerial(serialNumber || '');
 
-  const columns = useMemo<MRT_ColumnDef<any>[]>(
-    () => [
+  // Функция для преобразования идентификатора станции в читаемое имя
+  function getStationName(stationId: string): string {
+    switch (stationId) {
+      case 'wp1': return 'Рабочее место 1';
+      case 'wp2': return 'Рабочее место 5';
+      case 'wp3': return 'Рабочее место 8';
+      case 'wp4': return 'Рабочее место 12';
+      default: return stationId;
+    }
+  }
+
+  function showComponentsIcon(nameStation: string): boolean {
+    const allowedStations = ['wp2', 'wp3', 'wp4'];
+    const shouldShow = allowedStations.includes(nameStation);
+    return shouldShow;
+  }
+
+  const columns = useMemo<MRT_ColumnDef<any>[]>(() => [
       {
         accessorKey: 'id',
         header: 'ID',
@@ -118,6 +135,29 @@ export default function OperationsResults() {
     enableStickyHeader: true,
     enableStickyFooter: true,
     enablePagination: true,
+    enableRowActions: true,
+    positionActionsColumn: 'first',
+    renderRowActions: ({ row }) => (
+      <>
+        { showComponentsIcon(row.original.stationName) && 
+                <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+                <Tooltip title="Компоненты">
+                  <IconButton
+                    onClick={() => navigate(`/results/boiler/components/${row.original.id}`, {
+                      state: {
+                        station: getStationName(row.original.stationName),
+                        serialNumber: serialNumber
+                      }
+                    })}
+                    color="primary"
+                  >
+                    <OpenInNewIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+      }
+      </>
+    ),
     muiTableContainerProps: { sx: { maxHeight: '650px' } },
     state: {
       isLoading,
@@ -140,15 +180,6 @@ export default function OperationsResults() {
       }
       : undefined,
     data: operations || [],
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: () => navigate(`/results/boiler/components/${row.original.id}`),
-      sx: {
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: 'rgba(0, 0, 0, 0.04)',
-        },
-      },
-    }),
   });
 
   return (
@@ -157,7 +188,6 @@ export default function OperationsResults() {
     </Container>
   );
 }
-
 export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],

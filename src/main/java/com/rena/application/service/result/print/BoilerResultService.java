@@ -29,9 +29,8 @@ public class BoilerResultService {
         return boilerMapper.toDtoBoilerResult(boilers);
     }
 
-    public List<BoilerResult> getBoilerBySerialNumber(String serialNumber) {
-        //List<Boiler> boilers = boilerRepository.findBySerialNumber(serialNumber);
-        //return boilerMapper.toDtoBoilerResult(boilers);
-        return null;
+    public List<BoilerResult> getBoilersById(Long boilerId) {
+        List<Boiler> boilers = boilerRepository.findAllByBoilerOrderId(boilerId);
+        return boilerMapper.toDtoBoilerResult(boilers);
     }
 }

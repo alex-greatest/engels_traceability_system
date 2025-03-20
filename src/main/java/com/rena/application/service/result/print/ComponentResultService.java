@@ -1,26 +1,27 @@
 package com.rena.application.service.result.print;
 
-import com.rena.application.entity.model.component.set.ComponentSet;
-import com.rena.application.repository.component.set.ComponentSetRepository;
+import com.rena.application.config.mapper.result.ComponentMapper;
+import com.rena.application.entity.dto.result.print.ComponentsResults;
+import com.rena.application.exceptions.RecordNotFoundException;
+import com.rena.application.repository.result.common.OperationRepository;
+import com.rena.application.repository.result.station.wp.ComponentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ComponentResultService {
-    private final ComponentSetRepository componentSetRepository;
+    private final ComponentRepository componentRepository;
+    private final ComponentMapper componentMapper;
+    private final OperationRepository operationRepository;
 
-    public ComponentResultService(ComponentSetRepository componentSetRepository) {
-        this.componentSetRepository = componentSetRepository;
+    public ComponentsResults getComponentsByOperationId(Long operationId) {
+        var components = componentRepository.findByOperation_IdOrderByNameAsc(operationId);
+        var operation = operationRepository.findOperationById(operationId).
+                orElseThrow(() -> new RecordNotFoundException("Операция не найдена"));
+        var componentResults = componentMapper.toDto(components);
+        return new ComponentsResults(componentResults, operation.getStation().getDescription());
     }
-
-    /**
-     * Получает список компонентов по ID операции
-     * @param operationId ID операции
-     * @return список компонентов
-     */
-    public List<ComponentSet> getComponentsByOperationId(Long operationId) {
-        return componentSetRepository.findAllComponentsById(operationId);
-    }
-} 
+}

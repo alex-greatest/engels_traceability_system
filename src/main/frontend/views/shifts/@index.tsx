@@ -155,7 +155,7 @@ export default function ShiftsView() {
     initialState: { showColumnFilters: true, density: 'compact' },
     columns: shiftsColumns,
     localization: MRT_Localization_RU,
-    positionActionsColumn: 'last',
+    positionActionsColumn: 'first',
     enableRowActions: true,
     paginationDisplayMode: 'pages',
     enableStickyHeader: true,

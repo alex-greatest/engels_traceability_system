@@ -18,4 +18,7 @@ public interface BoilerRepository extends JpaRepository<Boiler, String> {
     
     @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory where b.dateCreate between ?1 and ?2")
     List<Boiler> findAllByDateCreateBetween(LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory where b.boilerOrder.id = ?1")
+    List<Boiler> findAllByBoilerOrderId(Long boilerOrderId);
 }

@@ -1,1 +1,9 @@
-{"lit-plugin.strict":true,"java.compile.nullAnalysis.mode":"automatic","java.configuration.updateBuildConfiguration":"automatic","typescript.preferences.includePackageJsonAutoImports":"on"}
+{
+    "lit-plugin.strict": true,
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "java.dependency.packagePresentation": "hierarchical",
+    "github.copilot.editor.enableAutoCompletions": false,
+    "workbench.activityBar.orientation": "vertical"
+}

@@ -53,7 +53,7 @@ const Users = () => {
     initialState: { showColumnFilters: true, density: 'compact' },
     columns: usersColumns,
     localization: MRT_Localization_RU,
-    positionActionsColumn: 'last',
+    positionActionsColumn: 'first',
     enableRowActions: true,
     paginationDisplayMode: 'pages',
     state: {

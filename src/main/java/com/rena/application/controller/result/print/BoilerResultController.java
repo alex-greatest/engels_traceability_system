@@ -48,11 +48,11 @@ public class BoilerResultController {
     }
 
     @Nonnull
-    public List<@Nonnull BoilerResult> getBoilerBySerialNumber(@Nonnull String serialNumber) {
+    public List<@Nonnull BoilerResult> getBoilerById(@Nonnull Long boilerId) {
         try {
-            return boilerResultService.getBoilerBySerialNumber(serialNumber);
+            return boilerResultService.getBoilersById(boilerId);
         } catch (DataAccessException e) {
-            log.error("Ошибка при получении котлов по серийному номеру", e);
+            log.error("Ошибка при получении котлов по идентификатору", e);
             String message = handlerErrorConstraintDB.findMessageError(e.getMessage());
             throw new DbException(message);
         }

@@ -92,7 +92,7 @@ const ComponentsNameSet = () => {
     initialState: { showColumnFilters: true, density: 'compact' },
     columns: componentNameSetColumns,
     localization: MRT_Localization_RU,
-    positionActionsColumn: 'last',
+    positionActionsColumn: 'first',
     enableRowActions: true,
     paginationDisplayMode: 'pages',
     enableStickyHeader: true,

@@ -7,5 +7,6 @@ public record OperationResult(
     String stationName,
     String status,
     LocalDateTime dateCreate,
-    Boolean isLast
+    Boolean isLast,
+    String stationDescription
 ) {}

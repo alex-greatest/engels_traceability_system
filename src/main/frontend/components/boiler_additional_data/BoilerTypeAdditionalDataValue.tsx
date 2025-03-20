@@ -127,7 +127,7 @@ const BoilerTypeAdditionalDataValue = (props: Props) => {
     initialState: { showColumnFilters: true, density: 'compact' },
     columns: componentsSetColumn,
     localization: MRT_Localization_RU,
-    positionActionsColumn: 'last',
+    positionActionsColumn: 'first',
     enableEditing: isEnableEditing.value,
     createDisplayMode: 'row',
     editDisplayMode: 'table',

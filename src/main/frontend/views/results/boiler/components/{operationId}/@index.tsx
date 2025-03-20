@@ -4,21 +4,39 @@ import {
   useMaterialReactTable
 } from 'material-react-table';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
-import { Container, Box, Tooltip } from '@mui/material';
+import { Container, Box, Tooltip, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useComponentsByOperationId } from 'Frontend/components/api/components_result_print';
-import dayjs from 'dayjs';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
+import ComponentResult from 'Frontend/generated/com/rena/application/entity/dto/result/print/ComponentResult';
+
 
 export default function ComponentsResults() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { operationId } = useParams<{ operationId: string }>();
-  
-  const { data: components, isError, isLoading, refetch, isRefetching } =
-    useComponentsByOperationId(Number(operationId));
+  const parsedOperationId = operationId ? Number(operationId) : undefined;
+  const isValidOperationId = !isNaN(Number(operationId));
+  const { data: componentsResult, isError, isLoading, refetch, isRefetching } =
+    useComponentsByOperationId(isValidOperationId ? parsedOperationId! : 0);
+  const components = componentsResult?.components ?? [] as ComponentResult[];
 
-  const columns = useMemo<MRT_ColumnDef<any>[]>(
+  React.useEffect(() => {
+    if (isValidOperationId && componentsResult?.station) {
+      navigate(`/results/boiler/components/${operationId}`, {
+        replace: true,
+        state: { 
+          station: componentsResult.station,
+          serialNumber: location.state?.serialNumber || ''
+        },
+      });
+    }
+  }, [componentsResult?.station, isValidOperationId, navigate, operationId, location.state?.serialNumber]);
+
+
+  const columns = useMemo<MRT_ColumnDef<ComponentResult>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -31,7 +49,7 @@ export default function ComponentsResults() {
         size: 100,
       },
       {
-        accessorKey: 'status',
+        accessorKey: 'status.name',
         header: 'Статус',
         size: 100,
         filterVariant: 'select',
@@ -77,12 +95,6 @@ export default function ComponentsResults() {
           );
         },
       },
-      {
-        accessorKey: 'dateCreate',
-        header: 'Дата',
-        size: 100,
-        Cell: ({ cell }) => dayjs(cell.getValue<string>()).format('YYYY-MM-DD HH:mm'),
-      }
     ],
     [],
   );
@@ -99,10 +111,12 @@ export default function ComponentsResults() {
     enableStickyHeader: true,
     enableStickyFooter: true,
     enablePagination: true,
+    enableRowActions: true,
+    positionActionsColumn: 'last',
     muiTableContainerProps: { sx: { maxHeight: '650px' } },
     state: {
       isLoading,
-      showAlertBanner: isError,
+      showAlertBanner: isError || !isValidOperationId,
       showProgressBars: isRefetching || isLoading,
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -114,17 +128,22 @@ export default function ComponentsResults() {
         </Tooltip>
       </Box>
     ),
-    muiToolbarAlertBannerProps: isError
+    muiToolbarAlertBannerProps: isError || !isValidOperationId
       ? {
         color: 'error',
-        children: 'Ошибка при загрузке данных',
+        children: !isValidOperationId 
+          ? 'Некорректный ID операции' 
+          : 'Ошибка при загрузке данных',
       }
       : undefined,
-    data: components || [],
+    data: components ?? [],
   });
 
   return (
     <Container maxWidth={'xl'} sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', marginTop: '1em' }}>
+      <Typography variant={'h5'} sx={{fontWeight: 'bold'}}>
+        {`${componentsResult?.station ?? ""}`}
+      </Typography>
       <MaterialReactTable table={table} />
     </Container>
   );
@@ -134,4 +153,4 @@ export const config: ViewConfig = {
   loginRequired: true,
   rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
   title: "Компоненты"
-}; 
+};

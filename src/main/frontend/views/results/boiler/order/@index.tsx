@@ -10,17 +10,20 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import Box from '@mui/material/Box';
 import { useBoilerOrdersByDateRange } from 'Frontend/components/api/boiler_order';
 import dayjs from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers';
-import BoilerOrderDto from 'Frontend/generated/com/rena/application/entity/dto/result/print/BoilerOrderDto';
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import { Context } from 'Frontend/index';
 import { useSignal } from '@vaadin/hilla-react-signals';
+import BoilerOrderDto from 'Frontend/generated/com/rena/application/entity/dto/result/print/BoilerOrderDto';
+import { useNavigate } from 'react-router-dom';
 
 export default function BoilerOrders() {
+  const navigate = useNavigate();
   const startDateTimeBoilerOrder = useContext(Context).startDateTimeBoilerOrder;
   const endDateTimeBoilerOrder = useContext(Context).endDateTimeBoilerOrder;
   const submitedStartDate = useSignal(startDateTimeBoilerOrder.value);
@@ -140,7 +143,7 @@ export default function BoilerOrders() {
     },
     columns: boilerOrdersColumns,
     localization: MRT_Localization_RU,
-    positionActionsColumn: 'last',
+    positionActionsColumn: 'first',
     enableRowActions: true,
     paginationDisplayMode: 'pages',
     enableStickyHeader: true,
@@ -152,6 +155,17 @@ export default function BoilerOrders() {
       showAlertBanner: isError,
       showProgressBars: isRefetching || isLoading,
     },
+    renderRowActions: ({ row }) => (
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Tooltip arrow title="Список котлов">
+          <IconButton
+            onClick={() => navigate(`/results/boiler/order/${row.original.id}`)}
+          >
+            <FormatListBulletedIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box sx={{display: 'flex', gap: '1em'}}>
         <Tooltip arrow title="Обновить данные">

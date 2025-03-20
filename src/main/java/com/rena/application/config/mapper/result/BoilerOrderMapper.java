@@ -8,7 +8,7 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {StatusMapper.class})
 public interface BoilerOrderMapper {
     BoilerOrder toEntity(BoilerOrderDto boilerOrderDto);
 

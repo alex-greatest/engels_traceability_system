@@ -28,28 +28,22 @@ export default function Boilers() {
   const submitedEndDate = useSignal(endDateTimeBoiler.value);
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // Получаем текущую страницу из URL-параметров или localStorage
+
   const urlParams = new URLSearchParams(location.search);
   const savedPage = localStorage.getItem('boilersPage');
   const currentPage = parseInt(urlParams.get('page') || savedPage || '0', 10);
-  
-  // Добавляем состояние для пагинации
+
   const [pagination, setPagination] = useState({
     pageIndex: currentPage,
     pageSize: 10,
   });
-  
-  // Функция для обновления URL при изменении страницы
+
   const handlePageChange = useCallback((pageIndex: number) => {
     const newUrlParams = new URLSearchParams(location.search);
     newUrlParams.set('page', pageIndex.toString());
-    
-    // Сохраняем номер страницы в localStorage
     localStorage.setItem('boilersPage', pageIndex.toString());
-    
     navigate(`${location.pathname}?${newUrlParams.toString()}`, { replace: true });
-  }, [location, navigate]);
+  }, [navigate, location.search, location.pathname]);
   
   const { data: boilers, isError, isLoading, refetch, isRefetching } =
     useBoilersByDateRange(submitedStartDate.value, submitedEndDate.value);
@@ -152,10 +146,10 @@ export default function Boilers() {
         filterVariant: 'select',
         filterFn: 'equals',
         filterSelectOptions: [
-          { text: 'Рабочее место 1', value: 'wp1' },
-          { text: 'wp2', value: 'wp2' },
-          { text: 'wp3', value: 'wp3' },
-          { text: 'wp4', value: 'wp4' }
+          { label: 'Рабочее место 1', value: 'wp1' },
+          { label: 'Рабочее место 5', value: 'wp2' },
+          { label: 'Рабочее место 8', value: 'wp3' },
+          { label: 'Рабочее место 12', value: 'wp4' }
         ],
         size: 150,
         Cell: ({ cell }) => {
@@ -194,7 +188,7 @@ export default function Boilers() {
     },
     columns: boilerColumns,
     localization: MRT_Localization_RU,
-    positionActionsColumn: 'last',
+    positionActionsColumn: 'first',
     enableRowActions: true,
     renderRowActions: ({ row }) => (
       <Box sx={{ display: 'flex', gap: '0.5rem' }}>
