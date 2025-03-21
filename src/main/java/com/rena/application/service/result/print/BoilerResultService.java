@@ -10,10 +10,11 @@ import com.rena.application.repository.result.common.BoilerRepository;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-@RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
+@Transactional
 @Slf4j
 public class BoilerResultService {
     private final BoilerRepository boilerRepository;

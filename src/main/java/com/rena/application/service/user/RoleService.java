@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
+@Transactional
 public class RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
@@ -32,7 +32,7 @@ public class RoleService {
                 }
                 yield roleRepository.findByNameIn(RoleListHelper.getRolesAdmin());
             }
-            case "ROLE_Инженер МОЕ", "ROLE_Инженер TEF" -> roleRepository.findByNameIn(RoleListHelper.getRolesEngineer());
+            case "ROLE_Бригадир", "ROLE_Мастер/Технолог" -> roleRepository.findByNameIn(RoleListHelper.getRolesEngineer());
             default -> throw new DbException("Не удалось получить список пользователей");
         };
         return roles.stream().map((r) -> {

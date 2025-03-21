@@ -67,7 +67,6 @@ export default function UserEditPassword() {
 
 export const config: ViewConfig = {
     loginRequired: true,
-    rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
+    rolesAllowed: ["ROLE_Администратор", "ROLE_Бригадир", "ROLE_Мастер/Технолог"],
     title: "Изменение пароля пользователя"
 };
-

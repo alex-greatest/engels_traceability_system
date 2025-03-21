@@ -1,6 +1,6 @@
 ---
-description: Основое описание правил проекта, структуры папок, технологий, где найти типы, в чём смысл проекта и т.д.
-globs: 
+description: 
+globs: *
 alwaysApply: false
 ---
 ## PROJECT OVERVIEW
@@ -195,7 +195,6 @@ Vaadin Hilla (видно по структуре generated endpoints и connect-
 ## DEBUGGING
 ## FINAL DOs AND DON'Ts
 -Всегда показывайте полный контекст кода. Никогда не добавляйте новые внешние пакеты без явного одобрения
- -Отвечай на русском
 
 
 -src\main\frontend\generated - файлы сгенерованные hilla vadin и используемые в src\main\frontend\components\api. А так же в src\main\frontend\generated\com\rena\application\entity\dto
@@ -206,6 +205,11 @@ Vaadin Hilla (видно по структуре generated endpoints и connect-
 
 -materia-react-table: https://www.material-react-table.com/
 -material-ui: https://mui.com/material-ui/getting-started/
+
+
+
+-Отвечай на русском
+
 
 
 

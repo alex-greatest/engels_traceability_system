@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-@RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
+@Transactional
 @Slf4j
 public class ShiftService {
     private final ShiftRepository shiftRepository;

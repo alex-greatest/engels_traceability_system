@@ -19,7 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
+@Transactional
 @Slf4j
 public class ComponentBindingService {
     private final ComponentBindingRepository componentBindingRepository;

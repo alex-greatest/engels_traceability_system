@@ -8,6 +8,7 @@ import com.rena.application.entity.model.user.Role;
 import com.rena.application.entity.model.user.User;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.exceptions.RecordNotFoundException;
+import com.rena.application.repository.result.common.StationRepository;
 import com.rena.application.repository.user.RoleRepository;
 import com.rena.application.repository.user.UserRepository;
 import jakarta.annotation.security.RolesAllowed;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@RolesAllowed({"ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"})
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -27,6 +28,8 @@ public class UserService {
     private final UserHistoryService userHistoryService;
     private final UserInfoService userInfoService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final StationRepository stationRepository;
+    private final UserLoginLogService userLoginLogService;
 
     @Transactional(readOnly = true)
     public List<UserResponse> getAllUsers() {
@@ -39,7 +42,7 @@ public class UserService {
                 }
                 yield userRepository.findByIs_deletedFalseAndUsernameNotAndRole_NameIn(RoleListHelper.getRolesAdmin());
             }
-            case "ROLE_Инженер МОЕ", "ROLE_Инженер TEF" -> userRepository.findByIs_deletedFalseAndUsernameNotAndRole_NameIn(RoleListHelper.getRolesEngineer());
+            case "ROLE_Бригадир", "ROLE_Мастер/Технолог" -> userRepository.findByIs_deletedFalseAndUsernameNotAndRole_NameIn(RoleListHelper.getRolesEngineer());
             default -> throw new DbException("Не удалось получить список пользователей");
         };
         return users.stream().map((u) -> {
@@ -103,18 +106,30 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    @Transactional
     public UserResponse getUserAuthorization(UserRequestAuthorization userRequestAuthorization) {
         User user = userRepository.findByUsernameAuthorization(userRequestAuthorization.login()).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
         String newRoleName = user.getRole().getName().replace("ROLE_", "");
         user.getRole().setName(newRoleName);
-        if (!user.getRole().getName().equals("Администратор")) {
-            throw new RecordNotFoundException("Пользователь не является администратором");
-        }
         if (!bCryptPasswordEncoder.matches(userRequestAuthorization.password(), user.getPassword())) {
             throw new RecordNotFoundException("Неверный пароль");
         }
+        userLoginLogService.saveUserLoginLog(user.getId(), userRequestAuthorization.station(), true);
         return userMapper.toDto(user);
     }
 
+
+    @Transactional
+    public UserResponse stationLogout(UserRequestAuthorization userRequestAuthorization) {
+        User user = userRepository.findByUsernameAuthorization(userRequestAuthorization.login()).
+                orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        String newRoleName = user.getRole().getName().replace("ROLE_", "");
+        user.getRole().setName(newRoleName);
+        if (!bCryptPasswordEncoder.matches(userRequestAuthorization.password(), user.getPassword())) {
+            throw new RecordNotFoundException("Неверный пароль");
+        }
+        userLoginLogService.saveUserLoginLog(user.getId(), userRequestAuthorization.station(), true);
+        return userMapper.toDto(user);
+    }
 }

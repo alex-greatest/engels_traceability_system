@@ -37,7 +37,7 @@ export default function UserAdd() {
   });
 
   useEffect(() => {
-    if (value.role?.name === "Оператор") {
+    if (value.role?.name === "Сборщик") {
       value.password = "1111";
       value.repeatPassword = "1111";
     }
@@ -71,8 +71,8 @@ export default function UserAdd() {
                 ))}
               </ListBox>
             </Select>
-            <PasswordField disabled={value.role?.name === "Оператор"} label="Пароль" {...field(model.password)} />
-            <PasswordField disabled={value.role?.name === "Оператор"} label="Подтвердите пароль" {...field(model.repeatPassword)} />
+            <PasswordField disabled={value.role?.name === "Сборщик"} label="Пароль" {...field(model.password)} />
+            <PasswordField disabled={value.role?.name === "Сборщик"} label="Подтвердите пароль" {...field(model.repeatPassword)} />
           </FormLayout>
           <HorizontalLayout theme="spacing">
             <Button disabled={mutation.isPending} onClick={submit} theme="primary">
@@ -92,7 +92,6 @@ export default function UserAdd() {
 
 export const config: ViewConfig = {
   loginRequired: true,
-  rolesAllowed: ["ROLE_Администратор", "ROLE_Инженер МОЕ", "ROLE_Инженер TEF"],
+  rolesAllowed: ["ROLE_Администратор", "ROLE_Бригадир", "ROLE_Мастер/Технолог"],
   title: "Добавление пользователя"
 };
-

@@ -20,7 +20,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(@NotBlank String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).
                 orElseThrow(() -> new UsernameNotFoundException(String.format("Пользователь с именем %s не найден", username)));
-        if (user.getRole().getName().equals("Оператор")) {
+        if (user.getRole().getName().equals("Сборщик")) {
             throw new UsernameNotFoundException(String.format("Пользователь с именем %s не найден", username));
         }
         var roles = Stream.of(new SimpleGrantedAuthority(user.getRole().getName())).toList();

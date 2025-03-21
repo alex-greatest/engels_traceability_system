@@ -49,5 +49,20 @@ public class UserAuthorization {
                     "Неизвестная ошибка");
         }
     }
-}
 
+    @MessageMapping("/user/authorization/logout/request")
+    public void stationLogOut(@Payload UserRequestAuthorization userRequestAuthorization) {
+        try {
+            userService.stationLogout(userRequestAuthorization);
+            messagingTemplate.convertAndSend(String.format("/message/%s/user/authorization/logout/response", userRequestAuthorization.station()), "");
+        } catch (RecordNotFoundException e) {
+            log.error("Выход из аккаунта оператор", e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/user/authorization/logout/errors", userRequestAuthorization.station()),
+                    e.getMessage());
+        } catch (Exception e) {
+            log.error("Выход из аккаунта оператор", e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/user/authorization/logout/errors", userRequestAuthorization.station()),
+                    "Неизвестная ошибка");
+        }
+    }
+}
