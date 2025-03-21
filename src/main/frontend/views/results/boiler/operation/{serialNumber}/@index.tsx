@@ -119,7 +119,7 @@ export default function OperationsResults() {
     [],
   );
 
-  const table = useMaterialReactTable({
+  const table = useMaterialReactTable<any>({
     initialState: {
       showColumnFilters: true,
       density: 'compact',
@@ -127,10 +127,9 @@ export default function OperationsResults() {
     },
     enableExpanding: true,
     getRowCanExpand: (row) => showComponentsIcon(row.original.stationName),
+    enableExpandAll: false,
     renderDetailPanel: ({ row }) => (
-      <>
-      { showComponentsIcon(row.original.stationName) &&  <ComponentsDetailPanel operationId={row.original.id} /> }
-      </>
+      showComponentsIcon(row.original.stationName) ? <ComponentsDetailPanel operationId={row.original.id} /> : null
     ),
     enableRowActions: true,
     positionActionsColumn: 'first',

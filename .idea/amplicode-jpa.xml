@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AmplicodeJpaIdeaProjectConfig" newRepositoryParent="org.springframework.data.jpa.repository.JpaRepository">
+    <option name="defaultUnitInitialized" value="true" />
+    <option name="renamerInitialized" value="true" />
+    <option name="sourceDbValue" value="253df8df-b1f5-4718-8c8e-ad57083a6213" />
+    <option name="sourceModelValue" value="Default" />
+    <option name="targetDbValue" value="253df8df-b1f5-4718-8c8e-ad57083a6213" />
+    <option name="targetSnapshotValue" value="$PROJECT_DIR$/src/main/resources/db/changelog/2025/02/data-model-snapshot.json" />
+    <option name="updateChangeLogPath" value="src/main/resources/db/changelog/db.changelog-master.xml" />
+    <option name="updateDbConnectionName" value="253df8df-b1f5-4718-8c8e-ad57083a6213" />
+    <option name="reverseEngineeringLastDbConnectionId" value="253df8df-b1f5-4718-8c8e-ad57083a6213" />
+    <option name="reLastEntityCreationPackage" value="src/main/java/com/rena/application" />
+    <option name="newEntityIdType" value="Long" />
+    <option name="newEntityIdStrategy" value="Identity" />
+  </component>
+</project>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DiffGenerationConfig">
+    <option name="snapshotDbValue" value="253df8df-b1f5-4718-8c8e-ad57083a6213" />
+    <option name="snapshotDirValue" value="$PROJECT_DIR$/src/main/resources/db/changelog/2025/02" />
+    <option name="targetDiffType" value="SNAPSHOT" />
+    <option name="targetSnapshotValue" value="$PROJECT_DIR$/src/main/resources/db/changelog/2025/02/data-model-snapshot.json" />
+    <option name="updateChangeLogPath" value="src/main/resources/db/changelog/db.changelog-master.xml" />
+    <option name="updateDbConnectionName" value="253df8df-b1f5-4718-8c8e-ad57083a6213" />
+  </component>
+</project>

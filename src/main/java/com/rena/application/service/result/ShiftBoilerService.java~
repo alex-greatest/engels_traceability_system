@@ -1,0 +1,20 @@
+package com.rena.application.service.result;
+
+import com.rena.application.entity.model.Shift;
+import com.rena.application.entity.model.settings.ShiftBoiler;
+import com.rena.application.repository.result.ShiftBoilerRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@RequiredArgsConstructor
+@Service
+public class ShiftBoilerService {
+    private final ShiftBoilerRepository shiftBoilerRepository;
+
+    public void addShiftBoilerRepository(Shift shift) {
+        var shiftBoiler = new ShiftBoiler();
+        shiftBoiler.setShift(shift);
+        shiftBoiler.setAmountBoiler(0);
+        shiftBoiler.setAmountBoilerPrint(0);
+    }
+}

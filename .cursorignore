@@ -1,0 +1,16 @@
+# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
+
+# Игнорируемые директории
+node_modules/
+target/
+.git/
+dist/
+build/
+
+# Игнорируемые файлы
+*.log
+*.lock
+*.min.js
+*.min.css
+*.map
+*.d.ts
