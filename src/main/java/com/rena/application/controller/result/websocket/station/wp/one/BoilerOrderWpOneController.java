@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class BoilerOrderController {
+public class BoilerOrderWpOneController {
     private final SimpMessagingTemplate messagingTemplate;
     private final BoilerOrderWpOneService boilerOrderWpOneService;
 
@@ -54,6 +54,28 @@ public class BoilerOrderController {
         } catch (Exception e) {
             log.error("Получение последнего заказа", e);
             messagingTemplate.convertAndSend("/message/boiler/order/last/get/errors", "");
+        }
+    }
+
+    @MessageMapping("/boiler/order/amount/printer/get/request")
+    public void getAmountPrinterBoilerOrder() {
+        try {
+            var amountPrintedBarcode = boilerOrderWpOneService.getAmountPrintedBarcode();
+            messagingTemplate.convertAndSend("/message/boiler/order/amount/printer/get/response", amountPrintedBarcode);
+        } catch (Exception e) {
+            log.error("Получение последнего заказа", e);
+            messagingTemplate.convertAndSend("/message/boiler/order/amount/printer/get/errors", "");
+        }
+    }
+
+    @MessageMapping("/boiler/order/amount/printer/update/request")
+    public void updateAmountPrinterBoilerOrder(Integer amountPrintedBarcode) {
+        try {
+            var amountPrintedBarcodeUpd = boilerOrderWpOneService.updateAmountPrintedBarcode(amountPrintedBarcode);
+            messagingTemplate.convertAndSend("/message/boiler/order/amount/printer/update/response", amountPrintedBarcodeUpd);
+        } catch (Exception e) {
+            log.error("Получение последнего заказа", e);
+            messagingTemplate.convertAndSend("/message/boiler/order/amount/printer/update/errors", "");
         }
     }
 }

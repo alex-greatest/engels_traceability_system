@@ -1,7 +1,7 @@
 package com.rena.application.service.result.station.wp.one;
 
-import com.rena.application.entity.dto.result.station.wp.one.WpOneRequest;
-import com.rena.application.entity.dto.result.station.wp.one.WpOneResponse;
+import com.rena.application.entity.dto.result.station.wp.one.BarcodeSaveOneWpRequest;
+import com.rena.application.entity.dto.result.station.wp.one.BarcodeSaveOneWpResponse;
 import com.rena.application.entity.model.result.common.Boiler;
 import com.rena.application.entity.model.result.common.Operation;
 import com.rena.application.entity.model.result.common.Station;
@@ -19,7 +19,6 @@ import com.rena.application.repository.result.station.wp.BoilerOrderRepository;
 import com.rena.application.repository.settings.SettingRepository;
 import com.rena.application.repository.user.UserHistoryRepository;
 import com.rena.application.service.result.ErrorService;
-import com.rena.application.service.result.helper.WpOneHelper;
 import com.rena.application.service.shift.ShiftService;
 import com.vaadin.hilla.exception.EndpointException;
 import jakarta.validation.Valid;
@@ -34,7 +33,7 @@ import java.time.LocalDateTime;
 @Service
 @Validated
 @Slf4j
-public class TraceabilityOneService {
+public class TraceabilityWpOneEndService {
     private final SettingRepository settingRepository;
     private final BoilerOrderRepository boilerOrderRepository;
     private final BoilerRepository boilerRepository;
@@ -46,21 +45,14 @@ public class TraceabilityOneService {
     private final ShiftService shiftService;
 
     @Transactional
-    public WpOneResponse generateBarcodeData(@Valid WpOneRequest wp) {
+    public BarcodeSaveOneWpResponse saveBarcodes(@Valid BarcodeSaveOneWpRequest wp) {
         UserHistory user = null;
         try {
             user = userHistoryRepository.findByCodeAndIsActive(wp.userCode(), true).
                     orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-            var status = statusRepository.getReferenceById(1L);
-            var setting = settingRepository.findById(1L).orElseThrow(() -> new RecordNotFoundException("Настройки не найдены"));
             var boilerOrder = boilerOrderRepository.findById(wp.id()).
                     orElseThrow(() -> new BoilerOrderNotFoundException("Заказ не найден"));
-            var boilerType = boilerOrder.getBoilerTypeCycle();
-            var serialNumber = WpOneHelper.getSerialNumber(setting, boilerType.getArticle());
-            setting.setNextBoilerNumber(setting.getNextBoilerNumber() + 1);
-            saveTraceabilityData(user, status, boilerOrder, serialNumber, wp.numberShift());
-            var amountBoilerShift = shiftService.updateShiftStation("wp1");
-            return new WpOneResponse(serialNumber, boilerOrder.getAmountBoilerPrint(), amountBoilerShift);
+            return saveBarcodes(wp, user, boilerOrder);
         } catch (BoilerTypeNotFoundException | BoilerOrderNotFoundException e) {
             log.error(e.getMessage(), e);
             errorSave(user, e);
@@ -68,13 +60,19 @@ public class TraceabilityOneService {
         }
     }
 
-    private void saveTraceabilityData(UserHistory user, Status status, BoilerOrder boilerOrder, String serialNumber, Integer numberShift) {
-        var now = LocalDateTime.now();
+    private BarcodeSaveOneWpResponse saveBarcodes(BarcodeSaveOneWpRequest wp, UserHistory user, BoilerOrder boilerOrder) {
+        var amountBarcodes = wp.serialNumbers().size();
+        var status = statusRepository.getReferenceById(1L);
+        var setting = settingRepository.getReferenceById(1L);
         var station = stationRepository.getReferenceById(1L);
-        var boiler = createBoiler(boilerOrder, user, status, serialNumber, station, now);
-        createOperation(boiler, user, status, station, now, numberShift);
-        boilerOrder.setAmountBoilerPrint(boilerOrder.getAmountBoilerPrint() + 1);
-        boilerOrderRepository.save(boilerOrder);
+        wp.serialNumbers().forEach(serialNumber -> {
+            var boiler = createBoiler(boilerOrder, user, status, serialNumber, station, LocalDateTime.now());
+            boilerRepository.save(boiler);
+            createOperation(boiler, user, status, station, LocalDateTime.now(), wp.numberShift());
+        });
+        setting.setNextBoilerNumber(setting.getNextBoilerNumber() + amountBarcodes);
+        var shiftAmount = shiftService.updateShiftStation(station.getName(), amountBarcodes);
+        return new BarcodeSaveOneWpResponse(boilerOrder.getAmountBoilerPrint(), shiftAmount);
     }
 
     private Boiler createBoiler(BoilerOrder boilerOrder, UserHistory userHistory, Status status,

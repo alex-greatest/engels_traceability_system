@@ -5,10 +5,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class WpOneHelper {
-    public static String getSerialNumber(Setting setting, String article) {
+    public static String getSerialNumber(Integer nextBoilerNumber, String article) {
         var manufacture = "EngP3";
         var dateNow = getDateNow();
-        var barcodeNumber = getBarcodeNumber(setting.getNextBoilerNumber());
+        var barcodeNumber = getBarcodeNumber(nextBoilerNumber);
         return String.format("%s%s%s%s", manufacture, dateNow, barcodeNumber, article);
     }
 

@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 @Validated
 @Slf4j
-public class TraceabilityWpEnd {
+public class TraceabilityWpEndService {
     private final BoilerRepository boilerRepository;
     private final ComponentRepository componentRepository;
     private final OperationRepository operationRepository;
@@ -53,7 +53,7 @@ public class TraceabilityWpEnd {
         var componentsResult = componentsResultRequest.componentsResult();
         saveComponentsResult(componentsResult, operation, statusOK, statusNOK);
         var amountBoilerShift = statusCommon.getName().equals("OK") ?
-                shiftService.updateShiftStation(componentsResultRequest.stationName()) :
+                shiftService.updateShiftStation(componentsResultRequest.stationName(), 1) :
                 shiftService.getAmountBoilerMade(componentsResultRequest.stationName());
         partLastRepository.updatePart_idByStation(null, componentsResultRequest.stationName());
         return new WpResponse(amountBoilerShift);

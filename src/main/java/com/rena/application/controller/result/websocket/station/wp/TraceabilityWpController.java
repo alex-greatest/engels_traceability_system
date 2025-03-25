@@ -8,8 +8,8 @@ import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.exceptions.result.boiler.BoilerPrevStationEmpty;
 import com.rena.application.exceptions.result.boiler.BoilerTraceabilityOK;
 import com.rena.application.exceptions.result.boiler.BoilerTraceabilityPrevNOK;
-import com.rena.application.service.result.station.wp.TraceabilityWpEnd;
-import com.rena.application.service.result.station.wp.TraceabilityWpStart;
+import com.rena.application.service.result.station.wp.TraceabilityWpEndService;
+import com.rena.application.service.result.station.wp.TraceabilityWpStartService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +23,13 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class TraceabilityWpController {
     private final SimpMessagingTemplate messagingTemplate;
-    private final TraceabilityWpStart traceabilityWpStart;
-    private final TraceabilityWpEnd traceabilityWpEnd;
+    private final TraceabilityWpStartService traceabilityWpStartService;
+    private final TraceabilityWpEndService traceabilityWpEndService;
 
     @MessageMapping("/station/start/operation/request")
     public void getBoilerOrder(@Payload ComponentRequest componentRequest) {
         try {
-            var boilerComponents = traceabilityWpStart.getComponentsBoiler(componentRequest);
+            var boilerComponents = traceabilityWpStartService.getComponentsBoiler(componentRequest);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/operation/response", componentRequest.stationName()), boilerComponents);
         } catch (BoilerTraceabilityOK e) {
             log.error("Получение компонентов. Ошибка маршрута. Станция {}", componentRequest.stationName(), e);
@@ -52,7 +52,7 @@ public class TraceabilityWpController {
     @MessageMapping("/station/end/operation/request")
     public void saveComponents(@Payload ComponentsResultRequest componentsResultRequest) {
         try {
-            var wpResponse = traceabilityWpEnd.saveResultsComponent(componentsResultRequest);
+            var wpResponse = traceabilityWpEndService.saveResultsComponent(componentsResultRequest);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/end/operation/response",
                             componentsResultRequest.stationName()), wpResponse);
         } catch (RecordNotFoundException e) {
@@ -69,7 +69,7 @@ public class TraceabilityWpController {
     @MessageMapping("/station/start/operation/get/last/request")
     public void getLastOperation(@NotBlank String nameStation) {
         try {
-            var boilerComponents = traceabilityWpStart.getLastOperation(nameStation);
+            var boilerComponents = traceabilityWpStartService.getLastOperation(nameStation);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/operation/get/last/response", nameStation), boilerComponents);
         } catch (Exception e) {
             log.error("Получение последний операции. Станция {}", nameStation, e);
@@ -80,7 +80,7 @@ public class TraceabilityWpController {
    @MessageMapping("/station/interrupted/operation/request")
     public void interruptedOperation(@Payload InterruptedRequest interruptedRequest) {
         try {
-            traceabilityWpEnd.interruptedOperation(interruptedRequest);
+            traceabilityWpEndService.interruptedOperation(interruptedRequest);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/interrupted/operation/response",
                             interruptedRequest.stationName()),
                     "");

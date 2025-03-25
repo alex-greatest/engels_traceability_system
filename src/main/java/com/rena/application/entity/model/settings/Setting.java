@@ -25,6 +25,10 @@ public class Setting {
     private Integer nextBoilerNumber;
 
     @NotNull
+    @Column(name = "amount_printed_barcode", nullable = false)
+    private Integer amountPrintedBarcode;
+
+    @NotNull
     @Column(name = "last_zeroing", nullable = false)
     private LocalDateTime lastZeroing;
 }

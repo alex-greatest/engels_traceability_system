@@ -16,7 +16,7 @@ import org.springframework.validation.annotation.Validated;
 @RequiredArgsConstructor
 @Service
 @Validated
-public class BoilerWpOneService {
+public class BoilerHistoryWpOneService {
     private final BoilerRepository boilerRepository;
     private final BoilerMapper boilerMapper;
 

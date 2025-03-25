@@ -39,7 +39,7 @@ import java.util.Optional;
 @Service
 @Validated
 @Slf4j
-public class TraceabilityWpStart {
+public class TraceabilityWpStartService {
     private final BoilerRepository boilerRepository;
     private final BoilerTypeRepository boilerTypeRepository;
     private final OperationRepository operationRepository;

@@ -14,6 +14,7 @@ import com.rena.application.repository.boiler.type.BoilerTypeCycleRepository;
 import com.rena.application.repository.result.station.wp.BoilerOrderRepository;
 import com.rena.application.repository.result.common.StatusRepository;
 import com.rena.application.repository.settings.PartLastRepository;
+import com.rena.application.repository.settings.SettingRepository;
 import com.rena.application.repository.user.UserHistoryRepository;
 import com.rena.application.service.result.ErrorService;
 import com.vaadin.hilla.exception.EndpointException;
@@ -37,6 +38,7 @@ public class BoilerOrderWpOneService {
     private final StatusRepository statusRepository;
     private final ErrorService errorService;
     private final PartLastRepository partLastRepository;
+    private final SettingRepository settingRepository;
 
     @Transactional
     public BoilerOrderResponseWpOne addOrder(@Valid CanbanUniqueCode canbanUniqueCode) {
@@ -130,11 +132,26 @@ public class BoilerOrderWpOneService {
         if (id.getPart_id() != null) {
             var boilerOrder = boilerOrderRepository.findById(id.getPart_id()).
                     orElseThrow(() -> new RecordNotFoundException("Последний заказ не найден"));
+            checkOrder(boilerOrder);
             return new BoilerOrderResponseWpOne(boilerOrder.getId(), true,
                     boilerOrder.getOrderNumber(), boilerOrder.getBoilerTypeCycle().getArticle(),
                     boilerOrder.getAmountBoilerOrder(), boilerOrder.getAmountBoilerPrint(),
                     boilerOrder.getScanCode(), boilerOrder.getModifiedDate());
         }
         throw new RecordNotFoundException("Последний заказ не найден");
+    }
+
+    public Integer getAmountPrintedBarcode() {
+        var setting = settingRepository.findById(1L).
+                orElseThrow(() -> new RecordNotFoundException("Настройки не найдены"));
+        return setting.getAmountPrintedBarcode();
+    }
+
+    public Integer updateAmountPrintedBarcode(Integer amountPrintedBarcode) {
+        var setting = settingRepository.findById(1L).
+                orElseThrow(() -> new RecordNotFoundException("Настройки не найдены"));
+        setting.setAmountPrintedBarcode(amountPrintedBarcode);
+        settingRepository.save(setting);
+        return setting.getAmountPrintedBarcode();
     }
 }

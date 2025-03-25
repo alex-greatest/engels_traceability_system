@@ -57,10 +57,10 @@ public class ShiftService {
     }
 
     @Transactional
-    public Integer updateShiftStation(String nameStation) {
+    public Integer updateShiftStation(String nameStation, Integer amount) {
         var shiftStation = shiftStationRepository.findByStationName(nameStation).
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
-        shiftStation.setAmountBoilerMade(shiftStation.getAmountBoilerMade() + 1);
+        shiftStation.setAmountBoilerMade(shiftStation.getAmountBoilerMade() + amount);
         return shiftStation.getAmountBoilerMade();
     }
 

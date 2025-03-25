@@ -121,15 +121,11 @@ public class UserService {
 
 
     @Transactional
-    public UserResponse stationLogout(UserRequestAuthorization userRequestAuthorization) {
+    public void stationLogout(UserRequestAuthorization userRequestAuthorization) {
         User user = userRepository.findByUsernameAuthorization(userRequestAuthorization.login()).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
         String newRoleName = user.getRole().getName().replace("ROLE_", "");
         user.getRole().setName(newRoleName);
-        if (!bCryptPasswordEncoder.matches(userRequestAuthorization.password(), user.getPassword())) {
-            throw new RecordNotFoundException("Неверный пароль");
-        }
-        userLoginLogService.saveUserLoginLog(user.getId(), userRequestAuthorization.station(), true);
-        return userMapper.toDto(user);
+        userLoginLogService.saveUserLoginLog(user.getId(), userRequestAuthorization.station(), false);
     }
 }
