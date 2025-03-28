@@ -81,7 +81,7 @@ public class BoilerOrderWpOneService {
 
     private void checkOrder(BoilerOrder boilerOrder) {
         boolean isOrderReady = boilerOrder.getAmountBoilerPrint() != 0 &&
-                Objects.equals(boilerOrder.getAmountBoilerOrder(), boilerOrder.getAmountBoilerPrint());
+                boilerOrder.getAmountBoilerPrint() >= boilerOrder.getAmountBoilerOrder();
         if (isOrderReady) {
             partLastRepository.updatePart_idByStation(null, "wp1");
             throw new BoilerOrderReadyNotFoundException("Все этикетки заказа распечатаны");

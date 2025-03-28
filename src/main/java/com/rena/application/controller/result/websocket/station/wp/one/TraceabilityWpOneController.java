@@ -20,20 +20,6 @@ public class TraceabilityWpOneController {
     private final TraceabilityWpOneStartService traceabilityWpOneStartService;
     private final TraceabilityWpOneEndService traceabilityWpOneEndService;
 
-    @MessageMapping("/boiler/wp1/save/barcode/request")
-    public void saveSerialNumber(@Payload BarcodeSaveOneWpRequest barcodeSaveOneWpRequest) {
-        try {
-            var barcodeSaveResponse = traceabilityWpOneEndService.saveBarcodes(barcodeSaveOneWpRequest);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/response", barcodeSaveResponse);
-        } catch (RecordNotFoundException e) {
-            log.error("Канбан карта", e);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/errors", e.getMessage());
-        } catch (Exception e) {
-            log.error("Канбан карта", e);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/errors", "Неизвестная ошибка");
-        }
-    }
-
     @MessageMapping("/boiler/wp1/get/barcode/request")
     public void getBoilerSerialNumber(@Payload BarcodeGetOneWpRequest barcodeGetOneWpRequest) {
         try {
@@ -45,6 +31,20 @@ public class TraceabilityWpOneController {
         } catch (Exception e) {
             log.error("Канбан карта", e);
             messagingTemplate.convertAndSend("/message/boiler/wp1/get/barcode/errors", "Неизвестная ошибка");
+        }
+    }
+
+    @MessageMapping("/boiler/wp1/save/barcode/request")
+    public void saveSerialNumber(@Payload BarcodeSaveOneWpRequest barcodeSaveOneWpRequest) {
+        try {
+            var barcodeSaveResponse = traceabilityWpOneEndService.saveBarcodes(barcodeSaveOneWpRequest);
+            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/response", barcodeSaveResponse);
+        } catch (RecordNotFoundException e) {
+            log.error("Канбан карта", e);
+            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/errors", e.getMessage());
+        } catch (Exception e) {
+            log.error("Канбан карта", e);
+            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/errors", "Неизвестная ошибка");
         }
     }
 }

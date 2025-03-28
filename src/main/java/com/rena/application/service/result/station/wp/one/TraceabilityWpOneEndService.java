@@ -16,6 +16,7 @@ import com.rena.application.repository.result.common.OperationRepository;
 import com.rena.application.repository.result.common.StationRepository;
 import com.rena.application.repository.result.common.StatusRepository;
 import com.rena.application.repository.result.station.wp.BoilerOrderRepository;
+import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.settings.SettingRepository;
 import com.rena.application.repository.user.UserHistoryRepository;
 import com.rena.application.service.result.ErrorService;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -43,6 +45,7 @@ public class TraceabilityWpOneEndService {
     private final ErrorService errorService;
     private final OperationRepository operationRepository;
     private final ShiftService shiftService;
+    private final PartLastRepository partLastRepository;
 
     @Transactional
     public BarcodeSaveOneWpResponse saveBarcodes(@Valid BarcodeSaveOneWpRequest wp) {
@@ -52,6 +55,10 @@ public class TraceabilityWpOneEndService {
                     orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
             var boilerOrder = boilerOrderRepository.findById(wp.id()).
                     orElseThrow(() -> new BoilerOrderNotFoundException("Заказ не найден"));
+            if (boilerOrder.getAmountBoilerPrint() >= boilerOrder.getAmountBoilerOrder()) {
+                partLastRepository.findByStation_Name("wp1").ifPresent(partLastRepository::delete);
+                throw new RecordNotFoundException("Все этикетки уже распечатаны");
+            }
             return saveBarcodes(wp, user, boilerOrder);
         } catch (BoilerTypeNotFoundException | BoilerOrderNotFoundException e) {
             log.error(e.getMessage(), e);
@@ -72,6 +79,7 @@ public class TraceabilityWpOneEndService {
         });
         setting.setNextBoilerNumber(setting.getNextBoilerNumber() + amountBarcodes);
         var shiftAmount = shiftService.updateShiftStation(station.getName(), amountBarcodes);
+        boilerOrder.setAmountBoilerPrint(boilerOrder.getAmountBoilerPrint() + amountBarcodes);
         return new BarcodeSaveOneWpResponse(boilerOrder.getAmountBoilerPrint(), shiftAmount);
     }
 
