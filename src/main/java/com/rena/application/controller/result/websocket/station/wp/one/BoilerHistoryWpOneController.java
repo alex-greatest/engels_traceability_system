@@ -1,10 +1,10 @@
 package com.rena.application.controller.result.websocket.station.wp.one;
 
 import com.rena.application.entity.dto.Paging;
-import com.rena.application.entity.dto.result.station.wp.one.boiler.BoilerRequestWpOne;
-import com.rena.application.entity.dto.result.station.wp.one.boiler.BoilerResponseWpOne;
+import com.rena.application.entity.dto.result.station.wp.one.traceability.BoilerRequestWpOne;
+import com.rena.application.entity.dto.result.station.wp.one.traceability.BoilerResponseWpOne;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.service.result.station.wp.one.BoilerHistoryWpOneService;
+import com.rena.application.service.result.station.wp.one.order.BoilerHistoryWpOneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

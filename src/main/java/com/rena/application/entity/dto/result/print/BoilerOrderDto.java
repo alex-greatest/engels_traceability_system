@@ -1,6 +1,6 @@
 package com.rena.application.entity.dto.result.print;
 
-import com.rena.application.entity.dto.result.common.UserHistoryDto;
+import com.rena.application.entity.dto.user.UserHistoryDto;
 import com.vaadin.hilla.Nonnull;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;

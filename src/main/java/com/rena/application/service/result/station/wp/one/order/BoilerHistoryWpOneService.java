@@ -1,8 +1,8 @@
-package com.rena.application.service.result.station.wp.one;
+package com.rena.application.service.result.station.wp.one.order;
 
 import com.rena.application.config.mapper.boiler.BoilerMapper;
-import com.rena.application.entity.dto.result.station.wp.one.boiler.BoilerRequestWpOne;
-import com.rena.application.entity.dto.result.station.wp.one.boiler.BoilerResponseWpOne;
+import com.rena.application.entity.dto.result.station.wp.one.traceability.BoilerRequestWpOne;
+import com.rena.application.entity.dto.result.station.wp.one.traceability.BoilerResponseWpOne;
 import com.rena.application.repository.result.common.BoilerRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -4,6 +4,8 @@ import com.rena.application.config.mapper.component.common.UserMapper;
 import com.rena.application.config.security.UserInfo;
 import com.rena.application.config.security.UserInfoService;
 import com.rena.application.entity.dto.user.*;
+import com.rena.application.entity.dto.user.station.OperatorRequestAuthorization;
+import com.rena.application.entity.dto.user.station.UserRequestAuthorization;
 import com.rena.application.entity.model.user.Role;
 import com.rena.application.entity.model.user.User;
 import com.rena.application.exceptions.DbException;
@@ -11,16 +13,18 @@ import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.result.common.StationRepository;
 import com.rena.application.repository.user.RoleRepository;
 import com.rena.application.repository.user.UserRepository;
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Validated
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -57,8 +61,7 @@ public class UserService {
         User user = userRepository.findByCode(code).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
         String newRoleName = user.getRole().getName().replace("ROLE_", "");
-        user.getRole().setName(newRoleName);
-        return userMapper.toDto(user);
+        return userMapper.toDtoWithCustomRoleName(user, newRoleName);
     }
 
     @Transactional
@@ -106,26 +109,56 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    /**
+     * Метод для авторизации оператора. Пока такой
+     *
+     * @param userRequestAuthorization - запрос авторизации
+     * @return - ответ с данными пользователя
+     */
     @Transactional
-    public UserResponse getUserAuthorization(UserRequestAuthorization userRequestAuthorization) {
+    public UserResponse getOperatorAuthorization(@Valid OperatorRequestAuthorization userRequestAuthorization) {
         User user = userRepository.findByUsernameAuthorization(userRequestAuthorization.login()).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
         String newRoleName = user.getRole().getName().replace("ROLE_", "");
-        user.getRole().setName(newRoleName);
         if (!bCryptPasswordEncoder.matches(userRequestAuthorization.password(), user.getPassword())) {
             throw new RecordNotFoundException("Неверный пароль");
         }
         userLoginLogService.saveUserLoginLog(user.getId(), userRequestAuthorization.station(), true);
-        return userMapper.toDto(user);
+        return userMapper.toDtoWithCustomRoleName(user, newRoleName);
+    }
+
+    /**
+     * Метод для выхода оператора. Пока такой
+     *
+     * @param operatorRequestAuthorization - запрос авторизации
+     */
+    @Transactional
+    public void stationLogout(@Valid OperatorRequestAuthorization operatorRequestAuthorization) {
+        User user = userRepository.findByUsernameAuthorization(operatorRequestAuthorization.login()).
+                orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        userLoginLogService.saveUserLoginLog(user.getId(), operatorRequestAuthorization.station(), false);
+    }
+
+    @Transactional
+    public UserResponse getUserAuthorization(@Valid UserRequestAuthorization userRequestAuthorization) {
+        User user = userRepository.findByUsernameAuthorization(userRequestAuthorization.login()).
+                orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        String newRoleName = user.getRole().getName().replace("ROLE_", "");
+        if (!bCryptPasswordEncoder.matches(userRequestAuthorization.password(), user.getPassword())) {
+            throw new RecordNotFoundException("Неверный пароль");
+        }
+        if (newRoleName.equals("Сборщик")) {
+            throw new RecordNotFoundException("Доступ запрещён");
+        }
+        userLoginLogService.saveUserLoginLog(user.getId(), userRequestAuthorization.station(), true);
+        return userMapper.toDtoWithCustomRoleName(user, newRoleName);
     }
 
 
     @Transactional
-    public void stationLogout(UserRequestAuthorization userRequestAuthorization) {
+    public void stationLogout(@Valid UserRequestAuthorization userRequestAuthorization) {
         User user = userRepository.findByUsernameAuthorization(userRequestAuthorization.login()).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-        String newRoleName = user.getRole().getName().replace("ROLE_", "");
-        user.getRole().setName(newRoleName);
         userLoginLogService.saveUserLoginLog(user.getId(), userRequestAuthorization.station(), false);
     }
 }

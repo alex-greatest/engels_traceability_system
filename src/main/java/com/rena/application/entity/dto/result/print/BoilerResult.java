@@ -1,6 +1,6 @@
 package com.rena.application.entity.dto.result.print;
 
-import com.rena.application.entity.dto.result.common.UserHistoryDto;
+import com.rena.application.entity.dto.user.UserHistoryDto;
 import com.rena.application.entity.model.result.common.Station;
 import com.rena.application.entity.model.result.common.Status;
 import com.vaadin.hilla.Nonnull;

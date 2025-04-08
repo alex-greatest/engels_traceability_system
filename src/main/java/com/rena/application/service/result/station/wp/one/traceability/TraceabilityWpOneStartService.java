@@ -1,4 +1,4 @@
-package com.rena.application.service.result.station.wp.one;
+package com.rena.application.service.result.station.wp.one.traceability;
 
 import com.rena.application.entity.dto.result.station.wp.one.BarcodeGetOneWpRequest;
 import com.rena.application.repository.settings.SettingRepository;

@@ -1,4 +1,4 @@
-package com.rena.application.entity.dto.user;
+package com.rena.application.entity.dto.user.station;
 
 import com.rena.application.entity.model.user.User;
 import jakarta.validation.constraints.NotBlank;
