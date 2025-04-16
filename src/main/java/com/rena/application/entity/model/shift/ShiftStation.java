@@ -1,6 +1,6 @@
 package com.rena.application.entity.model.shift;
 
-import com.rena.application.entity.model.result.common.Station;
+import com.rena.application.entity.model.traceability.common.Station;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

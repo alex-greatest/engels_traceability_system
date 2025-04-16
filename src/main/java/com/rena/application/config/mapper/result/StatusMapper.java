@@ -1,7 +1,7 @@
 package com.rena.application.config.mapper.result;
 
-import com.rena.application.entity.dto.result.print.StatusDto;
-import com.rena.application.entity.model.result.common.Status;
+import com.rena.application.entity.dto.print.StatusDto;
+import com.rena.application.entity.model.traceability.common.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

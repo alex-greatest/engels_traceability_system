@@ -1,6 +1,6 @@
 package com.rena.application.entity.model.settings;
 
-import com.rena.application.entity.model.result.common.Station;
+import com.rena.application.entity.model.traceability.common.Station;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

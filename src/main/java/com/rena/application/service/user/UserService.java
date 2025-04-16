@@ -10,7 +10,7 @@ import com.rena.application.entity.model.user.Role;
 import com.rena.application.entity.model.user.User;
 import com.rena.application.exceptions.DbException;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.result.common.StationRepository;
+import com.rena.application.repository.traceability.common.StationRepository;
 import com.rena.application.repository.user.RoleRepository;
 import com.rena.application.repository.user.UserRepository;
 import jakarta.validation.Valid;

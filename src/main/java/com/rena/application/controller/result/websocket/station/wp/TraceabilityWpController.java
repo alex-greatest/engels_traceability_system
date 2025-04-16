@@ -1,15 +1,15 @@
 package com.rena.application.controller.result.websocket.station.wp;
 
-import com.rena.application.entity.dto.result.common.ErrorRoute;
-import com.rena.application.entity.dto.result.station.wp.components.ComponentsResultRequest;
-import com.rena.application.entity.dto.result.station.wp.InterruptedRequest;
-import com.rena.application.entity.dto.result.station.wp.components.ComponentRequest;
+import com.rena.application.entity.dto.traceability.common.ErrorRoute;
+import com.rena.application.entity.dto.traceability.station.wp.components.ComponentsResultRequest;
+import com.rena.application.entity.dto.traceability.station.wp.InterruptedRequest;
+import com.rena.application.entity.dto.traceability.station.wp.components.ComponentRequest;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.exceptions.result.boiler.BoilerPrevStationEmpty;
-import com.rena.application.exceptions.result.boiler.BoilerTraceabilityOK;
-import com.rena.application.exceptions.result.boiler.BoilerTraceabilityPrevNOK;
-import com.rena.application.service.result.station.wp.TraceabilityWpEndService;
-import com.rena.application.service.result.station.wp.TraceabilityWpStartService;
+import com.rena.application.exceptions.traceability.boiler.BoilerPrevStationEmpty;
+import com.rena.application.exceptions.traceability.boiler.BoilerTraceabilityOK;
+import com.rena.application.exceptions.traceability.boiler.BoilerTraceabilityPrevNOK;
+import com.rena.application.service.traceability.station.wp.TraceabilityWpEndService;
+import com.rena.application.service.traceability.station.wp.TraceabilityWpStartService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

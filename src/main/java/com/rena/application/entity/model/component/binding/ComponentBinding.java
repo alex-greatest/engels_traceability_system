@@ -2,7 +2,7 @@ package com.rena.application.entity.model.component.binding;
 
 import com.rena.application.entity.model.component.ComponentType;
 import com.rena.application.entity.model.component.set.ComponentNameSet;
-import com.rena.application.entity.model.result.common.Station;
+import com.rena.application.entity.model.traceability.common.Station;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,9 +1,9 @@
 package com.rena.application.service.user;
 
-import com.rena.application.entity.model.result.station.UserLoginLog;
+import com.rena.application.entity.model.traceability.station.UserLoginLog;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.result.common.StationRepository;
-import com.rena.application.repository.result.common.UserLoginLogRepository;
+import com.rena.application.repository.traceability.common.StationRepository;
+import com.rena.application.repository.traceability.common.UserLoginLogRepository;
 import com.rena.application.repository.user.UserHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

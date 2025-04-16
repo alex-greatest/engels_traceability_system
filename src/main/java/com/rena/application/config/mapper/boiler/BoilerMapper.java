@@ -1,8 +1,8 @@
 package com.rena.application.config.mapper.boiler;
 
-import com.rena.application.entity.dto.result.print.BoilerResult;
-import com.rena.application.entity.dto.result.station.wp.one.traceability.BoilerResponseWpOne;
-import com.rena.application.entity.model.result.common.Boiler;
+import com.rena.application.entity.dto.print.BoilerResult;
+import com.rena.application.entity.dto.traceability.station.wp.one.traceability.BoilerResponseWpOne;
+import com.rena.application.entity.model.traceability.common.Boiler;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

@@ -1,8 +1,8 @@
 package com.rena.application.controller.result.websocket.station.wp.one;
 
-import com.rena.application.entity.dto.result.station.wp.one.traceability.SerialLogManualRequest;
+import com.rena.application.entity.dto.traceability.station.wp.one.traceability.SerialLogManualRequest;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.service.result.station.wp.one.traceability.SerialNumberLogManualService;
+import com.rena.application.service.traceability.station.wp.one.traceability.SerialNumberLogManualService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
