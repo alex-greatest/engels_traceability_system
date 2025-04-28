@@ -1,6 +1,6 @@
 package com.rena.application.entity.model.traceability.error;
 
-import com.rena.application.entity.model.user.UserHistory;
+import com.rena.application.entity.model.settings.user.UserHistory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

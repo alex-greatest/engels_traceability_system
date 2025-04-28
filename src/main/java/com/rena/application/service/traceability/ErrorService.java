@@ -1,7 +1,7 @@
 package com.rena.application.service.traceability;
 
 import com.rena.application.entity.model.traceability.error.Error;
-import com.rena.application.entity.model.user.UserHistory;
+import com.rena.application.entity.model.settings.user.UserHistory;
 import com.rena.application.repository.traceability.error.ErrorRepository;
 import com.rena.application.repository.traceability.error.ErrorTemplateRepository;
 import lombok.RequiredArgsConstructor;

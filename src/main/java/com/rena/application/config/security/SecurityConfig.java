@@ -21,7 +21,9 @@ public class SecurityConfig extends VaadinWebSecurity {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(registry ->
                 registry.requestMatchers(routeUtil::isRouteAllowed,
-                        new AntPathRequestMatcher("/images/**"), new AntPathRequestMatcher("/ws/**"), new AntPathRequestMatcher("/ws/info")).permitAll());
+                        new AntPathRequestMatcher("/images/**"),
+                        new AntPathRequestMatcher("/ws/**"),
+                        new AntPathRequestMatcher("/ws/info")).permitAll());
         super.configure(http);
         setLoginView(http, "/login", "/");
     }

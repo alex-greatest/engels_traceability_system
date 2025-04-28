@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1745843782415-1" author="Alexander (generated)">
+        <addColumn tableName="admin_login_log">
+            <column name="date_login" type="DATETIME"/>
+            <column name="date_logout" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1745843782415-2" author="Alexander (generated)">
+        <addNotNullConstraint columnName="date_login" tableName="admin_login_log"/>
+    </changeSet>
+    <changeSet id="1745843782415-3" author="Alexander (generated)">
+        <addColumn tableName="operator_login_log">
+            <column name="date_login" type="DATETIME"/>
+            <column name="date_logout" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1745843782415-4" author="Alexander (generated)">
+        <addNotNullConstraint columnName="date_login" tableName="operator_login_log"/>
+    </changeSet>
+    <changeSet id="1745843782415-15" author="Alexander (generated)">
+        <dropColumn columnName="date" tableName="admin_login_log"/>
+    </changeSet>
+    <changeSet id="1745843782415-16" author="Alexander (generated)">
+        <dropColumn columnName="date" tableName="operator_login_log"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,6 +1,6 @@
 package com.rena.application.entity.model.traceability.error;
 
-import com.rena.application.entity.model.traceability.common.Station;
+import com.rena.application.entity.model.traceability.common.station.Station;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

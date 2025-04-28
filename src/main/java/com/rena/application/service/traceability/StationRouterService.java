@@ -1,6 +1,6 @@
 package com.rena.application.service.traceability;
 
-import com.rena.application.repository.traceability.common.StationRouterRepository;
+import com.rena.application.repository.traceability.common.station.StationRouterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

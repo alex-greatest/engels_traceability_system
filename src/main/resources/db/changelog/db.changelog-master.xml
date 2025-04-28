@@ -4,10 +4,16 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
-    <includeAll path="db/changelog/2024/12" context=""/>
-    <includeAll path="db/changelog/2025/01" context=""/>
-    <includeAll path="db/changelog/2025/02" context=""/>
-    <includeAll path="db/changelog/2025/03" context=""/>
-    <include file="db/changelog/2025/04/01-01-changelog.xml"/>
-    <include file="db/changelog/2025/04/08-01-changelog.xml"/>
+    <include file="db/changelog/2025/04/16-01-changelog.xml"/>
+    <include file="db/changelog/2025/04/21-01-changelog.xml"/>
+    <include file="db/changelog/2025/04/23-01-changelog.xml"/>
+    <include file="db/changelog/2025/04/23-03-changelog.xml"/>
+    <include file="db/changelog/2025/04/23-04-changelog.xml"/>
+    <include file="db/changelog/2025/04/23-05-changelog.xml"/>
+    <include file="db/changelog/2025/04/23-06-changelog.xml"/>
+    <include file="db/changelog/2025/04/23-07-changelog.xml"/>
+    <include file="db/changelog/2025/04/23-08-changelog.xml"/>
+    <include file="db/changelog/2025/04/28-01-changelog.xml"/>
+    <include file="db/changelog/2025/04/28-02-changelog.xml"/>
+    <include file="db/changelog/2025/04/28-03-changelog.xml"/>
 </databaseChangeLog>

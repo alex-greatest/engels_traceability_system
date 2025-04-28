@@ -1,0 +1,989 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1744821369795-1" author="Alexander (generated)">
+        <createTable tableName="boiler">
+            <column name="serial_number" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler"/>
+            </column>
+            <column name="boiler_type_cycle_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_create" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_update" type="DATETIME"/>
+            <column name="status_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="boiler_order_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-2" author="Alexander (generated)">
+        <createTable tableName="boiler_order">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler_order"/>
+            </column>
+            <column name="scan_code" type="VARCHAR(255)"/>
+            <column name="status_id" type="BIGINT"/>
+            <column name="boiler_type_cycle_id" type="BIGINT"/>
+            <column name="order_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_boiler_order" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_boiler_print" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_boiler_made" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_shift_created" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-3" author="Alexander (generated)">
+        <createTable tableName="boiler_type">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler_type"/>
+            </column>
+            <column name="type_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="component_name_set_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="boiler_type_additional_data_set_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-4" author="Alexander (generated)">
+        <createTable tableName="boiler_type_additional_data">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler_type_additional_data"/>
+            </column>
+            <column name="name" type="NVARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-5" author="Alexander (generated)">
+        <createTable tableName="boiler_type_additional_data_set">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler_type_additional_data_set"/>
+            </column>
+            <column name="name" type="NVARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-6" author="Alexander (generated)">
+        <createTable tableName="boiler_type_additional_data_template">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="pk_boiler_type_additional_data_template"/>
+            </column>
+            <column name="unit" type="VARCHAR(30)"/>
+            <column name="boiler_type_additional_data_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-7" author="Alexander (generated)">
+        <createTable tableName="boiler_type_additional_value">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler_type_additional_value"/>
+            </column>
+            <column name="value" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit" type="VARCHAR(30)"/>
+            <column name="boiler_type_additional_data_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="boiler_type_additional_data_set_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-8" author="Alexander (generated)">
+        <createTable tableName="boiler_type_сycle">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_boiler_type_сycle"/>
+            </column>
+            <column name="boiler_type_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_history_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-9" author="Alexander (generated)">
+        <createTable tableName="component">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_component"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operation_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-10" author="Alexander (generated)">
+        <createTable tableName="component_binding">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_component_binding"/>
+            </column>
+            <column name="component_name_set_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="component_type_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_component" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-11" author="Alexander (generated)">
+        <createTable tableName="component_name_set">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_component_name_set"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-12" author="Alexander (generated)">
+        <createTable tableName="component_set">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_component_set"/>
+            </column>
+            <column name="component_name_set_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="component_type_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="NVARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-13" author="Alexander (generated)">
+        <createTable tableName="component_type">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_component_type"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-14" author="Alexander (generated)">
+        <createTable tableName="error">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_error"/>
+            </column>
+            <column name="serial_number" type="VARCHAR(255)"/>
+            <column name="date_create" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="error_template_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-15" author="Alexander (generated)">
+        <createTable tableName="error_message">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_error_message"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-16" author="Alexander (generated)">
+        <createTable tableName="error_step">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_error_step"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-17" author="Alexander (generated)">
+        <createTable tableName="error_template">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_error_template"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="error_step_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="error_message_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-18" author="Alexander (generated)">
+        <createTable tableName="operation">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_operation"/>
+            </column>
+            <column name="date_create" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_update" type="DATETIME"/>
+            <column name="status_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_shift" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="boiler_serial_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reason_for_stopping" type="VARCHAR(255)"/>
+            <column name="is_last" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-19" author="Alexander (generated)">
+        <createTable tableName="part_last">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_part_last"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="part_id" type="VARCHAR(30)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-20" author="Alexander (generated)">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-21" author="Alexander (generated)">
+        <createTable tableName="serial_number_log_manual">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_serial_number_log_manual"/>
+            </column>
+            <column name="boiler_serial_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_create" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shift_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-22" author="Alexander (generated)">
+        <createTable tableName="setting">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_setting"/>
+            </column>
+            <column name="prev_shift" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="next_boiler_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_printed_barcode" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_zeroing" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-23" author="Alexander (generated)">
+        <createTable tableName="shift">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_shift"/>
+            </column>
+            <column name="number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_start" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_end" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-24" author="Alexander (generated)">
+        <createTable tableName="shift_station">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_shift_station"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_boiler_made" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-25" author="Alexander (generated)">
+        <createTable tableName="station">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_station"/>
+            </column>
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-26" author="Alexander (generated)">
+        <createTable tableName="station_router">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_station_router"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-27" author="Alexander (generated)">
+        <createTable tableName="status">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_status"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-28" author="Alexander (generated)">
+        <createTable tableName="user_">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_"/>
+            </column>
+            <column name="code" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-29" author="Alexander (generated)">
+        <createTable tableName="user_history">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_history"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="old_code" type="VARCHAR(255)"/>
+            <column name="old_username" type="VARCHAR(50)"/>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username_changed" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code_changed" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_operation" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-30" author="Alexander (generated)">
+        <createTable tableName="user_login_log">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_login_log"/>
+            </column>
+            <column name="user_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="DATETIME"/>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_login" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744821369795-31" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="UC_ROLE_NAME" tableName="role"/>
+    </changeSet>
+    <changeSet id="1744821369795-32" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="order" constraintName="UC_STATION_ROUTER_ORDER" tableName="station_router"/>
+    </changeSet>
+    <changeSet id="1744821369795-33" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="station_id" constraintName="UC_STATION_ROUTER_STATION"
+                             tableName="station_router"/>
+    </changeSet>
+    <changeSet id="1744821369795-34" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="component_name_set_id, component_type_id" constraintName="uc_binding_name_set"
+                             tableName="component_binding"/>
+    </changeSet>
+    <changeSet id="1744821369795-35" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="component_name_set_id, station_id, order_component"
+                             constraintName="uc_binding_order" tableName="component_binding"/>
+    </changeSet>
+    <changeSet id="1744821369795-36" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_boiler_type_additional_data_name"
+                             tableName="boiler_type_additional_data"/>
+    </changeSet>
+    <changeSet id="1744821369795-37" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_boiler_type_additional_data_set"
+                             tableName="boiler_type_additional_data_set"/>
+    </changeSet>
+    <changeSet id="1744821369795-38" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="article" constraintName="uc_boiler_type_article" tableName="boiler_type"/>
+    </changeSet>
+    <changeSet id="1744821369795-39" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="model" constraintName="uc_boiler_type_model" tableName="boiler_type"/>
+    </changeSet>
+    <changeSet id="1744821369795-40" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="type_name" constraintName="uc_boiler_type_name_type_name"
+                             tableName="boiler_type"/>
+    </changeSet>
+    <changeSet id="1744821369795-41" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_component_name_set_name"
+                             tableName="component_name_set"/>
+    </changeSet>
+    <changeSet id="1744821369795-42" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_component_type_name" tableName="component_type"/>
+    </changeSet>
+    <changeSet id="1744821369795-43" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_error_message_name" tableName="error_message"/>
+    </changeSet>
+    <changeSet id="1744821369795-44" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_error_step_name" tableName="error_step"/>
+    </changeSet>
+    <changeSet id="1744821369795-45" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="number" constraintName="uc_shift_number" tableName="shift"/>
+    </changeSet>
+    <changeSet id="1744821369795-46" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="description" constraintName="uc_station_description" tableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-47" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_station_name" tableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-48" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_status_name" tableName="status"/>
+    </changeSet>
+    <changeSet id="1744821369795-49" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="code" constraintName="uc_user__code" tableName="user_"/>
+    </changeSet>
+    <changeSet id="1744821369795-50" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="username" constraintName="uc_user__username" tableName="user_"/>
+    </changeSet>
+    <changeSet id="1744821369795-53" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_date_create" tableName="boiler">
+            <column name="date_create"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-54" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_date_update" tableName="boiler">
+            <column name="date_update"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-56" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_order_date" tableName="boiler_order">
+            <column name="date"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-57" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_order_order_number" tableName="boiler_order">
+            <column name="order_number"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-63" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_type_history_article" tableName="boiler_type_сycle">
+            <column name="article"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-64" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_type_history_article_model" tableName="boiler_type_сycle">
+            <column name="model"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-65" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_type_history_boiler_type_id" tableName="boiler_type_сycle">
+            <column name="boiler_type_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-66" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_type_history_is_active" tableName="boiler_type_сycle">
+            <column name="is_active"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-67" author="Alexander (generated)">
+        <createIndex indexName="idx_boiler_type_history_name_type_name" tableName="boiler_type_сycle">
+            <column name="type_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-70" author="Alexander (generated)">
+        <createIndex indexName="idx_component_name" tableName="component">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-74" author="Alexander (generated)">
+        <createIndex indexName="idx_component_set_value" tableName="component_set">
+            <column name="value"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-76" author="Alexander (generated)">
+        <createIndex indexName="idx_error_date_create" tableName="error">
+            <column name="date_create"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-77" author="Alexander (generated)">
+        <createIndex indexName="idx_error_serial_number" tableName="error">
+            <column name="serial_number"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-80" author="Alexander (generated)">
+        <createIndex indexName="idx_operation_date_create" tableName="operation">
+            <column name="date_create"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-81" author="Alexander (generated)">
+        <createIndex indexName="idx_operation_is_last" tableName="operation">
+            <column name="is_last"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-85" author="Alexander (generated)">
+        <createIndex indexName="idx_user_history_code" tableName="user_history">
+            <column name="code"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-86" author="Alexander (generated)">
+        <createIndex indexName="idx_user_history_is_active" tableName="user_history">
+            <column name="is_active"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-88" author="Alexander (generated)">
+        <createIndex indexName="idx_user_history_type_operation" tableName="user_history">
+            <column name="type_operation"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-89" author="Alexander (generated)">
+        <createIndex indexName="idx_user_history_user_id" tableName="user_history">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-90" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_type_additional_data_id"
+                                 baseTableName="boiler_type_additional_data_template"
+                                 constraintName="FK_BOILERTYPEADDITIONALDATATEMPLATE_ON_BOILERTYPEADDITIONALDATA"
+                                 referencedColumnNames="id" referencedTableName="boiler_type_additional_data"/>
+    </changeSet>
+    <changeSet id="1744821369795-91" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_type_additional_data_set_id"
+                                 baseTableName="boiler_type_additional_value"
+                                 constraintName="FK_BOILERTYPEADDITIONALVALUE_ON_BOILERTYPEADDITIONALDATASET"
+                                 referencedColumnNames="id" referencedTableName="boiler_type_additional_data_set"/>
+
+        <createIndex indexName="idx_boiler_type_additional_value_data_set" tableName="boiler_type_additional_value">
+            <column name="boiler_type_additional_data_set_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-92" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_order_id" baseTableName="boiler"
+                                 constraintName="FK_BOILER_ON_BOILER_ORDER" referencedColumnNames="id"
+                                 referencedTableName="boiler_order"/>
+
+        <createIndex indexName="idx_boiler_boiler_order_id" tableName="boiler">
+            <column name="boiler_order_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-93" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_type_cycle_id" baseTableName="boiler"
+                                 constraintName="FK_BOILER_ON_BOILER_TYPE_CYCLE" referencedColumnNames="id"
+                                 referencedTableName="boiler_type_сycle"/>
+
+        <createIndex indexName="idx_boiler_boiler_type_cycle_id" tableName="boiler">
+            <column name="boiler_type_cycle_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-94" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="boiler"
+                                 constraintName="FK_BOILER_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-95" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="boiler" constraintName="FK_BOILER_ON_STATUS"
+                                 referencedColumnNames="id" referencedTableName="status"/>
+    </changeSet>
+    <changeSet id="1744821369795-96" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="boiler"
+                                 constraintName="FK_BOILER_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+
+        <createIndex indexName="idx_boiler_user_history_id" tableName="boiler">
+            <column name="user_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-97" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_type_cycle_id" baseTableName="boiler_order"
+                                 constraintName="FK_BOILER_ORDER_ON_BOILER_TYPE_CYCLE" referencedColumnNames="id"
+                                 referencedTableName="boiler_type_сycle"/>
+
+        <createIndex indexName="idx_boiler_order" tableName="boiler_order">
+            <column name="boiler_type_cycle_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-98" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="boiler_order"
+                                 constraintName="FK_BOILER_ORDER_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status"/>
+    </changeSet>
+    <changeSet id="1744821369795-99" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="boiler_order"
+                                 constraintName="FK_BOILER_ORDER_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+
+        <createIndex indexName="idx_boiler_order_user_history_id" tableName="boiler_order">
+            <column name="user_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-100" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_type_additional_data_id"
+                                 baseTableName="boiler_type_additional_value"
+                                 constraintName="FK_BOILER_TYPE_ADDITIONAL_VALUE_ON_BOILER_TYPE_ADDITIONAL_DATA"
+                                 referencedColumnNames="id" referencedTableName="boiler_type_additional_data"/>
+
+        <createIndex indexName="idx_boiler_type_additional_value_boiler_type_data"
+                     tableName="boiler_type_additional_value">
+            <column name="boiler_type_additional_data_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-101" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_type_additional_data_set_id" baseTableName="boiler_type"
+                                 constraintName="FK_BOILER_TYPE_ON_BOILER_TYPE_ADDITIONAL_DATA_SET"
+                                 referencedColumnNames="id" referencedTableName="boiler_type_additional_data_set"/>
+
+        <createIndex indexName="idx_boiler_type_boiler_type_additional_data_set_id" tableName="boiler_type">
+            <column name="boiler_type_additional_data_set_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-102" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="component_name_set_id" baseTableName="boiler_type"
+                                 constraintName="FK_BOILER_TYPE_ON_COMPONENT_NAME_SET" referencedColumnNames="id"
+                                 referencedTableName="component_name_set"/>
+
+        <createIndex indexName="idx_boiler_type_component_name_set" tableName="boiler_type">
+            <column name="component_name_set_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-103" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="boiler_type_сycle"
+                                 constraintName="FK_BOILER_TYPE_СYCLE_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+
+        <createIndex indexName="idx_boiler_type_history_user_history_id" tableName="boiler_type_сycle">
+            <column name="user_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-104" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="component_name_set_id" baseTableName="component_binding"
+                                 constraintName="FK_COMPONENT_BINDING_ON_COMPONENT_NAME_SET" referencedColumnNames="id"
+                                 referencedTableName="component_name_set"/>
+    </changeSet>
+    <changeSet id="1744821369795-105" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="component_type_id" baseTableName="component_binding"
+                                 constraintName="FK_COMPONENT_BINDING_ON_COMPONENT_TYPE" referencedColumnNames="id"
+                                 referencedTableName="component_type"/>
+    </changeSet>
+    <changeSet id="1744821369795-106" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="component_binding"
+                                 constraintName="FK_COMPONENT_BINDING_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-107" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="operation_id" baseTableName="component"
+                                 constraintName="FK_COMPONENT_ON_OPERATION" referencedColumnNames="id"
+                                 referencedTableName="operation"/>
+
+        <createIndex indexName="idx_component_operation_id" tableName="component">
+            <column name="operation_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-108" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="component"
+                                 constraintName="FK_COMPONENT_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status"/>
+
+        <createIndex indexName="idx_component_status_id" tableName="component">
+            <column name="status_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-109" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="component_name_set_id" baseTableName="component_set"
+                                 constraintName="FK_COMPONENT_SET_ON_COMPONENT_NAME_SET" referencedColumnNames="id"
+                                 referencedTableName="component_name_set"/>
+
+        <createIndex indexName="idx_component_name_set" tableName="component_set">
+            <column name="component_name_set_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-110" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="component_type_id" baseTableName="component_set"
+                                 constraintName="FK_COMPONENT_SET_ON_COMPONENT_TYPE" referencedColumnNames="id"
+                                 referencedTableName="component_type"/>
+
+        <createIndex indexName="idx_component_set_component_type_id" tableName="component_set">
+            <column name="component_type_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-111" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="error_template_id" baseTableName="error"
+                                 constraintName="FK_ERROR_ON_ERROR_TEMPLATE" referencedColumnNames="id"
+                                 referencedTableName="error_template"/>
+    </changeSet>
+    <changeSet id="1744821369795-112" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="error"
+                                 constraintName="FK_ERROR_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+
+        <createIndex indexName="idx_error_user_history_id" tableName="error">
+            <column name="user_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-113" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="error_message_id" baseTableName="error_template"
+                                 constraintName="FK_ERROR_TEMPLATE_ON_ERROR_MESSAGE" referencedColumnNames="id"
+                                 referencedTableName="error_message"/>
+    </changeSet>
+    <changeSet id="1744821369795-114" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="error_step_id" baseTableName="error_template"
+                                 constraintName="FK_ERROR_TEMPLATE_ON_ERROR_STEP" referencedColumnNames="id"
+                                 referencedTableName="error_step"/>
+    </changeSet>
+    <changeSet id="1744821369795-115" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="error_template"
+                                 constraintName="FK_ERROR_TEMPLATE_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-116" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_serial_number" baseTableName="operation"
+                                 constraintName="FK_OPERATION_ON_BOILER_SERIAL_NUMBER"
+                                 referencedColumnNames="serial_number" referencedTableName="boiler"/>
+
+        <createIndex indexName="idx_operation" tableName="operation">
+            <column name="boiler_serial_number"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-117" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="operation"
+                                 constraintName="FK_OPERATION_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-118" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="operation"
+                                 constraintName="FK_OPERATION_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status"/>
+    </changeSet>
+    <changeSet id="1744821369795-119" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="operation"
+                                 constraintName="FK_OPERATION_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+
+        <createIndex indexName="idx_operation_user_history_id" tableName="operation">
+            <column name="user_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-120" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="part_last"
+                                 constraintName="FK_PART_LAST_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-121" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="boiler_serial_number" baseTableName="serial_number_log_manual"
+                                 constraintName="FK_SERIAL_NUMBER_LOG_MANUAL_ON_BOILER_SERIAL_NUMBER"
+                                 referencedColumnNames="serial_number" referencedTableName="boiler"/>
+
+        <createIndex indexName="idx_serial_number_log_manual" tableName="serial_number_log_manual">
+            <column name="boiler_serial_number"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-122" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="serial_number_log_manual"
+                                 constraintName="FK_SERIAL_NUMBER_LOG_MANUAL_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+    </changeSet>
+    <changeSet id="1744821369795-123" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="shift_station"
+                                 constraintName="FK_SHIFT_STATION_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-124" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="station_router"
+                                 constraintName="FK_STATION_ROUTER_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-125" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_history"
+                                 constraintName="FK_USER_HISTORY_ON_ROLE" referencedColumnNames="id"
+                                 referencedTableName="role"/>
+
+        <createIndex indexName="idx_user_history_role_id" tableName="user_history">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1744821369795-126" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="user_login_log"
+                                 constraintName="FK_USER_LOGIN_LOG_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1744821369795-127" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="user_login_log"
+                                 constraintName="FK_USER_LOGIN_LOG_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+    </changeSet>
+    <changeSet id="1744821369795-128" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_" constraintName="FK_USER__ON_ROLE"
+                                 referencedColumnNames="id" referencedTableName="role"/>
+
+        <createIndex indexName="idx_user__role_id" tableName="user_">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

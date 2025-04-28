@@ -1,8 +1,8 @@
 package com.rena.application.config.mapper.type;
 
-import com.rena.application.entity.dto.boiler_type.BoilerTypeDto;
-import com.rena.application.entity.dto.boiler_type.BoilerTypeStation;
-import com.rena.application.entity.model.boiler.type.BoilerType;
+import com.rena.application.entity.dto.settings.boiler_type.BoilerTypeDto;
+import com.rena.application.entity.dto.settings.boiler_type.BoilerTypeStation;
+import com.rena.application.entity.model.settings.type.BoilerType;
 import org.mapstruct.*;
 import java.util.List;
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1745837012156-1" author="Alexander (generated)">
+        <createTable tableName="admin_login_log">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_admin_login_log"/>
+            </column>
+            <column name="user_history_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="DATETIME"/>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_login" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1745837012156-3" author="Alexander (generated)">
+        <createIndex indexName="idx_admin_login_log_is_login" tableName="admin_login_log">
+            <column name="is_login"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1745837012156-5" author="Alexander (generated)">
+        <createIndex indexName="idx_operator_login_log" tableName="operator_login_log">
+            <column name="user_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1745837012156-6" author="Alexander (generated)">
+        <createIndex indexName="idx_operator_login_log_is_login" tableName="operator_login_log">
+            <column name="is_login"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1745837012156-7" author="Alexander (generated)">
+        <createIndex indexName="idx_operator_login_log_station_id" tableName="operator_login_log">
+            <column name="station_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1745837012156-8" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="admin_login_log"
+                                 constraintName="FK_ADMIN_LOGIN_LOG_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+
+        <createIndex indexName="idx_admin_login_log_station_id" tableName="admin_login_log">
+            <column name="station_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1745837012156-9" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="admin_login_log"
+                                 constraintName="FK_ADMIN_LOGIN_LOG_ON_USER_HISTORY" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+
+        <createIndex indexName="idx_admin_login_log" tableName="admin_login_log">
+            <column name="user_history_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

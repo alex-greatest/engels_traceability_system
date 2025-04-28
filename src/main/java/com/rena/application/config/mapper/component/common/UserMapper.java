@@ -1,10 +1,10 @@
 package com.rena.application.config.mapper.component.common;
 
-import com.rena.application.entity.dto.user.RoleDTO;
-import com.rena.application.entity.dto.user.UserRequest;
-import com.rena.application.entity.dto.user.UserRequestUpdate;
-import com.rena.application.entity.dto.user.UserResponse;
-import com.rena.application.entity.model.user.User;
+import com.rena.application.entity.dto.settings.user.RoleDTO;
+import com.rena.application.entity.dto.settings.user.UserRequest;
+import com.rena.application.entity.dto.settings.user.UserRequestUpdate;
+import com.rena.application.entity.dto.settings.user.UserResponse;
+import com.rena.application.entity.model.settings.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

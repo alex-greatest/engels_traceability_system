@@ -1,0 +1,38 @@
+package com.rena.application.entity.model.traceability.station.component;
+
+import com.rena.application.entity.model.traceability.common.station.Operation;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "component", indexes = {
+        @Index(name = "idx_component_name", columnList = "name"),
+        @Index(name = "idx_component_status_id", columnList = "status_id"),
+        @Index(name = "idx_component_operation_id", columnList = "operation_id")
+})
+public class Component {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @NotNull
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @NotNull
+    @Column(name = "value", nullable = false)
+    private String value;
+
+    @NotNull
+    @Column(name = "status", nullable = false)
+    private Integer status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "operation_id")
+    private Operation operation;
+}

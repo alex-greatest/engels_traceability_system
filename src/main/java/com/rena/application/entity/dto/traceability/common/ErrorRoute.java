@@ -1,6 +1,6 @@
 package com.rena.application.entity.dto.traceability.common;
 
-import com.rena.application.entity.model.traceability.common.Boiler;
+import com.rena.application.entity.model.traceability.common.boiler.Boiler;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

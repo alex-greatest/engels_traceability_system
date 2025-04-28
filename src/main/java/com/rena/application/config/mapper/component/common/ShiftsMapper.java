@@ -1,7 +1,7 @@
 package com.rena.application.config.mapper.component.common;
 
-import com.rena.application.entity.dto.shift.ShiftDto;
-import com.rena.application.entity.model.shift.Shift;
+import com.rena.application.entity.dto.settings.shift.ShiftDto;
+import com.rena.application.entity.model.settings.shift.Shift;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

@@ -1,7 +1,7 @@
 package com.rena.application.config.mapper.component.common;
 
-import com.rena.application.entity.dto.user.RoleDTO;
-import com.rena.application.entity.model.user.Role;
+import com.rena.application.entity.dto.settings.user.RoleDTO;
+import com.rena.application.entity.model.settings.user.Role;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
