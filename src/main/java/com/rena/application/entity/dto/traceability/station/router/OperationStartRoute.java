@@ -1,4 +1,4 @@
-package com.rena.application.entity.dto.traceability.common.router;
+package com.rena.application.entity.dto.traceability.station.router;
 
 import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
 import jakarta.validation.constraints.Min;

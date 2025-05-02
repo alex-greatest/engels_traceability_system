@@ -1,4 +1,4 @@
-package com.rena.application.repository.traceability.common.router;
+package com.rena.application.repository.traceability.station.router;
 
 import com.rena.application.entity.model.traceability.common.station.StationHistory;
 import org.springframework.data.jpa.repository.JpaRepository;

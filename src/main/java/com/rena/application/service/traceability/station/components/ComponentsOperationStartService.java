@@ -1,6 +1,6 @@
 package com.rena.application.service.traceability.station.components;
 
-import com.rena.application.entity.dto.traceability.common.router.OperationStartRequest;
+import com.rena.application.entity.dto.traceability.station.router.OperationStartRequest;
 import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationStartResponse;
 import com.rena.application.exceptions.traceability.boiler.*;
 import com.rena.application.repository.traceability.common.boiler.BoilerRepository;

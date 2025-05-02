@@ -2,7 +2,7 @@ package com.rena.application.controller.traceability.websocket.station.component
 
 import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationSaveResultRequest;
 import com.rena.application.entity.dto.traceability.common.operation.OperationInterruptedRequest;
-import com.rena.application.entity.dto.traceability.common.router.OperationStartRequest;
+import com.rena.application.entity.dto.traceability.station.router.OperationStartRequest;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.station.components.ComponentsOperationEndService;
 import com.rena.application.service.traceability.station.components.ComponentsOperationStartService;

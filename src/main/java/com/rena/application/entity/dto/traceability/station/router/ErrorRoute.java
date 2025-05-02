@@ -1,4 +1,4 @@
-package com.rena.application.entity.dto.traceability.common.router;
+package com.rena.application.entity.dto.traceability.station.router;
 
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
 import jakarta.validation.constraints.NotBlank;

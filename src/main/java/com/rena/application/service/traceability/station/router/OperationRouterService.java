@@ -1,7 +1,7 @@
-package com.rena.application.service.traceability.common.router;
+package com.rena.application.service.traceability.station.router;
 
 import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
-import com.rena.application.entity.dto.traceability.common.router.OperationStartRoute;
+import com.rena.application.entity.dto.traceability.station.router.OperationStartRoute;
 import com.rena.application.entity.model.traceability.common.station.Station;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.traceability.common.station.StationRepository;

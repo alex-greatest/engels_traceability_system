@@ -20,7 +20,6 @@ public class ComponentsResponserOperationService {
     private final MainInformationService mainInformationService;
     private final ComponentsScannedOperationService componentsScannedOperationService;
     private final MaterialScannedOperationService materialScannedOperationService;
-    private final UserTraceabilityService userTraceabilityService;
 
     public MainInformation createResponseOperationComponents(String stationName) {
         return mainInformationService.getBoilerMadeInfo(stationName);

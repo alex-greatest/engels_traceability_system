@@ -46,4 +46,6 @@ public interface ComponentSetRepository extends JpaRepository<ComponentSet, Long
             "WHERE c.componentNameSet.id = ?1 " +
             "AND c.componentType.id IN ?2 ")
     List<ComponentSet> findAllComponentsByBindingsIdOrdered(Long id, List<Long> idsComponentType, String stationName);
+
+
 }

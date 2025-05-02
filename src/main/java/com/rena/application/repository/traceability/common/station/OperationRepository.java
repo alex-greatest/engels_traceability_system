@@ -1,6 +1,6 @@
 package com.rena.application.repository.traceability.common.station;
 
-import com.rena.application.entity.dto.traceability.common.router.StationRouteCheckResult;
+import com.rena.application.entity.dto.traceability.station.router.StationRouteCheckResult;
 import com.rena.application.entity.model.traceability.common.Operation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

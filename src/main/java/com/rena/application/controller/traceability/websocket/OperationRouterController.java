@@ -1,10 +1,10 @@
 package com.rena.application.controller.traceability.websocket;
 
-import com.rena.application.entity.dto.traceability.common.router.OperationStartRoute;
+import com.rena.application.entity.dto.traceability.station.router.OperationStartRoute;
 import com.rena.application.entity.model.traceability.common.station.Station;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.traceability.common.station.StationRepository;
-import com.rena.application.service.traceability.common.router.StationRouterService;
+import com.rena.application.service.traceability.station.router.StationRouterService;
 import com.rena.application.service.traceability.helper.ErrorHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
