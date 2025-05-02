@@ -1,10 +1,10 @@
 package com.rena.application.service.traceability.common.operation;
 
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
-import com.rena.application.entity.model.traceability.common.station.Operation;
+import com.rena.application.entity.model.traceability.common.Operation;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.PartLastRepository;
-import com.rena.application.repository.traceability.common.OperationRepository;
+import com.rena.application.repository.traceability.common.station.OperationRepository;
 import com.rena.application.repository.traceability.common.station.StationRepository;
 import com.rena.application.repository.settings.user.UserHistoryRepository;
 import lombok.RequiredArgsConstructor;

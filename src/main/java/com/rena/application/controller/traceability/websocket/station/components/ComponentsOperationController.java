@@ -2,7 +2,7 @@ package com.rena.application.controller.traceability.websocket.station.component
 
 import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationSaveResultRequest;
 import com.rena.application.entity.dto.traceability.common.operation.OperationInterruptedRequest;
-import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationStartRequest;
+import com.rena.application.entity.dto.traceability.common.router.OperationStartRequest;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.station.components.ComponentsOperationEndService;
 import com.rena.application.service.traceability.station.components.ComponentsOperationStartService;
@@ -22,15 +22,15 @@ public class ComponentsOperationController {
     private final ComponentsOperationEndService componentsOperationEndService;
 
     @MessageMapping("/station/start/operation/request")
-    public void getBoilerOrder(@Payload ComponentsOperationStartRequest componentsOperationStartRequest) {
+    public void getBoilerOrder(@Payload OperationStartRequest operationStartRequest) {
         try {
-            var componentsResponse = componentsOperationStartService.startOperation(componentsOperationStartRequest);
+            var componentsResponse = componentsOperationStartService.startOperation(operationStartRequest);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/start/operation/response",
-                    componentsOperationStartRequest.stationName()),
+                    operationStartRequest.stationName()),
                     componentsResponse);
         } catch (Exception e) {
-            log.error("Получение компонентво. Станция {}", componentsOperationStartRequest.stationName(), e);
-            messagingTemplate.convertAndSend(String.format("/message/station/%s/start/operation/errors", componentsOperationStartRequest.stationName()), "Неизвестная ошибка");
+            log.error("Получение компонентво. Станция {}", operationStartRequest.stationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/start/operation/errors", operationStartRequest.stationName()), "Неизвестная ошибка");
         }
     }
 

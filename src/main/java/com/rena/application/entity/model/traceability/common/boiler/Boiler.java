@@ -2,6 +2,7 @@ package com.rena.application.entity.model.traceability.common.boiler;
 
 import com.rena.application.entity.model.settings.type.BoilerTypeCycle;
 import com.rena.application.entity.model.traceability.common.station.Station;
+import com.rena.application.entity.model.traceability.common.station.StationHistory;
 import com.rena.application.entity.model.traceability.station.order.BoilerOrder;
 import com.rena.application.entity.model.settings.user.UserHistory;
 import jakarta.persistence.*;
@@ -42,7 +43,7 @@ public class Boiler {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "station_id", nullable = false)
-    private Station lastStation;
+    private StationHistory lastStation;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_history_id", nullable = false)

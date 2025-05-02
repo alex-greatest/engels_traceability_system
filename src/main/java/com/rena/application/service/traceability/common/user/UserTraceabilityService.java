@@ -4,6 +4,7 @@ import com.rena.application.config.mapper.component.common.UserMapper;
 import com.rena.application.entity.dto.settings.user.UserResponse;
 import com.rena.application.entity.dto.settings.user.station.OperatorRequestAuthorization;
 import com.rena.application.entity.model.settings.user.User;
+import com.rena.application.entity.model.traceability.common.log.UserLoginLog;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.user.UserRepository;
 import com.rena.application.service.settings.user.UserLoginLogService;
@@ -60,7 +61,7 @@ public class UserTraceabilityService {
         if (!bCryptPasswordEncoder.matches(operatorRequestAuthorization.getPassword(), user.getPassword())) {
             throw new RecordNotFoundException("Неверный пароль");
         }
-        if (newRoleName.equals("Сборщик")) {
+        if (newRoleName.equals("Оператор")) {
             throw new RecordNotFoundException("Доступ запрещён");
         }
         userLoginLogService.saveAdminLoginLog(user.getId(), operatorRequestAuthorization.getStation(), true);
@@ -80,7 +81,7 @@ public class UserTraceabilityService {
         if (operatorLoginLogOptional.isPresent()) {
             var username = operatorLoginLogOptional.get().getUserHistory().getUsername();
             var userOptional = userRepository.findByUsernameAuthorization(username);
-            return getUserResponseLast(username, userOptional);
+            return getUserResponseLast(username, userOptional, operatorLoginLogOptional.get());
         }
         return null;
     }
@@ -91,15 +92,16 @@ public class UserTraceabilityService {
         if (adminLoginLogOptional.isPresent()) {
             var username = adminLoginLogOptional.get().getUserHistory().getUsername();
             var userOptional = userRepository.findByUsernameAuthorization(username);
-            return getUserResponseLast(username, userOptional);
+            return getUserResponseLast(username, userOptional, adminLoginLogOptional.get());
         }
         return null;
     }
 
     @Transactional
-    public UserResponse getUserResponseLast(String login, Optional<User> userOptional) {
+    public UserResponse getUserResponseLast(String login, Optional<User> userOptional, UserLoginLog userLoginLog) {
         if (userOptional.isEmpty()) {
-            stationOperatorLogout(login);
+            userLoginLog.setIsLogin(false);
+            userLoginLog.setDateLogout(userLoginLog.getDateLogin());
             return null;
         }
         var user = userOptional.get();

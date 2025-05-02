@@ -1,17 +1,17 @@
 package com.rena.application.entity.model.traceability.common.station;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "station", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_station_name", columnNames = {"name"}),
-        @UniqueConstraint(name = "uc_station_description", columnNames = {"description"})
-})
-public class Station {
+@Table(name = "station_history")
+public class StationHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -23,7 +23,8 @@ public class Station {
     @Column(name = "description", nullable = false, unique = true, length = 50)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "station_type_id", nullable = false)
-    private StationType stationType;
+    @NotNull
+    @Column(name = "is_active", nullable = false)
+    @JdbcTypeCode(SqlTypes.BIT)
+    private Boolean isActive = false;
 }

@@ -1,6 +1,6 @@
 package com.rena.application.entity.model.traceability.station.component;
 
-import com.rena.application.entity.model.traceability.common.station.Operation;
+import com.rena.application.entity.model.traceability.common.Operation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

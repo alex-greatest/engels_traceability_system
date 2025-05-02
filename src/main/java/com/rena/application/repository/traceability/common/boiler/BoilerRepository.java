@@ -21,4 +21,6 @@ public interface BoilerRepository extends JpaRepository<Boiler, String> {
 
     @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory where b.boilerOrder.id = ?1")
     List<Boiler> findAllByBoilerOrderId(Long boilerOrderId);
+
+
 }

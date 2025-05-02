@@ -4,10 +4,10 @@ import com.rena.application.entity.dto.traceability.common.exchange.MainInformat
 import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
 import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationStartResponse;
 import com.rena.application.entity.dto.traceability.station.order.BoilerOrderOperationResponse;
-import com.rena.application.entity.model.traceability.common.station.Operation;
+import com.rena.application.entity.model.traceability.common.Operation;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.PartLastRepository;
-import com.rena.application.repository.traceability.common.OperationRepository;
+import com.rena.application.repository.traceability.common.station.OperationRepository;
 import com.rena.application.repository.result.BoilerOrderRepository;
 import com.rena.application.service.traceability.station.components.responser.ComponentsResponserOperationService;
 import com.rena.application.service.traceability.station.order.BoilerOrderHelperService;

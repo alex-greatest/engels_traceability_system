@@ -1,7 +1,8 @@
-package com.rena.application.entity.model.traceability.common.station;
+package com.rena.application.entity.model.traceability.common;
 
 import com.rena.application.entity.model.settings.user.UserHistory;
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
+import com.rena.application.entity.model.traceability.common.station.StationHistory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,9 +14,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "operation", indexes = {
         @Index(name = "idx_operation_date_create", columnList = "date_create"),
-        @Index(name = "idx_operation", columnList = "boiler_serial_number"),
+        @Index(name = "idx_operation_boiler_serial_number", columnList = "boiler_serial_number"),
         @Index(name = "idx_operation_user_history_id", columnList = "user_history_id"),
-        @Index(name = "idx_operation_is_last", columnList = "is_last")
+        @Index(name = "idx_operation_station_history_id", columnList = "station_history_id")
 })
 public class Operation {
     @Id
@@ -35,8 +36,8 @@ public class Operation {
     private Integer status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "station_id", nullable = false)
-    private Station station;
+    @JoinColumn(name = "station_history_id", nullable = false)
+    private StationHistory stationHistory;
 
     @NotNull
     @Column(name = "number_shift", nullable = false)
@@ -56,8 +57,4 @@ public class Operation {
 
     @Column(name = "reason_for_stopping")
     private String reasonForStopping;
-
-    @NotNull
-    @Column(name = "is_last", nullable = false)
-    private Boolean isLast = false;
 }

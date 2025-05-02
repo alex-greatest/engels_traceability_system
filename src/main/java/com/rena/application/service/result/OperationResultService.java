@@ -2,7 +2,7 @@ package com.rena.application.service.result;
 
 import com.rena.application.config.mapper.traceability.OperationMapper;
 import com.rena.application.entity.dto.result.OperationResult;
-import com.rena.application.repository.traceability.common.OperationRepository;
+import com.rena.application.repository.traceability.common.station.OperationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
