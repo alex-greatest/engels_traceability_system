@@ -4,8 +4,8 @@ import com.rena.application.entity.dto.traceability.station.components.operation
 import com.rena.application.entity.dto.traceability.common.operation.OperationInterruptedRequest;
 import com.rena.application.entity.dto.traceability.station.router.OperationStartRequest;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.service.traceability.station.components.ComponentsOperationEndService;
-import com.rena.application.service.traceability.station.components.ComponentsOperationStartService;
+import com.rena.application.service.traceability.station.components.ComponentsResultSaveService;
+import com.rena.application.service.traceability.station.components.ComponentsPreparerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class ComponentsOperationController {
     private final SimpMessagingTemplate messagingTemplate;
-    private final ComponentsOperationStartService componentsOperationStartService;
-    private final ComponentsOperationEndService componentsOperationEndService;
+    private final ComponentsPreparerService componentsPreparerService;
+    private final ComponentsResultSaveService componentsResultSaveService;
 
     @MessageMapping("/station/start/operation/request")
     public void getBoilerOrder(@Payload OperationStartRequest operationStartRequest) {
         try {
-            var componentsResponse = componentsOperationStartService.startOperation(operationStartRequest);
+            var componentsResponse = componentsPreparerService.startOperation(operationStartRequest);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/start/operation/response",
                     operationStartRequest.stationName()),
                     componentsResponse);
@@ -37,7 +37,7 @@ public class ComponentsOperationController {
     @MessageMapping("/station/end/operation/request")
     public void saveComponents(@Payload ComponentsOperationSaveResultRequest componentsOperationSaveResultRequest) {
         try {
-            var wpResponse = componentsOperationEndService.saveResultsComponent(componentsOperationSaveResultRequest);
+            var wpResponse = componentsResultSaveService.saveResultsComponent(componentsOperationSaveResultRequest);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/end/operation/response",
                             componentsOperationSaveResultRequest.stationName()), wpResponse);
         } catch (RecordNotFoundException e) {
@@ -54,7 +54,7 @@ public class ComponentsOperationController {
    @MessageMapping("/station/interrupted/operation/request")
     public void interruptedOperation(@Payload OperationInterruptedRequest operationInterruptedRequest) {
         try {
-            componentsOperationEndService.interruptedOperation(operationInterruptedRequest);
+            componentsResultSaveService.interruptedOperation(operationInterruptedRequest);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/interrupted/operation/response",
                             operationInterruptedRequest.stationName()),
                     "");

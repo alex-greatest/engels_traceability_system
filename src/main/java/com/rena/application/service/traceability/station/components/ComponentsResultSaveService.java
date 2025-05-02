@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 @Validated
 @Slf4j
-public class ComponentsOperationEndService {
+public class ComponentsResultSaveService {
     private final BoilerRepository boilerRepository;
     private final ComponentRepository componentRepository;
     private final OperationRepository operationRepository;

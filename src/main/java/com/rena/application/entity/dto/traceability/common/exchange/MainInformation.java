@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @RequiredArgsConstructor
 @Getter
-@Setter
 public class MainInformation extends RpcBase {
     private final BoilerMadeInformation boilerMadeInformation;
     private final UserResponse operator;

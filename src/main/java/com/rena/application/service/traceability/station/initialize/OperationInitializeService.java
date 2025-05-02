@@ -9,7 +9,7 @@ import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.traceability.common.station.OperationRepository;
 import com.rena.application.repository.result.BoilerOrderRepository;
-import com.rena.application.service.traceability.station.components.responser.ComponentsResponserOperationService;
+import com.rena.application.service.traceability.station.components.prepare.ComponentsResponserOperationService;
 import com.rena.application.service.traceability.station.order.BoilerOrderHelperService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;

@@ -5,7 +5,7 @@ import com.rena.application.entity.dto.traceability.station.components.operation
 import com.rena.application.exceptions.traceability.boiler.*;
 import com.rena.application.repository.traceability.common.boiler.BoilerRepository;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
-import com.rena.application.service.traceability.station.components.responser.ComponentsResponserOperationService;
+import com.rena.application.service.traceability.station.components.prepare.ComponentsResponserOperationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @Slf4j
-public class ComponentsOperationStartService {
+public class ComponentsPreparerService {
     private final BoilerRepository boilerRepository;
     private final OperationTraceabilityService operationTraceabilityService;
     private final ComponentsResponserOperationService componentsResponserOperationService;
