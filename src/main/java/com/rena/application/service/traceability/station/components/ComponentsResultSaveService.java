@@ -9,9 +9,9 @@ import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.result.ComponentRepository;
 import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.traceability.common.boiler.BoilerRepository;
-import com.rena.application.repository.traceability.common.station.OperationRepository;
-import com.rena.application.repository.traceability.common.station.StationRepository;
-import com.rena.application.service.settings.shift.ShiftService;
+import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
+import com.rena.application.service.traceability.common.boiler.BoilerTraceabilityService;
+import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,45 +28,31 @@ import java.util.List;
 public class ComponentsResultSaveService {
     private final BoilerRepository boilerRepository;
     private final ComponentRepository componentRepository;
-    private final OperationRepository operationRepository;
-    private final StationRepository stationRepository;
+    private final OperationTraceabilityService operationTraceabilityService;
+    private final StationHistoryRepository stationHistoryRepository;
     private final PartLastRepository partLastRepository;
-    private final ShiftService shiftService;
+    private final BoilerTraceabilityService boilerTraceabilityService;
 
     @Transactional
     public Object saveResultsComponent(@Valid ComponentsOperationSaveResultRequest componentsOperationSaveResultRequest) {
-        var operation = operationRepository.findByStatus_IdAndStation_NameAndIsLastTrue(1, componentsOperationSaveResultRequest.stationName(),
-                componentsOperationSaveResultRequest.serialNumber()).orElseThrow(() -> new RecordNotFoundException("Операция не найдена"));
-        var statusCommon = componentsOperationSaveResultRequest.status().equals("OK") ? 1 : 2;
-        operation.setDateUpdate(LocalDateTime.now());
-        operation.setStatus(statusCommon);
-        var componentsResult = componentsOperationSaveResultRequest.componentsResultSave();
+        var operation = operationTraceabilityService.updateOperation(componentsOperationSaveResultRequest.getStationName(),
+                componentsOperationSaveResultRequest.getStatus(), componentsOperationSaveResultRequest.getIgnoringMessage());
+        var componentsResult = componentsOperationSaveResultRequest.getComponentsResultSave();
         saveComponentsResult(componentsResult, operation);
-        var amountBoilerShift = statusCommon == 1 ?
-                shiftService.updateShiftStation(componentsOperationSaveResultRequest.stationName(), 1) :
-                shiftService.getAmountBoilerMade(componentsOperationSaveResultRequest.stationName());
-        partLastRepository.updatePart_idByStation(null, componentsOperationSaveResultRequest.stationName());
+        boilerTraceabilityService.updateBoiler(componentsOperationSaveResultRequest.getSerialNumber(),
+                componentsOperationSaveResultRequest.getStationName(),
+                componentsOperationSaveResultRequest.getStatus());
+        partLastRepository.updatePart_idByStation(null, componentsOperationSaveResultRequest.getStationName());
         return null;
-        //return new WpResponse(amountBoilerShift);
-    }
-
-    private void updateBoiler(Integer statusCommon) {
-        /*var boiler = boilerRepository.findBySerialNumber(componentsResultRequest.serialNumber()).
-                orElseThrow(() -> new RecordNotFoundException("Котел не найден"));
-        var station = stationRepository.findByName(componentsResultRequest.stationName()).
-                orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
-        boiler.setDateUpdate(LocalDateTime.now());
-        boiler.setStatus(statusCommon);
-        boiler.setLastStation(station);*/
     }
 
     private void saveComponentsResult(List<ComponentsResultSave> componentsResultSave, Operation operation) {
         componentsResultSave.forEach(componentResult -> {
             var component = new Component();
-            component.setName(componentResult.componentType().name());
+            component.setName(componentResult.componentType());
             component.setValue(componentResult.scannedValue());
             component.setOperation(operation);
-            component.setStatus(componentResult.status().equals("OK") ? 1 : 2);
+            component.setStatus(componentResult.status());
             componentRepository.save(component);
         });
     }
@@ -76,7 +62,7 @@ public class ComponentsResultSaveService {
         var operation = operationRepository.findByStatus_IdAndStation_NameAndIsLastTrue(1, operationInterruptedRequest.stationName(),
                 operationInterruptedRequest.serialNumber()).orElseThrow(() -> new RecordNotFoundException("Операция не найдена"));
         var boiler = boilerRepository.findBySerialNumber(operationInterruptedRequest.serialNumber()).orElseThrow(() -> new RecordNotFoundException("Котел не найден"));
-        var station = stationRepository.findByName(operationInterruptedRequest.stationName()).
+        var station = stationHistoryRepository.findByName(operationInterruptedRequest.stationName()).
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         boiler.setDateUpdate(LocalDateTime.now());
         boiler.setStatus(4);

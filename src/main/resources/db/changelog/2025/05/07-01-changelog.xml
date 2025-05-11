@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1746613868079-1" author="Alexander (generated)">
+        <addColumn tableName="station_history">
+            <column name="station_type_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1746613868079-2" author="Alexander (generated)">
+        <dropUniqueConstraint constraintName="uc_station_description" tableName="station"/>
+
+        <dropUniqueConstraint constraintName="uc_station_history_description" tableName="station_history"/>
+
+        <dropIndex indexName="idx_operation_boiler_station" tableName="operation"/>
+
+        <addNotNullConstraint columnName="station_type_id" tableName="station_history"/>
+    </changeSet>
+    <changeSet id="1746613868079-3" author="Alexander (generated)">
+        <createIndex indexName="idx_operation_station_history_id" tableName="operation">
+            <column name="station_history_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1746613868079-4" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_type_id" baseTableName="station_history"
+                                 constraintName="FK_STATION_HISTORY_ON_STATION_TYPE" referencedColumnNames="id"
+                                 referencedTableName="station_type"/>
+    </changeSet>
+    <changeSet id="1746613868079-16" author="Alexander (generated)">
+        <dropColumn columnName="description" tableName="station"/>
+    </changeSet>
+    <changeSet id="1746613868079-17" author="Alexander (generated)">
+        <dropColumn columnName="description" tableName="station_history"/>
+    </changeSet>
+
+</databaseChangeLog>

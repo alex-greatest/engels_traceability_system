@@ -6,11 +6,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class InitializeData extends RpcBase {
+public class StationNameData extends RpcBase {
     @NotBlank
     private final String nameStation;
 
-    public InitializeData(String nameStation) {
+    public StationNameData(String nameStation) {
         super();
         this.nameStation = nameStation;
     }

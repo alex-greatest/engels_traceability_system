@@ -2,10 +2,9 @@ package com.rena.application.controller.traceability.websocket.station.component
 
 import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationSaveResultRequest;
 import com.rena.application.entity.dto.traceability.common.operation.OperationInterruptedRequest;
-import com.rena.application.entity.dto.traceability.station.router.OperationStartRequest;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.station.components.ComponentsResultSaveService;
-import com.rena.application.service.traceability.station.components.ComponentsPreparerService;
+import com.rena.application.service.traceability.station.components.ComponentsStartOperationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,36 +17,22 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class ComponentsOperationController {
     private final SimpMessagingTemplate messagingTemplate;
-    private final ComponentsPreparerService componentsPreparerService;
     private final ComponentsResultSaveService componentsResultSaveService;
 
-    @MessageMapping("/station/start/operation/request")
-    public void getBoilerOrder(@Payload OperationStartRequest operationStartRequest) {
-        try {
-            var componentsResponse = componentsPreparerService.startOperation(operationStartRequest);
-            messagingTemplate.convertAndSend(String.format("/message/station/%s/start/operation/response",
-                    operationStartRequest.stationName()),
-                    componentsResponse);
-        } catch (Exception e) {
-            log.error("Получение компонентво. Станция {}", operationStartRequest.stationName(), e);
-            messagingTemplate.convertAndSend(String.format("/message/station/%s/start/operation/errors", operationStartRequest.stationName()), "Неизвестная ошибка");
-        }
-    }
-
-    @MessageMapping("/station/end/operation/request")
+    @MessageMapping("/components/result/operation/save/request")
     public void saveComponents(@Payload ComponentsOperationSaveResultRequest componentsOperationSaveResultRequest) {
         try {
             var wpResponse = componentsResultSaveService.saveResultsComponent(componentsOperationSaveResultRequest);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/end/operation/response",
-                            componentsOperationSaveResultRequest.stationName()), wpResponse);
+                            componentsOperationSaveResultRequest.getStationName()), wpResponse);
         } catch (RecordNotFoundException e) {
-            log.error("Сохрание компонентов. Станция {}", componentsOperationSaveResultRequest.stationName(), e);
+            log.error("Сохрание компонентов. Станция {}", componentsOperationSaveResultRequest.getStationName(), e);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/end/operation/errors",
-                    componentsOperationSaveResultRequest.stationName()), e.getMessage());
+                    componentsOperationSaveResultRequest.getStationName()), e.getMessage());
         } catch (Exception e) {
-            log.error("Сохрание компонентов. Станция {}", componentsOperationSaveResultRequest.stationName(), e);
+            log.error("Сохрание компонентов. Станция {}", componentsOperationSaveResultRequest.getStationName(), e);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/end/operation/errors",
-                    componentsOperationSaveResultRequest.stationName()), "Неизвестная ошибка");
+                    componentsOperationSaveResultRequest.getStationName()), "Неизвестная ошибка");
         }
     }
 

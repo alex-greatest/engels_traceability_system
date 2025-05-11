@@ -1,10 +1,10 @@
 package com.rena.application.controller.traceability.websocket;
 
-import com.rena.application.entity.dto.traceability.station.router.OperationStartRoute;
-import com.rena.application.entity.model.traceability.common.station.Station;
+import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
+import com.rena.application.entity.dto.traceability.common.router.OperationStartRoute;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.repository.traceability.common.station.StationRepository;
-import com.rena.application.service.traceability.station.router.StationRouterService;
+import com.rena.application.service.traceability.common.router.ReworkOperationService;
+import com.rena.application.service.traceability.common.router.OperationRouterService;
 import com.rena.application.service.traceability.helper.ErrorHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,35 +19,47 @@ import org.springframework.stereotype.Controller;
 public class OperationRouterController {
     private final SimpMessagingTemplate messagingTemplate;
     private final ErrorHelper errorHelper;
-    private final StationRouterService stationRouterService;
-    private final StationRepository stationRepository;
+    private final OperationRouterService operationRouterService;
+    private final ReworkOperationService reworkOperationService;
 
-    @MessageMapping("/station/operation/start")
-    public void getOperatorAuthorization(@Payload OperationStartRoute operationStartRoute) {
+    @MessageMapping("/station/operation/start/request")
+    public void operationStart(@Payload OperationStartRoute operationStartRoute) {
         try {
-            var checkResult = stationRouterService.checkStations(operationStartRoute);
-            var station = stationRepository.findByName(operationStartRoute.getStationName())
-                    .orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
-            selectStationResponse(operationStartRoute, station);
+            var checkResult = operationRouterService.getDataForStation(operationStartRoute);
+            checkResult.setCorrelationId(operationStartRoute.getCorrelationId());
+            messagingTemplate.convertAndSend(String.format("/message/%s/station/operation/response",
+                    operationStartRoute.getStationName()), checkResult);
         } catch (RecordNotFoundException e) {
-            var error = errorHelper.getErrorResponse(e.getMessage(), operatorRequestAuthorization.getCorrelationId());
-            log.error("Получение данных оператора", e);
-            messagingTemplate.convertAndSend(String.format("/message/%s/operator/authorization/response/error",
-                            operatorRequestAuthorization.getStation()), error);
+            var error = errorHelper.getErrorResponse(e.getMessage(), operationStartRoute.getCorrelationId());
+            log.error("Получение данных для теста. Станция {}", operationStartRoute.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/station/operation/response/error",
+                    operationStartRoute.getStationName()), error);
         } catch (Exception e) {
-            var error = errorHelper.getErrorResponse("Неизвестная ошибка", operatorRequestAuthorization.getCorrelationId());
-            log.error("Получение данных оператора", e);
-            messagingTemplate.convertAndSend(String.format("/message/%s/operator/authorization/response/error",
-                            operatorRequestAuthorization.getStation()), error);
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", operationStartRoute.getCorrelationId());
+            log.error("Получение данных для теста. Станция {}", operationStartRoute.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/station/operation/response/error",
+                    operationStartRoute.getStationName()), error);
         }
     }
 
-    private void selectStationResponse(OperationStartRoute operationStartRoute, Station station) {
-        switch (operationStartRoute.getStationName()) {
-            case "Компоненты" -> messagingTemplate.convertAndSend(String.format("/message/%s/operator/authorization/response",
-                    operationStartRoute.getStation()), station);
-            default -> log.warn("Unknown station: {}", operationStartRoute.getStationName());
+    @MessageMapping("/station/rework/request")
+    public void operationRework(@Payload OperationStartRoute operationStartRoute) {
+        try {
+            reworkOperationService.startReworkOperation(operationStartRoute);
+            var response = new RpcBase();
+            response.setCorrelationId(operationStartRoute.getCorrelationId());
+            messagingTemplate.convertAndSend(String.format("/message/%s/station/rework/response",
+                    operationStartRoute.getStationName()), response);
+        } catch (RecordNotFoundException e) {
+            var error = errorHelper.getErrorResponse(e.getMessage(), operationStartRoute.getCorrelationId());
+            log.error("Добавление станции доработки. Станция {}", operationStartRoute.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/station/rework/response/error",
+                    operationStartRoute.getStationName()), error);
+        } catch (Exception e) {
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", operationStartRoute.getCorrelationId());
+            log.error("Добавление станции доработки. Станция {}", operationStartRoute.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/station/rework/response/error",
+                    operationStartRoute.getStationName()), error);
         }
-
     }
 }

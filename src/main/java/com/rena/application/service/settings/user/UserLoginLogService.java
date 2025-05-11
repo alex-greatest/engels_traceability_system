@@ -1,5 +1,6 @@
 package com.rena.application.service.settings.user;
 
+import com.rena.application.entity.model.settings.user.User;
 import com.rena.application.entity.model.traceability.common.log.AdminLoginLog;
 import com.rena.application.entity.model.traceability.common.log.OperatorLoginLog;
 import com.rena.application.exceptions.RecordNotFoundException;
@@ -18,15 +19,12 @@ public class UserLoginLogService {
     private final OperatorLoginLogRepository operatorLoginLogRepository;
     private final AdminLoginLogRepository adminLoginLogRepository;
     private final StationRepository stationRepository;
-    private final UserHistoryRepository userHistoryRepository;
 
-    public void saveOperatorLoginLog(Long idUser, String stationName, boolean isLogin) {
-        var userHistory = userHistoryRepository.findByUserIdAndIsActive(idUser, true).
-                orElseThrow(() -> new RecordNotFoundException("История пользователя не найдена"));
+    public void saveOperatorLoginLog(User user, String stationName, boolean isLogin) {
         var station = stationRepository.findByName(stationName).
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         var userLoginLog = new OperatorLoginLog();
-        userLoginLog.setUserHistory(userHistory);
+        userLoginLog.setUser(user);
         userLoginLog.setStation(station);
         userLoginLog.setDateLogin(LocalDateTime.now());
         userLoginLog.setIsLogin(isLogin);
@@ -40,13 +38,11 @@ public class UserLoginLogService {
         });
     }
 
-    public void saveAdminLoginLog(Long idUser, String stationName, boolean isLogin) {
-        var userHistory = userHistoryRepository.findByUserIdAndIsActive(idUser, true).
-                orElseThrow(() -> new RecordNotFoundException("История пользователя не найдена"));
+    public void saveAdminLoginLog(User user, String stationName, boolean isLogin) {
         var station = stationRepository.findByName(stationName).
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         var adminLoginLog = new AdminLoginLog();
-        adminLoginLog.setUserHistory(userHistory);
+        adminLoginLog.setUser(user);
         adminLoginLog.setStation(station);
         adminLoginLog.setDateLogin(LocalDateTime.now());
         adminLoginLog.setIsLogin(isLogin);

@@ -20,8 +20,9 @@ public class StationHistory {
     @Column(name = "name", nullable = false, unique = true, length = 30)
     private String name;
 
-    @Column(name = "description", nullable = false, unique = true, length = 50)
-    private String description;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "station_type_id", nullable = false)
+    private StationType stationType;
 
     @NotNull
     @Column(name = "is_active", nullable = false)

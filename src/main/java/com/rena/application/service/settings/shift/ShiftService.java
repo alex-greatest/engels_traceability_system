@@ -7,7 +7,6 @@ import com.rena.application.exceptions.DbException;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.SettingRepository;
 import com.rena.application.repository.settings.shift.ShiftRepository;
-import com.rena.application.repository.settings.shift.ShiftStationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class ShiftService {
     private final ShiftRepository shiftRepository;
     private final ShiftsMapper shiftsMapper;
     private final SettingRepository settingRepository;
-    private final ShiftStationRepository shiftStationRepository;
+    private final Object shiftLock = new Object();
 
     public List<ShiftDto> getAllShifts() {
         List<Shift> shifts = shiftRepository.findAll();
@@ -55,29 +54,23 @@ public class ShiftService {
     }
 
     @Transactional
-    public Integer updateShiftStation(String nameStation, Integer amount) {
-        var shiftStation = shiftStationRepository.findByStationName(nameStation).
-                orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
-        shiftStation.setAmountBoilerMade(shiftStation.getAmountBoilerMade() + amount);
-        return shiftStation.getAmountBoilerMade();
-    }
-
-    @Transactional
     public Optional<Shift> resetShiftsStation() {
         var setting = settingRepository.findById(1L).orElseThrow(() -> new RecordNotFoundException("Настройки не найдены"));
-        var shift = getCurrentShift();
+        var shift = getCurrentShiftSynchronized();
         if (!shift.getNumber().equals(setting.getPrevShift())) {
             setting.setPrevShift(shift.getNumber());
-            var shiftsStation = shiftStationRepository.findAll();
-            shiftsStation.forEach((shiftStation) -> {
-                shiftStation.setAmountBoilerMade(0);
-            });
             return Optional.of(shift);
         }
         return Optional.empty();
     }
 
-    public Shift getCurrentShift() {
+    public Shift getCurrentShiftSynchronized() {
+        synchronized (shiftLock) {
+            return getCurrentShiftStation();
+        }
+    }
+
+    public Shift getCurrentShiftStation() {
         boolean isWithinInterval;
         var now = LocalTime.now();
         List<Shift> shifts = shiftRepository.findAll();
@@ -94,11 +87,5 @@ public class ShiftService {
             }
         }
         throw new RecordNotFoundException("Смена не найдена");
-    }
-
-    public Integer getAmountBoilerMade(String nameStation) {
-        var shiftStation = shiftStationRepository.findByStationName(nameStation).
-                orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
-        return shiftStation.getAmountBoilerMade();
     }
 }

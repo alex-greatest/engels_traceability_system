@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotNull;
 /**
  * DTO for {@link com.rena.application.entity.model.settings.component.set.ComponentSet}
  */
-public record ComponentSetOperation(Long id, @NotNull String componentTypeName, @NotNull String value) {
+public record ComponentSetOperation(@NotNull String componentTypeName, @NotNull String value) {
 }

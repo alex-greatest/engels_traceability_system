@@ -1,7 +1,16 @@
 package com.rena.application.entity.dto.traceability.common.boiler;
 
+import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public record BoilerMadeInformation(@NotNull Integer orderNumber, @NotNull Integer amountBoilerMadeOrder,
-                                    @NotNull Integer amountBoilerMadeShift, @NotNull Integer shiftNumber) {
+@AllArgsConstructor
+@Getter
+@Setter
+public class BoilerMadeInformation extends RpcBase {
+    @NotNull private Integer orderNumber;
+    @NotNull private Integer amountBoilerMadeOrder;
+    @NotNull private Integer amountBoilerOrder;
 }

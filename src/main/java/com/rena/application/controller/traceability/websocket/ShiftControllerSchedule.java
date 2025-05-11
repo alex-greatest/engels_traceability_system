@@ -30,7 +30,7 @@ public class ShiftControllerSchedule {
                 settingRepository.save(setting);
             }
         } catch (Exception e) {
-            log.error("Обнуление предыдущей смены", e);
+            log.error("Обнуление порядкового номера котла", e);
         }
     }
 

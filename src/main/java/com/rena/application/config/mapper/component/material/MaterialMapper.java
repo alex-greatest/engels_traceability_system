@@ -1,7 +1,10 @@
 package com.rena.application.config.mapper.component.material;
 
+import com.rena.application.entity.dto.settings.user.RoleDTO;
+import com.rena.application.entity.dto.settings.user.UserResponse;
 import com.rena.application.entity.dto.traceability.station.components.scanned.material.MaterialOperation;
 import com.rena.application.entity.model.settings.component.material.Material;
+import com.rena.application.entity.model.settings.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
@@ -14,5 +17,8 @@ public interface MaterialMapper {
 
     MaterialOperation toMaterialOperation(Material material);
 
-    List<MaterialOperation> toMaterialOperation(List<Material> material);
+    default List<MaterialOperation> toMaterialOperation(List<Material> material) {
+        return material.stream().map(m -> new MaterialOperation(m.getMaterialType().getName(), m.getValue())).
+                toList();
+    }
 }

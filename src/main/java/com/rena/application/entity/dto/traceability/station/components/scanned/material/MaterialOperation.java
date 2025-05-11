@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotBlank;
 /**
  * DTO for {@link com.rena.application.entity.model.settings.component.material.Material}
  */
-public record MaterialOperation(Long id, @NotBlank String name, @NotBlank String value) {
+public record MaterialOperation(@NotBlank String name, @NotBlank String value) {
 }

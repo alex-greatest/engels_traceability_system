@@ -17,11 +17,4 @@ public class ComponentResultService {
     private final ComponentMapper componentMapper;
     private final OperationRepository operationRepository;
 
-    public ComponentsResults getComponentsByOperationId(Long operationId) {
-        var components = componentRepository.findByOperation_IdOrderByNameAsc(operationId);
-        var operation = operationRepository.findOperationById(operationId).
-                orElseThrow(() -> new RecordNotFoundException("Операция не найдена"));
-        var componentResults = componentMapper.toComponentResult(components);
-        return new ComponentsResults(componentResults, operation.getStation().getDescription());
-    }
 }

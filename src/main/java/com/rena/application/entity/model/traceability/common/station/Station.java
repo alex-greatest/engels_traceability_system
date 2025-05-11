@@ -8,8 +8,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "station", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_station_name", columnNames = {"name"}),
-        @UniqueConstraint(name = "uc_station_description", columnNames = {"description"})
+        @UniqueConstraint(name = "uc_station_name", columnNames = {"name"})
 })
 public class Station {
     @Id
@@ -20,10 +19,7 @@ public class Station {
     @Column(name = "name", nullable = false, unique = true, length = 30)
     private String name;
 
-    @Column(name = "description", nullable = false, unique = true, length = 50)
-    private String description;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "station_type_id", nullable = false)
     private StationType stationType;
 }

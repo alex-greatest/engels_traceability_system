@@ -4,8 +4,8 @@ import com.rena.application.entity.dto.settings.component.ComponentTypeDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record ComponentsResultSave(@NotNull ComponentTypeDto componentType,
+public record ComponentsResultSave(@NotBlank String componentType,
                                    @NotBlank String scannedValue,
-                                   @NotBlank String status,
-                                   @NotNull boolean isComponent) {
+                                   Integer status,
+                                   @NotNull boolean isMaterial) {
 }

@@ -57,4 +57,7 @@ public class Operation {
 
     @Column(name = "reason_for_stopping")
     private String reasonForStopping;
+
+    @Column(name = "ignoring_error")
+    private String ignoringError;
 }

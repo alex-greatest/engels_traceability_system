@@ -78,7 +78,7 @@ public class UserAuthorization {
                             operatorRequestAuthorization.getStation()), error);
         } catch (Exception e) {
             var error = errorHelper.getErrorResponse("Неизвестная ошибка", operatorRequestAuthorization.getCorrelationId());
-            log.error("Получение данных оператора", e);
+            log.error("Авторизация админа", e);
             messagingTemplate.convertAndSend(String.format("/message/%s/admin/authorization/response/error",
                             operatorRequestAuthorization.getStation()), error);
         }
@@ -99,7 +99,7 @@ public class UserAuthorization {
                             operatorRequestAuthorization.getStation()), error);
         } catch (Exception e) {
             var error = errorHelper.getErrorResponse("Неизвестная ошибка", operatorRequestAuthorization.getCorrelationId());
-            log.error("Выход из аккаунта оператор", e);
+            log.error("Выход из аккаунта админа", e);
             messagingTemplate.convertAndSend(String.format("/message/%s/admin/authorization/logout/response/error",
                             operatorRequestAuthorization.getStation()), error);
         }

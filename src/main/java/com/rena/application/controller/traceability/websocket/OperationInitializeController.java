@@ -1,8 +1,8 @@
 package com.rena.application.controller.traceability.websocket;
 
-import com.rena.application.entity.dto.traceability.common.exchange.ErrorResponse;
-import com.rena.application.entity.dto.traceability.common.exchange.InitializeData;
-import com.rena.application.service.traceability.station.initialize.OperationInitializeService;
+import com.rena.application.entity.dto.traceability.common.exchange.StationNameData;
+import com.rena.application.service.traceability.helper.ErrorHelper;
+import com.rena.application.service.traceability.common.initialize.OperationInitializeService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 public class OperationInitializeController {
     private final SimpMessagingTemplate messagingTemplate;
     private final OperationInitializeService operationInitializeService;
+    private final ErrorHelper errorHelper;
 
     @MessageMapping("/boiler/order/last/get/request")
     public void getLastBoilerOrder(@NotBlank String nameStation) {
@@ -30,18 +31,17 @@ public class OperationInitializeController {
     }
 
     @MessageMapping("/station/components/initialize/request")
-    public void getLastOperationComponents(@Payload InitializeData initializeData) {
+    public void getLastOperationComponents(@Payload StationNameData stationNameData) {
         try {
-            var response = operationInitializeService.getLastOperationComponents(initializeData.getNameStation());
-            response.setCorrelationId(initializeData.getCorrelationId());
+            var response = operationInitializeService.getLastOperationComponents(stationNameData.getNameStation());
+            response.setCorrelationId(stationNameData.getCorrelationId());
             messagingTemplate.convertAndSend(String.format("/message/station/%s/components/initialize/response",
-                    initializeData.getNameStation()), response);
+                    stationNameData.getNameStation()), response);
         } catch (Exception e) {
-            var nameStation = initializeData.getNameStation();
-            var error = new ErrorResponse("Ошибка при получении данных для инициалзиации");
-            error.setCorrelationId(initializeData.getCorrelationId());
-            log.error("Получение последний операции. Станция {}", nameStation, e);
-            messagingTemplate.convertAndSend(String.format("/message/station/%s/components/initialize/response/error", nameStation), error);
+            var error = errorHelper.getErrorResponse(e.getMessage(), stationNameData.getCorrelationId());
+            log.error("Получение последний операции. Станция {}", stationNameData.getNameStation(), e);
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/components/initialize/response/error",
+                    stationNameData.getNameStation()), error);
         }
     }
 }

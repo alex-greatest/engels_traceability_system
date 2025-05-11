@@ -38,7 +38,7 @@ public class UserTraceabilityService {
         if (!bCryptPasswordEncoder.matches(userRequestAuthorization.getPassword(), user.getPassword())) {
             throw new RecordNotFoundException("Неверный пароль");
         }
-        userLoginLogService.saveOperatorLoginLog(user.getId(), userRequestAuthorization.getStation(), true);
+        userLoginLogService.saveOperatorLoginLog(user, userRequestAuthorization.getStation(), true);
         return userMapper.toDtoWithCustomRoleName(user, newRoleName);
     }
 
@@ -64,7 +64,7 @@ public class UserTraceabilityService {
         if (newRoleName.equals("Оператор")) {
             throw new RecordNotFoundException("Доступ запрещён");
         }
-        userLoginLogService.saveAdminLoginLog(user.getId(), operatorRequestAuthorization.getStation(), true);
+        userLoginLogService.saveAdminLoginLog(user, operatorRequestAuthorization.getStation(), true);
         return userMapper.toDtoWithCustomRoleName(user, newRoleName);
     }
 
@@ -79,7 +79,7 @@ public class UserTraceabilityService {
     public UserResponse getLastOperatorLogin(String stationName) {
         var operatorLoginLogOptional = userLoginLogService.getLastOperatorLogin(stationName);
         if (operatorLoginLogOptional.isPresent()) {
-            var username = operatorLoginLogOptional.get().getUserHistory().getUsername();
+            var username = operatorLoginLogOptional.get().getUser().getUsername();
             var userOptional = userRepository.findByUsernameAuthorization(username);
             return getUserResponseLast(username, userOptional, operatorLoginLogOptional.get());
         }
@@ -90,7 +90,7 @@ public class UserTraceabilityService {
     public UserResponse getLastAdminLogin(String stationName) {
         var adminLoginLogOptional = userLoginLogService.getLastAdminLogin(stationName);
         if (adminLoginLogOptional.isPresent()) {
-            var username = adminLoginLogOptional.get().getUserHistory().getUsername();
+            var username = adminLoginLogOptional.get().getUser().getUsername();
             var userOptional = userRepository.findByUsernameAuthorization(username);
             return getUserResponseLast(username, userOptional, adminLoginLogOptional.get());
         }

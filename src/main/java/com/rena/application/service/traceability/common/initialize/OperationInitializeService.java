@@ -1,15 +1,16 @@
-package com.rena.application.service.traceability.station.initialize;
+package com.rena.application.service.traceability.common.initialize;
 
-import com.rena.application.entity.dto.traceability.common.exchange.MainInformation;
+import com.rena.application.entity.dto.traceability.common.boiler.BoilerMadeInformation;
 import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
 import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationStartResponse;
 import com.rena.application.entity.dto.traceability.station.order.BoilerOrderOperationResponse;
+import com.rena.application.entity.model.settings.PartLast;
 import com.rena.application.entity.model.traceability.common.Operation;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.traceability.common.station.OperationRepository;
 import com.rena.application.repository.result.BoilerOrderRepository;
-import com.rena.application.service.traceability.station.components.prepare.ComponentsResponserOperationService;
+import com.rena.application.service.traceability.station.components.prepare.ComponentsPrepareOperationService;
 import com.rena.application.service.traceability.station.order.BoilerOrderHelperService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -23,27 +24,33 @@ public class OperationInitializeService {
     private final OperationRepository operationRepository;
     private final BoilerOrderRepository boilerOrderRepository;
     private final BoilerOrderHelperService boilerOrderHelperService;
-    private final ComponentsResponserOperationService componentsResponserOperationService;
+    private final ComponentsPrepareOperationService componentsPrepareOperationService;
 
-    public MainInformation getLastMainInformationComponents(String nameStation) {
-        return componentsResponserOperationService.createResponseOperationComponents(nameStation);
+    public BoilerMadeInformation getLastMainInformationComponents(String nameStation) {
+        return componentsPrepareOperationService.createResponseOperationComponents(nameStation);
     }
 
     @Transactional
     public RpcBase getLastOperationComponents(@NotBlank String nameStation) {
-        var componentsOperationResponse = partLastRepository.findByStation_Name(nameStation).map(partLast -> {
-            var operationId = Long.parseLong(partLast.getPart_id());
-            return operationRepository.findById(operationId).
-                    map(operation -> createResponse(nameStation, operation)).
-                    orElse(null);
-        }).orElse(null);
+        var componentsOperationResponse = partLastRepository.findByStation_Name(nameStation).
+                map(partLast -> createLastPart(partLast, nameStation)).orElse(null);
         return componentsOperationResponse == null ? getLastMainInformationComponents(nameStation) : componentsOperationResponse;
+    }
+
+    public ComponentsOperationStartResponse createLastPart(PartLast partLast, String nameStation) {
+        if (partLast.getPart_id() == null) {
+            return null;
+        }
+        var operationId = Long.parseLong(partLast.getPart_id());
+        return operationRepository.findById(operationId).
+                map(operation -> createResponse(nameStation, operation)).
+                orElse(null);
     }
 
     public ComponentsOperationStartResponse createResponse(String nameStation, Operation operation) {
         if (operation.getStatus() == 4) {
             var boiler = operation.getBoiler();
-            return componentsResponserOperationService.createResponseOperationComponents(boiler, nameStation);
+            return componentsPrepareOperationService.createResponseOperationComponents(boiler, nameStation);
         }
         return null;
     }
