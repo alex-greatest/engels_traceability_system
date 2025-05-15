@@ -34,13 +34,18 @@ public class OperationTraceabilityService {
     }
 
     public Operation updateOperation(String stationName,
-                                Integer status,
-                                String ignoringError) {
-        var operation = operationRepository.findLatestActiveByStationName(stationName,status)
+                                     Integer oldStatus,
+                                     Integer newStatus,
+                                     String reasonForStopping,
+                                     Boolean isIgnoringError,
+                                     UserHistory adminInterrupted) {
+        var operation = operationRepository.findLatestActiveByStationName(stationName,oldStatus)
                 .orElseThrow(() -> new RecordNotFoundException("Операция не найдена"));
         operation.setDateUpdate(LocalDateTime.now());
-        operation.setStatus(status);
-        operation.setIgnoringError(ignoringError);
+        operation.setStatus(newStatus);
+        operation.setIgnoring_error(isIgnoringError);
+        operation.setReasonForStopping(reasonForStopping);
+        operation.setAdminInterrupted(adminInterrupted);
         return operationRepository.save(operation);
     }
 

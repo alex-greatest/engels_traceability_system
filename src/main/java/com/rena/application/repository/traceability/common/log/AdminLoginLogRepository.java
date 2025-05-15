@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface AdminLoginLogRepository extends JpaRepository<AdminLoginLog, Long> {
-    @Query("select a from AdminLoginLog a join a.station join a.userHistory where a.station.name = ?1 and a.isLogin = true")
+    @Query("select a from AdminLoginLog a join a.station join a.user where a.station.name = ?1 and a.isLogin = true")
     Optional<AdminLoginLog> findByStation_Name(String name);
 
-    @Query("select a from AdminLoginLog a join a.userHistory join a.station where a.userHistory.userId = ?1 and a.isLogin = true")
+    @Query("select a from AdminLoginLog a join a.user join a.station where a.user.id = ?1 and a.isLogin = true")
     Optional<AdminLoginLog> findByUserHistory_UserId(Long userId);
 
 

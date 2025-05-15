@@ -69,8 +69,9 @@ public class BoilerOrderEndOperationService {
             operationTraceabilityService.createOperation(boiler, wp.numberShift(), station, user, 1);
         });
         setting.setNextBoilerNumber(setting.getNextBoilerNumber() + amountBarcodes);
-        var shiftAmount = shiftService.updateShiftStation(station.getName(), amountBarcodes);
+        //var shiftAmount = shiftService.updateShiftStation(station.getName(), amountBarcodes);
         boilerOrder = boilerOrderManageService.setAmountBoilerPrint(boilerOrder, amountBarcodes);
-        return new BarcodeBoilerOrderSavePrintResponse(boilerOrder.getAmountBoilerPrint(), shiftAmount);
+        //return new BarcodeBoilerOrderSavePrintResponse(boilerOrder.getAmountBoilerPrint(), shiftAmount);
+        return null;
     }
 }

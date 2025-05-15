@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1747069760446-2" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="operator_login_log"
+                                 constraintName="FK_OPERATOR_LOGIN_LOG_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="user_"/>
+
+        <createIndex indexName="idx_operator_login_log" tableName="operator_login_log">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1747069760446-11" author="Alexander (generated)">
+        <dropColumn columnName="ignoring_error" tableName="operation"/>
+    </changeSet>
+
+</databaseChangeLog>

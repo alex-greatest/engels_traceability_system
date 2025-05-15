@@ -1,11 +1,12 @@
-package com.rena.application.controller.traceability.websocket;
+package com.rena.application.controller.traceability.websocket.common;
 
 import com.rena.application.entity.dto.settings.user.station.OperatorRequestAuthorization;
 import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
+import com.rena.application.entity.dto.traceability.common.exchange.StationNameData;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.service.settings.user.UserService;
 import com.rena.application.service.traceability.common.user.UserTraceabilityService;
 import com.rena.application.service.traceability.helper.ErrorHelper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class UserAuthorization {
     private final SimpMessagingTemplate messagingTemplate;
-    private final UserService userService;
     private final ErrorHelper errorHelper;
     private final UserTraceabilityService userTraceabilityService;
 
@@ -102,6 +102,26 @@ public class UserAuthorization {
             log.error("Выход из аккаунта админа", e);
             messagingTemplate.convertAndSend(String.format("/message/%s/admin/authorization/logout/response/error",
                             operatorRequestAuthorization.getStation()), error);
+        }
+    }
+
+    @MessageMapping("/users/last/login/request")
+    public void getLastLoginUser(@Payload @Valid StationNameData stationNameData) {
+        try {
+            var userLoginLast = userTraceabilityService.getUserLastLogin(stationNameData.getNameStation());
+            userLoginLast.setCorrelationId(stationNameData.getCorrelationId());
+            messagingTemplate.convertAndSend(String.format("/message/%s/users/last/login/response",
+                    stationNameData.getNameStation()), userLoginLast);
+        } catch (RecordNotFoundException e) {
+            var error = errorHelper.getErrorResponse(e.getMessage(), stationNameData.getCorrelationId());
+            log.error("Иниицалазиция станции. Получение инфорамации о залогининых пользователях", e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/users/last/login/response/error",
+                    stationNameData.getNameStation()), error);
+        } catch (Exception e) {
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", stationNameData.getCorrelationId());
+            log.error("Иниицалазиция станции. Получение инфорамации о залогининых пользователях", e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/users/last/login/response/error",
+                    stationNameData.getNameStation()), error);
         }
     }
 }

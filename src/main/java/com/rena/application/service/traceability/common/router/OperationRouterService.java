@@ -1,14 +1,17 @@
 package com.rena.application.service.traceability.common.router;
 
 import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
+import com.rena.application.entity.dto.traceability.common.operation.OperationInterruptedRequest;
 import com.rena.application.entity.dto.traceability.common.router.ErrorRoute;
 import com.rena.application.entity.dto.traceability.common.router.OperationStartRoute;
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
 import com.rena.application.exceptions.RecordNotFoundException;
+import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.settings.user.UserHistoryRepository;
 import com.rena.application.repository.traceability.common.boiler.BoilerRepository;
 import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
 import com.rena.application.service.settings.shift.ShiftService;
+import com.rena.application.service.traceability.common.boiler.BoilerTraceabilityService;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
 import com.rena.application.service.traceability.station.components.prepare.ComponentsPrepareOperationService;
 import jakarta.validation.Valid;
@@ -30,6 +33,8 @@ public class OperationRouterService {
     private final UserHistoryRepository userHistoryRepository;
     private final OperationTraceabilityService operationTraceabilityService;
     private final ShiftService shiftService;
+    private final BoilerTraceabilityService boilerTraceabilityService;
+    private final PartLastRepository partLastRepository;
 
     @Transactional
     public RpcBase getDataForStation(@Valid OperationStartRoute operationStartRoute) {
@@ -60,5 +65,24 @@ public class OperationRouterService {
             case "Компоненты" -> componentsPrepareOperationService.createResponseOperationComponents(boiler, nameStation);
             default -> throw new RecordNotFoundException("Неизвестный тип станции: " + nameStation);
         };
+    }
+
+    @Transactional
+    public void interruptedOperation(@Valid OperationInterruptedRequest operationInterruptedRequest) {
+        var admin = userHistoryRepository.
+                findUserAdminForActiveOperatorByStationName(operationInterruptedRequest.getStationName()).
+                orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        operationTraceabilityService.updateOperation(
+                operationInterruptedRequest.getStationName(),
+                3,
+                4,
+                operationInterruptedRequest.getMessage(),
+                null,
+                admin);
+        boilerTraceabilityService.updateBoiler(
+                operationInterruptedRequest.getSerialNumber(),
+                operationInterruptedRequest.getStationName(),
+                4);
+        partLastRepository.updatePart_idByStation(null, operationInterruptedRequest.getStationName());
     }
 }

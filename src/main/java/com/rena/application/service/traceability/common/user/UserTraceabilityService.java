@@ -3,6 +3,7 @@ package com.rena.application.service.traceability.common.user;
 import com.rena.application.config.mapper.component.common.UserMapper;
 import com.rena.application.entity.dto.settings.user.UserResponse;
 import com.rena.application.entity.dto.settings.user.station.OperatorRequestAuthorization;
+import com.rena.application.entity.dto.traceability.common.initialize.UsersLastLogin;
 import com.rena.application.entity.model.settings.user.User;
 import com.rena.application.entity.model.traceability.common.log.UserLoginLog;
 import com.rena.application.exceptions.RecordNotFoundException;
@@ -107,5 +108,12 @@ public class UserTraceabilityService {
         var user = userOptional.get();
         String newRoleName = user.getRole().getName().replace("ROLE_", "");
         return userMapper.toDtoWithCustomRoleName(user, newRoleName);
+    }
+
+    @Transactional
+    public UsersLastLogin getUserLastLogin(String nameStation) {
+        var operator = getLastOperatorLogin(nameStation);
+        var admin = getLastAdminLogin(nameStation);
+        return new UsersLastLogin(operator, admin);
     }
 }

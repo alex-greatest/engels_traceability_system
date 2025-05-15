@@ -1,6 +1,7 @@
-package com.rena.application.controller.traceability.websocket;
+package com.rena.application.controller.traceability.websocket.common.operation;
 
 import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
+import com.rena.application.entity.dto.traceability.common.operation.OperationInterruptedRequest;
 import com.rena.application.entity.dto.traceability.common.router.OperationStartRoute;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.common.router.ReworkOperationService;
@@ -60,6 +61,28 @@ public class OperationRouterController {
             log.error("Добавление станции доработки. Станция {}", operationStartRoute.getStationName(), e);
             messagingTemplate.convertAndSend(String.format("/message/%s/station/rework/response/error",
                     operationStartRoute.getStationName()), error);
+        }
+    }
+
+    @MessageMapping("/station/interrupted/operation/request")
+    public void interruptedOperation(@Payload OperationInterruptedRequest operationInterruptedRequest) {
+        try {
+            operationRouterService.interruptedOperation(operationInterruptedRequest);
+            var rpcBase = new RpcBase();
+            rpcBase.setCorrelationId(operationInterruptedRequest.getCorrelationId());
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/interrupted/operation/response",
+                            operationInterruptedRequest.getStationName()), rpcBase);
+        } catch (RecordNotFoundException e) {
+            var error = errorHelper.getErrorResponse(e.getMessage(), operationInterruptedRequest.getCorrelationId());
+            log.error("Прерывание операции. Станция {}", operationInterruptedRequest.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/interrupted/operation/response/error",
+                    operationInterruptedRequest.getStationName()), error);
+        }
+        catch (Exception e) {
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", operationInterruptedRequest.getCorrelationId());
+            log.error("Прерывание операции. Станция {}", operationInterruptedRequest.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/interrupted/operation/response/error",
+                            operationInterruptedRequest.getStationName()), error);
         }
     }
 }

@@ -3,7 +3,6 @@ package com.rena.application.repository.settings.user;
 import com.rena.application.entity.model.settings.user.UserHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import java.util.Optional;
 
 public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> {
@@ -14,4 +13,9 @@ public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> 
     @Query("SELECT uh FROM UserHistory uh WHERE uh.isActive = true and uh.userId = " +
             "(SELECT o.user.id FROM OperatorLoginLog o WHERE o.station.name = ?1 AND o.isLogin = true)")
     Optional<UserHistory> findUserHistoryForActiveOperatorByStationName(String stationName);
+
+
+    @Query("SELECT uh FROM UserHistory uh WHERE uh.isActive = true and uh.userId = " +
+            "(SELECT a.user.id FROM AdminLoginLog a WHERE a.station.name = ?1 AND a.isLogin = true)")
+    Optional<UserHistory> findUserAdminForActiveOperatorByStationName(String stationName);
 }

@@ -1,7 +1,7 @@
 package com.rena.application.service.traceability.common.initialize;
 
 import com.rena.application.entity.dto.traceability.common.boiler.BoilerMadeInformation;
-import com.rena.application.entity.dto.traceability.common.initialize.MainDataStation;
+import com.rena.application.entity.dto.traceability.common.initialize.ShiftNumber;
 import com.rena.application.entity.model.traceability.common.boiler.BoilerMadeCountOrder;
 import com.rena.application.entity.model.traceability.station.order.BoilerOrder;
 import com.rena.application.exceptions.RecordNotFoundException;
@@ -41,12 +41,5 @@ public class MainInformationService {
         boilerMadeOrder.setAmountBoilerMadeOrder(0);
         boilerMadeOrder.setStation(station);
         return boilerMadeOrderRepository.save(boilerMadeOrder);
-    }
-
-    public MainDataStation createInitializeData(String nameStation) {
-        var operator = userTraceabilityService.getLastOperatorLogin(nameStation);
-        var admin = userTraceabilityService.getLastAdminLogin(nameStation);
-        var shift = shiftService.getCurrentShiftSynchronized();
-        return new MainDataStation(operator, admin, shift.getNumber());
     }
 }

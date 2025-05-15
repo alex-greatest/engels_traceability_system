@@ -11,7 +11,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
            "JOIN o.stationHistory " +
            "JOIN o.boiler " +
            "WHERE o.stationHistory.name = ?1 " +
-           "AND o.status = :statusId " +
+           "AND o.status = ?2 " +
            "ORDER BY o.dateCreate DESC")
     Optional<Operation> findLatestActiveByStationName(String stationName, Integer status);
 

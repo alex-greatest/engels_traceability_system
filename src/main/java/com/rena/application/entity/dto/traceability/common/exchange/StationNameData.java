@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StationNameData extends RpcBase {
-    @NotBlank
-    private final String nameStation;
+    @NotBlank private final String nameStation;
 
     public StationNameData(String nameStation) {
         super();

@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
         @Index(name = "idx_operation_date_create", columnList = "date_create"),
         @Index(name = "idx_operation_boiler_serial_number", columnList = "boiler_serial_number"),
         @Index(name = "idx_operation_user_history_id", columnList = "user_history_id"),
-        @Index(name = "idx_operation_station_history_id", columnList = "station_history_id")
+        @Index(name = "idx_operation_station_history_id", columnList = "station_history_id"),
+        @Index(name = "idx_operation_admin_interrupted", columnList = "admin_interrupted")
 })
 public class Operation {
     @Id
@@ -58,6 +59,10 @@ public class Operation {
     @Column(name = "reason_for_stopping")
     private String reasonForStopping;
 
-    @Column(name = "ignoring_error")
-    private String ignoringError;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_interrupted")
+    private UserHistory adminInterrupted;
+
+    @Column(name = "ignoring_error", nullable = false)
+    private Boolean ignoring_error = false;
 }

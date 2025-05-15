@@ -14,6 +14,6 @@ public class ComponentsOperationSaveResultRequest extends RpcBase {
     @NotNull private final List<ComponentsResultSave> componentsResultSave;
     @NotBlank private final String serialNumber;
     @NotBlank private final String stationName;
-    @NotBlank private final Integer status;
-    private final String ignoringMessage;
+    @NotNull private final Integer status;
+    @NotNull private final Boolean ignoringMessage;
 }

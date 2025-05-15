@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1747314916602-2" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="admin_interrupted" baseTableName="operation"
+                                 constraintName="FK_OPERATION_ON_ADMIN_INTERRUPTED" referencedColumnNames="id"
+                                 referencedTableName="user_history"/>
+
+        <createIndex indexName="idx_operation_admin_interrupted" tableName="operation">
+            <column name="admin_interrupted"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

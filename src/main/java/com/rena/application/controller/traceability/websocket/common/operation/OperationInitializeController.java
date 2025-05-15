@@ -1,8 +1,9 @@
-package com.rena.application.controller.traceability.websocket;
+package com.rena.application.controller.traceability.websocket.common.operation;
 
 import com.rena.application.entity.dto.traceability.common.exchange.StationNameData;
 import com.rena.application.service.traceability.helper.ErrorHelper;
 import com.rena.application.service.traceability.common.initialize.OperationInitializeService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class OperationInitializeController {
     }
 
     @MessageMapping("/station/components/initialize/request")
-    public void getLastOperationComponents(@Payload StationNameData stationNameData) {
+    public void getLastOperationComponents(@Payload @Valid StationNameData stationNameData) {
         try {
             var response = operationInitializeService.getLastOperationComponents(stationNameData.getNameStation());
             response.setCorrelationId(stationNameData.getCorrelationId());

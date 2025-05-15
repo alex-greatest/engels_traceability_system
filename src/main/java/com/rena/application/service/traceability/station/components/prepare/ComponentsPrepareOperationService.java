@@ -38,7 +38,7 @@ public class ComponentsPrepareOperationService {
         var boilerTypeOperation = new BoilerTypeOperation(
                 boiler.getBoilerTypeCycle().getTypeName(),
                 boiler.getBoilerTypeCycle().getArticle(),
-                stationName);
+                boiler.getSerialNumber());
         return new ComponentsOperationStartResponse(
                 boilerMadeInformation,
                 boilerTypeOperation,

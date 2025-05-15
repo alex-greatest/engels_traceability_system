@@ -4,7 +4,6 @@ import com.rena.application.entity.dto.traceability.station.components.operation
 import com.rena.application.entity.dto.traceability.common.operation.OperationInterruptedRequest;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.station.components.ComponentsResultSaveService;
-import com.rena.application.service.traceability.station.components.ComponentsStartOperationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -33,26 +32,6 @@ public class ComponentsOperationController {
             log.error("Сохрание компонентов. Станция {}", componentsOperationSaveResultRequest.getStationName(), e);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/end/operation/errors",
                     componentsOperationSaveResultRequest.getStationName()), "Неизвестная ошибка");
-        }
-    }
-
-   @MessageMapping("/station/interrupted/operation/request")
-    public void interruptedOperation(@Payload OperationInterruptedRequest operationInterruptedRequest) {
-        try {
-            componentsResultSaveService.interruptedOperation(operationInterruptedRequest);
-            messagingTemplate.convertAndSend(String.format("/message/station/%s/interrupted/operation/response",
-                            operationInterruptedRequest.stationName()),
-                    "");
-        } catch (RecordNotFoundException e) {
-            log.error("Прерывание операции. Станция {}", operationInterruptedRequest.stationName(), e);
-            messagingTemplate.convertAndSend(String.format("/message/station/%s/interrupted/operation/response",
-                            operationInterruptedRequest.stationName()), e.getMessage());
-        }
-        catch (Exception e) {
-            log.error("Прерывание операции. Станция {}", operationInterruptedRequest.stationName(), e);
-            messagingTemplate.convertAndSend(String.format("/message/station/%s/interrupted/operation/response",
-                            operationInterruptedRequest.stationName()),
-                    "Неизвестная ошибка");
         }
     }
 }

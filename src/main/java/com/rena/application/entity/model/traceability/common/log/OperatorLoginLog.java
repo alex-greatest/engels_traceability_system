@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "operator_login_log", indexes = {
-        @Index(name = "idx_operator_login_log", columnList = "user_history_id"),
         @Index(name = "idx_operator_login_log_station_id", columnList = "station_id"),
-        @Index(name = "idx_operator_login_log_is_login", columnList = "is_login")
+        @Index(name = "idx_operator_login_log_is_login", columnList = "is_login"),
+        @Index(name = "idx_operator_login_log", columnList = "user_id")
 })
 public class OperatorLoginLog extends UserLoginLog {
 }

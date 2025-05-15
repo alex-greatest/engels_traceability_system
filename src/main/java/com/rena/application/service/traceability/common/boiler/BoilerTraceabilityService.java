@@ -36,19 +36,34 @@ public class BoilerTraceabilityService {
         return boilerRepository.save(boiler);
     }
 
+    public Boiler updateBoiler(String serialNumber, StationHistory station, Integer status) {
+        return updateBoiler(serialNumber, status, station);
+    }
+
     public void updateBoiler(String serialNumber, String stationName, Integer status) {
-        var boiler = boilerRepository.findBySerialNumber(serialNumber).
-                orElseThrow(() -> new RecordNotFoundException("Котел не найден"));
         var station = stationHistoryRepository.findByName(stationName).
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
+        updateBoiler(serialNumber, status, station);
+    }
+
+    private Boiler updateBoiler(String serialNumber, Integer status, StationHistory station) {
+        var boiler = boilerRepository.findBySerialNumber(serialNumber).
+                orElseThrow(() -> new RecordNotFoundException("Котел не найден"));
         boiler.setDateUpdate(LocalDateTime.now());
         boiler.setStatus(status);
         boiler.setLastStation(station);
         boilerRepository.save(boiler);
-        var boilerOrder = boilerMadeOrderRepository.
-                findByStation_NameAndBoilerOrder_Id(stationName, boiler.getBoilerOrder().getId()).
+        if (!station.getName().equals("Доработка")) {
+            updateBoilerMadeOrder(boiler.getBoilerOrder(), station.getName());
+        }
+        return boiler;
+    }
+
+    private void updateBoilerMadeOrder(BoilerOrder boilerOrder, String stationName) {
+        var boilerMadeOrder = boilerMadeOrderRepository.
+                findByStation_NameAndBoilerOrder_Id(stationName, boilerOrder.getId()).
                 orElseThrow(() -> new RecordNotFoundException("Заказ не найден"));
-        boilerOrder.setAmountBoilerMadeOrder(boilerOrder.getAmountBoilerMadeOrder() + 1);
-        boilerMadeOrderRepository.save(boilerOrder);
+        boilerMadeOrder.setAmountBoilerMadeOrder(boilerMadeOrder.getAmountBoilerMadeOrder() + 1);
+        boilerMadeOrderRepository.save(boilerMadeOrder);
     }
 }

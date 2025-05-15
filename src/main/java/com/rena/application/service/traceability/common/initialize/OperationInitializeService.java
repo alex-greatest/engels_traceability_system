@@ -48,7 +48,7 @@ public class OperationInitializeService {
     }
 
     public ComponentsOperationStartResponse createResponse(String nameStation, Operation operation) {
-        if (operation.getStatus() == 4) {
+        if (operation.getStatus() == 3) {
             var boiler = operation.getBoiler();
             return componentsPrepareOperationService.createResponseOperationComponents(boiler, nameStation);
         }
