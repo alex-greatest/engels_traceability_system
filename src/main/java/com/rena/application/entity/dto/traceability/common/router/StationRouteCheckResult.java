@@ -19,8 +19,7 @@ public class StationRouteCheckResult {
     private String[] failedStations;
 
     public String formatErrorStations() {
-        // Объединяем станции с пометками в один поток и сортируем
-        return Stream.concat(
+        String stationsInfo = Stream.concat(
                         Arrays.stream(notPassedStations != null ? notPassedStations : new String[0])
                                 .map(station -> "- " + station + " (не пройдена)"),
                         Arrays.stream(failedStations != null ? failedStations : new String[0])
@@ -28,6 +27,9 @@ public class StationRouteCheckResult {
                 )
                 .sorted()
                 .collect(Collectors.joining("\n"));
+
+        // Если информации о станциях нет, вернуть основное сообщение
+        return stationsInfo.isEmpty() ? message : stationsInfo;
     }
 
     public static StationRouteCheckResult of(boolean isOk, String message, String[] notPassed, String[] failed) {

@@ -28,4 +28,10 @@
     <include file="db/changelog/2025/05/12-02-changelog.xml"/>
     <include file="db/changelog/2025/05/12-03-changelog.xml"/>
     <include file="db/changelog/2025/05/15-01-changelog.xml"/>
+    <include file="db/changelog/2025/05/15-02-changelog.xml"/>
+    <include file="db/changelog/2025/05/18-01-changelog.xml"/>
+    <include file="db/changelog/2025/05/19-01-changelog.xml"/>
+    <include file="db/changelog/2025/05/19-02-changelog.xml"/>
+    <include file="db/changelog/2025/05/V1.0.1__create_check_boiler_function.sql" />
+    <include file="db/changelog/2025/05/22-01-changelog.xml"/>
 </databaseChangeLog>

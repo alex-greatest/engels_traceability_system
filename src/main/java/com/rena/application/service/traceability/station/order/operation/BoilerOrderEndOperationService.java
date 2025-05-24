@@ -12,7 +12,6 @@ import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.settings.SettingRepository;
 import com.rena.application.repository.settings.user.UserHistoryRepository;
 import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
-import com.rena.application.service.settings.shift.ShiftService;
 import com.rena.application.service.traceability.common.boiler.BoilerTraceabilityService;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
 import com.rena.application.service.traceability.station.order.BoilerOrderManageService;
@@ -29,10 +28,8 @@ import org.springframework.validation.annotation.Validated;
 @Slf4j
 public class BoilerOrderEndOperationService {
     private final SettingRepository settingRepository;
-    private final StationHistoryRepository stationHistoryRepository;
     private final UserHistoryRepository userHistoryRepository;
     private final OperationTraceabilityService operationTraceabilityService;
-    private final ShiftService shiftService;
     private final PartLastRepository partLastRepository;
     private final BoilerTraceabilityService boilerTraceabilityService;
     private final BoilerOrderManageService boilerOrderManageService;
@@ -66,7 +63,7 @@ public class BoilerOrderEndOperationService {
         BoilerOrder finalBoilerOrder = boilerOrder;
         wp.serialNumbers().forEach(serialNumber -> {
             var boiler = boilerTraceabilityService.createBoiler(finalBoilerOrder, user, 1, serialNumber, station);
-            operationTraceabilityService.createOperation(boiler, wp.numberShift(), station, user, 1);
+            operationTraceabilityService.createOperation(boiler, station, 1);
         });
         setting.setNextBoilerNumber(setting.getNextBoilerNumber() + amountBarcodes);
         //var shiftAmount = shiftService.updateShiftStation(station.getName(), amountBarcodes);

@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "component", indexes = {
-        @Index(name = "idx_component_name", columnList = "name"),
-        @Index(name = "idx_component_operation_id", columnList = "operation_id")
+@Table(name = "material_result", indexes = {
+        @Index(name = "idx_material_result_name", columnList = "name"),
+        @Index(name = "idx_material_result_operation_id", columnList = "operation_id")
 })
-public class Component {
+public class MaterialResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

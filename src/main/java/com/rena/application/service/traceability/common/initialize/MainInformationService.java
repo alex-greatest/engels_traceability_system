@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MainInformationService {
     private final BoilerMadeOrderRepository boilerMadeOrderRepository;
-    private final ShiftService shiftService;
     private final StationRepository stationRepository;
-    private final UserTraceabilityService userTraceabilityService;
 
     public BoilerMadeInformation getBoilerMadeInfo(String nameStation) {
         return new BoilerMadeInformation(0, 0, 0);

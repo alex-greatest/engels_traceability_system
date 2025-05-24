@@ -36,25 +36,27 @@ public class BoilerTraceabilityService {
         return boilerRepository.save(boiler);
     }
 
-    public Boiler updateBoiler(String serialNumber, StationHistory station, Integer status) {
-        return updateBoiler(serialNumber, status, station);
+    public Boiler updateBoiler(String serialNumber, StationHistory station, Integer status, String stationNameSource) {
+        return updateBoiler(serialNumber, status, station, stationNameSource);
     }
 
-    public void updateBoiler(String serialNumber, String stationName, Integer status) {
+    public Boiler updateBoiler(String serialNumber, String stationName, Integer status) {
         var station = stationHistoryRepository.findByName(stationName).
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
-        updateBoiler(serialNumber, status, station);
+        return updateBoiler(serialNumber, status, station, null);
     }
 
-    private Boiler updateBoiler(String serialNumber, Integer status, StationHistory station) {
+    private Boiler updateBoiler(String serialNumber, Integer status, StationHistory station, String stationNameSource) {
         var boiler = boilerRepository.findBySerialNumber(serialNumber).
                 orElseThrow(() -> new RecordNotFoundException("Котел не найден"));
         boiler.setDateUpdate(LocalDateTime.now());
         boiler.setStatus(status);
         boiler.setLastStation(station);
         boilerRepository.save(boiler);
-        if (!station.getName().equals("Доработка")) {
+        if (!station.getName().equals("Доработка") && status == 1) {
             updateBoilerMadeOrder(boiler.getBoilerOrder(), station.getName());
+        } else if (station.getName().equals("Доработка") && stationNameSource != null) {
+            decreaseBoilerMadeOrder(boiler.getBoilerOrder(), stationNameSource);
         }
         return boiler;
     }
@@ -64,6 +66,17 @@ public class BoilerTraceabilityService {
                 findByStation_NameAndBoilerOrder_Id(stationName, boilerOrder.getId()).
                 orElseThrow(() -> new RecordNotFoundException("Заказ не найден"));
         boilerMadeOrder.setAmountBoilerMadeOrder(boilerMadeOrder.getAmountBoilerMadeOrder() + 1);
+        boilerMadeOrderRepository.save(boilerMadeOrder);
+    }
+
+    private void decreaseBoilerMadeOrder(BoilerOrder boilerOrder, String stationNameSource) {
+        var boilerMadeOrder = boilerMadeOrderRepository.
+                findByStation_NameAndBoilerOrder_Id(stationNameSource, boilerOrder.getId()).
+                orElseThrow(() -> new RecordNotFoundException("Заказ не найден"));
+        if  (boilerMadeOrder.getAmountBoilerMadeOrder() <= 0) {
+            return;
+        }
+        boilerMadeOrder.setAmountBoilerMadeOrder(boilerMadeOrder.getAmountBoilerMadeOrder() - 1);
         boilerMadeOrderRepository.save(boilerMadeOrder);
     }
 }

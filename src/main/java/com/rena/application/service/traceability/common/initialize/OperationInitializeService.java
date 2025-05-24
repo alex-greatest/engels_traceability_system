@@ -8,6 +8,7 @@ import com.rena.application.entity.model.settings.PartLast;
 import com.rena.application.entity.model.traceability.common.Operation;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.PartLastRepository;
+import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
 import com.rena.application.repository.traceability.common.station.OperationRepository;
 import com.rena.application.repository.result.BoilerOrderRepository;
 import com.rena.application.service.traceability.station.components.prepare.ComponentsPrepareOperationService;
@@ -25,6 +26,7 @@ public class OperationInitializeService {
     private final BoilerOrderRepository boilerOrderRepository;
     private final BoilerOrderHelperService boilerOrderHelperService;
     private final ComponentsPrepareOperationService componentsPrepareOperationService;
+    private final StationHistoryRepository stationHistoryRepository;
 
     public BoilerMadeInformation getLastMainInformationComponents(String nameStation) {
         return componentsPrepareOperationService.createResponseOperationComponents(nameStation);
@@ -50,7 +52,9 @@ public class OperationInitializeService {
     public ComponentsOperationStartResponse createResponse(String nameStation, Operation operation) {
         if (operation.getStatus() == 3) {
             var boiler = operation.getBoiler();
-            return componentsPrepareOperationService.createResponseOperationComponents(boiler, nameStation);
+            var station = stationHistoryRepository.findByName(nameStation).
+                    orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
+            return componentsPrepareOperationService.createResponseOperationComponents(boiler, station);
         }
         return null;
     }

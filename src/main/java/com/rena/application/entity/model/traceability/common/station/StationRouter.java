@@ -7,7 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "station_router")
+@Table(name = "station_router", indexes = {
+        @Index(name = "idx_station_router_order", columnList = "order")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "uc_station_router_station_id", columnNames = {"station_id"})
+})
 public class StationRouter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -66,9 +66,8 @@ public class ShiftController {
     @Scheduled(fixedDelay = 30000)
     public void resetShiftsStation() {
         try {
-            shiftService.resetShiftsStation().ifPresent((shift) -> {
-                messagingTemplate.convertAndSend("/message/current/shift", shift.getNumber());
-            });
+            shiftService.resetShiftsStation().ifPresent((shift) ->
+                    messagingTemplate.convertAndSend("/message/current/shift", shift.getNumber()));
         } catch (Exception e) {
             log.error("Обнуление предыдущей смены", e);
         }

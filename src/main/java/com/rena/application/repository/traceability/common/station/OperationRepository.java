@@ -8,11 +8,13 @@ import java.util.Optional;
 
 public interface OperationRepository extends JpaRepository<Operation, Long> {
     @Query("SELECT o FROM Operation o " +
-           "JOIN o.stationHistory " +
-           "JOIN o.boiler " +
-           "WHERE o.stationHistory.name = ?1 " +
-           "AND o.status = ?2 " +
-           "ORDER BY o.dateCreate DESC")
+            "JOIN o.stationHistory " +
+            "JOIN o.boiler " +
+            "WHERE o.stationHistory.name = ?1 " +
+            "AND o.status = ?2 " +
+            "AND o.id = (SELECT MAX(op.id) FROM Operation op " +
+            "            JOIN op.stationHistory sh " +
+            "            WHERE sh.name = ?1 AND op.status = ?2)")
     Optional<Operation> findLatestActiveByStationName(String stationName, Integer status);
 
     @Query(nativeQuery = true, value =

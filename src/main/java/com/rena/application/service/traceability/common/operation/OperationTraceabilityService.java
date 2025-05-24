@@ -6,7 +6,9 @@ import com.rena.application.entity.model.traceability.common.Operation;
 import com.rena.application.entity.model.traceability.common.station.StationHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.PartLastRepository;
+import com.rena.application.repository.settings.user.UserHistoryRepository;
 import com.rena.application.repository.traceability.common.station.OperationRepository;
+import com.rena.application.service.settings.shift.ShiftService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -16,12 +18,21 @@ import java.time.LocalDateTime;
 public class OperationTraceabilityService {
     private final OperationRepository operationRepository;
     private final PartLastRepository partLastRepository;
+    private final ShiftService shiftService;
+    private final UserHistoryRepository userHistoryRepository;
+
+    public void createOperation(Boiler boiler, StationHistory station, Integer status) {
+        var user = userHistoryRepository.
+                findUserHistoryForActiveOperatorByStationName(station.getName()).
+                orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
+        createOperation(boiler, station, user, status);
+    }
 
     public void createOperation(Boiler boiler,
-                                Integer numberShift,
                                 StationHistory station,
                                 UserHistory userHistory,
                                 Integer status) {
+        var numberShift = shiftService.getCurrentShiftStation().getNumber();
         Operation operation = new Operation();
         operation.setDateCreate(LocalDateTime.now());
         operation.setBoiler(boiler);

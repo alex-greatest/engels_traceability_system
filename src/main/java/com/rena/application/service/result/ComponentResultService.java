@@ -1,10 +1,8 @@
 package com.rena.application.service.result;
 
 import com.rena.application.config.mapper.traceability.ComponentMapper;
-import com.rena.application.entity.dto.result.ComponentsResults;
-import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.traceability.common.station.OperationRepository;
-import com.rena.application.repository.result.ComponentRepository;
+import com.rena.application.repository.traceability.station.components.ComponentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

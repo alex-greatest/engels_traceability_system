@@ -7,8 +7,10 @@ import com.rena.application.entity.dto.traceability.station.components.scanned.C
 import com.rena.application.entity.dto.traceability.station.components.scanned.component.ComponentSetOperation;
 import com.rena.application.entity.dto.traceability.station.components.scanned.material.MaterialOperation;
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
+import com.rena.application.entity.model.traceability.common.station.StationHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.common.initialize.MainInformationService;
+import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ public class ComponentsPrepareOperationService {
     private final MainInformationService mainInformationService;
     private final ComponentsScannedOperationService componentsScannedOperationService;
     private final MaterialScannedOperationService materialScannedOperationService;
+    private final OperationTraceabilityService operationTraceabilityService;
 
     @Transactional
     public BoilerMadeInformation createResponseOperationComponents(String stationName) {
@@ -28,7 +31,8 @@ public class ComponentsPrepareOperationService {
     }
 
     @Transactional
-    public ComponentsOperationStartResponse createResponseOperationComponents(Boiler boiler, String stationName) {
+    public ComponentsOperationStartResponse createResponseOperationComponents(Boiler boiler, StationHistory stationHistory) {
+        var stationName = stationHistory.getName();
         var boilerOrder = boiler.getBoilerOrder();
         var componentsScannedOperation = componentsScannedOperationService.getComponentsScanned(boiler, stationName);
         var materialsScannedOperation = materialScannedOperationService.getMaterialsScanned(stationName);
@@ -39,6 +43,7 @@ public class ComponentsPrepareOperationService {
                 boiler.getBoilerTypeCycle().getTypeName(),
                 boiler.getBoilerTypeCycle().getArticle(),
                 boiler.getSerialNumber());
+        operationTraceabilityService.createOperation(boiler, stationHistory, 3);
         return new ComponentsOperationStartResponse(
                 boilerMadeInformation,
                 boilerTypeOperation,

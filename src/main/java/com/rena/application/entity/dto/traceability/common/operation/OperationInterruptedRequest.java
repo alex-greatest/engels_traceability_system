@@ -17,4 +17,5 @@ public class OperationInterruptedRequest extends RpcBase {
     @NotBlank private final String serialNumber;
     @NotBlank private final String stationName;
     @NotBlank private final String message;
+    private final Integer adminInterrupted;
 }
