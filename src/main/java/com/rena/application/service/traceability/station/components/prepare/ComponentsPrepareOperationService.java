@@ -43,7 +43,7 @@ public class ComponentsPrepareOperationService {
                 boiler.getBoilerTypeCycle().getTypeName(),
                 boiler.getBoilerTypeCycle().getArticle(),
                 boiler.getSerialNumber());
-        operationTraceabilityService.createOperation(boiler, stationHistory, 3);
+        operationTraceabilityService.createOperation(boiler, stationHistory, 3, true);
         return new ComponentsOperationStartResponse(
                 boilerMadeInformation,
                 boilerTypeOperation,

@@ -22,8 +22,11 @@ public class BoilerOrder {
     @Column(name = "id", nullable = false)
     private String id;
 
-    @Column(name = "scan_code")
-    private String scanCode;
+    @Column(name = "main_code")
+    private String mainCode;
+
+    @Column(name = "canban_code")
+    private String canbanCode;
 
     @NotNull
     @Column(name = "status", nullable = false)

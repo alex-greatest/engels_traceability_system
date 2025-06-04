@@ -1,16 +1,19 @@
 package com.rena.application.entity.dto.traceability.station.order.canban;
 
-import com.vaadin.hilla.Nonnull;
+import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-public record Canban(
-        @NotBlank String id,
-        @Min(1) Integer numberOrder,
-        @NotBlank @Nonnull String article,
-        @NotNull @Nonnull Integer amountBoilerOrder,
-        @NotBlank String code,
-        @Min(1) Integer numberShift,
-        @Min(1) Integer userCode
-) {}
+@Getter
+@Setter
+@RequiredArgsConstructor
+public class Canban extends RpcBase {
+    @NotBlank private String id;
+    @NotBlank private String stationName;
+    @Min(1) private final Integer numberOrder;
+    @NotBlank private final String article;
+    @Min(1) private final Integer amountBoilerOrder;
+    @NotBlank private final String mainCode;
+    @NotBlank private final String canbanCode;
+}

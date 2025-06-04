@@ -49,11 +49,11 @@ public class Boiler {
     @JoinColumn(name = "user_history_id", nullable = false)
     private UserHistory userHistory;
 
-    @Version
-    @Column(name = "version", nullable = false)
-    private Integer version;
-
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "boiler_order_id", nullable = false)
     private BoilerOrder boilerOrder;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private Integer version;
 }

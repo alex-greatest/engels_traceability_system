@@ -16,14 +16,14 @@ import org.springframework.validation.annotation.Validated;
 @RequiredArgsConstructor
 @Service
 @Validated
-public class BoilerHistoryWpOneService {
+public class BoilerHistoryService {
     private final BoilerRepository boilerRepository;
     private final BoilerMapper boilerMapper;
 
     public Page<BoilerHistoryResponse> getBoilers(@Valid BoilerHistoryRequest boilerHistoryRequest) {
-        Pageable pageable = PageRequest.of(boilerHistoryRequest.page(), boilerHistoryRequest.size(),
+        Pageable pageable = PageRequest.of(boilerHistoryRequest.getPage(), boilerHistoryRequest.getSize(),
                 Sort.by("dateCreate").ascending());
-        var boiler = boilerRepository.findByBoilerOrder_OrderNumber(boilerHistoryRequest.id(), pageable);
+        var boiler = boilerRepository.findByBoilerOrder_OrderNumber(boilerHistoryRequest.getId(), pageable);
         return boiler.map(boilerMapper::toBoilerResponse);
     }
 }

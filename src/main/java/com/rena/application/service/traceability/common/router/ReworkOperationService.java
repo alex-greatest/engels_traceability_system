@@ -34,7 +34,7 @@ public class ReworkOperationService {
                 station,
                 1,
                 operationStartRoute.getStationName());
-        operationTraceabilityService.createOperation(boiler, station, user, 1);
+        operationTraceabilityService.createOperation(boiler, station, user, 1, true);
     }
 
     private void checkUser(UserHistory user) {

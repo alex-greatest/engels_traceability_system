@@ -1,8 +1,9 @@
 package com.rena.application.controller.traceability.websocket.station.order;
 
-import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeBoilerOrderPrintRequest;
-import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeBoilerOrderSavePrintRequest;
+import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeBoilerGetRequest;
+import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeSaveRequest;
 import com.rena.application.exceptions.RecordNotFoundException;
+import com.rena.application.service.traceability.helper.ErrorHelper;
 import com.rena.application.service.traceability.station.order.operation.BoilerOrderEndOperationService;
 import com.rena.application.service.traceability.station.order.operation.BoilerOrderStartOperationService;
 import lombok.RequiredArgsConstructor;
@@ -19,32 +20,44 @@ public class BoilerOrderOperationController {
     private final SimpMessagingTemplate messagingTemplate;
     private final BoilerOrderStartOperationService boilerOrderStartOperationService;
     private final BoilerOrderEndOperationService boilerOrderEndOperationService;
+    private final ErrorHelper errorHelper;
 
-    @MessageMapping("/boiler/wp1/get/barcode/request")
-    public void getBoilerSerialNumber(@Payload BarcodeBoilerOrderPrintRequest barcodeBoilerOrderPrintRequest) {
+    @MessageMapping("/boiler/station/get/barcode/request")
+    public void getBoilerSerialNumber(@Payload BarcodeBoilerGetRequest barcodeBoilerOrderPrintRequest) {
         try {
             var barcodes = boilerOrderStartOperationService.generateBarcodeData(barcodeBoilerOrderPrintRequest);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/get/barcode/response", barcodes);
+            barcodes.setCorrelationId(barcodeBoilerOrderPrintRequest.getCorrelationId());
+            messagingTemplate.convertAndSend(String.format("/message/%s/boiler/station/get/barcode/response",
+                            barcodeBoilerOrderPrintRequest.getStation()), barcodes);
         } catch (RecordNotFoundException e) {
-            log.error("Канбан карта", e);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/get/barcode/errors", e.getMessage());
+            var error = errorHelper.getErrorResponse(e.getMessage(), barcodeBoilerOrderPrintRequest.getCorrelationId());
+            log.error("Генерация нового баркода. Станция {}", barcodeBoilerOrderPrintRequest.getStation(), e);
+            messagingTemplate.convertAndSend("/message/%s/boiler/station/get/barcode/response/error", error);
         } catch (Exception e) {
-            log.error("Канбан карта", e);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/get/barcode/errors", "Неизвестная ошибка");
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", barcodeBoilerOrderPrintRequest.getCorrelationId());
+            log.error("Генерация нового баркода. Станция {}", barcodeBoilerOrderPrintRequest.getStation(), e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/boiler/order/add/response/error",
+                    barcodeBoilerOrderPrintRequest.getStation()), error);
         }
     }
 
-    @MessageMapping("/boiler/wp1/save/barcode/request")
-    public void saveSerialNumber(@Payload BarcodeBoilerOrderSavePrintRequest barcodeBoilerOrderSavePrintRequest) {
+    @MessageMapping("/boiler/station/save/barcode/request")
+    public void saveSerialNumber(@Payload BarcodeSaveRequest barcodeSaveRequest) {
         try {
-            var barcodeSaveResponse = boilerOrderEndOperationService.saveBarcodes(barcodeBoilerOrderSavePrintRequest);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/response", barcodeSaveResponse);
+            var barcodeSaveResponse = boilerOrderEndOperationService.saveBarcodes(barcodeSaveRequest);
+            barcodeSaveResponse.setCorrelationId(barcodeSaveRequest.getCorrelationId());
+            messagingTemplate.convertAndSend(String.format("/message/%s/boiler/station/save/barcode/response",
+                            barcodeSaveRequest.getStation()),
+                    barcodeSaveResponse);
         } catch (RecordNotFoundException e) {
-            log.error("Канбан карта", e);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/errors", e.getMessage());
+            var error = errorHelper.getErrorResponse(e.getMessage(), barcodeSaveRequest.getCorrelationId());
+            log.error("Результат сохранения баркода. Станция {}", barcodeSaveRequest.getStation(), e);
+            messagingTemplate.convertAndSend("/message/%s/boiler/station/get/barcode/response/error", error);
         } catch (Exception e) {
-            log.error("Канбан карта", e);
-            messagingTemplate.convertAndSend("/message/boiler/wp1/save/barcode/errors", "Неизвестная ошибка");
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", barcodeSaveRequest.getCorrelationId());
+            log.error("Результат сохранения баркода. Станция {}", barcodeSaveRequest.getStation(), e);
+            messagingTemplate.convertAndSend(String.format("/message/%s/boiler/station/get/barcode/response/error",
+                    barcodeSaveRequest.getStation()), error);
         }
     }
 }

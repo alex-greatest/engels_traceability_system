@@ -1,6 +1,7 @@
 package com.rena.application.service.traceability.station.order.operation;
 
-import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeBoilerOrderPrintRequest;
+import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeBoilerGetRequest;
+import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeGenerated;
 import com.rena.application.repository.settings.SettingRepository;
 import com.rena.application.service.traceability.helper.WpOneHelper;
 import jakarta.validation.Valid;
@@ -9,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
@@ -20,17 +20,20 @@ import java.util.stream.IntStream;
 public class BoilerOrderStartOperationService {
     private final SettingRepository settingRepository;
 
-    public List<String> generateBarcodeData(@Valid BarcodeBoilerOrderPrintRequest barcodeBoilerOrderPrintRequest) {
+    public BarcodeGenerated generateBarcodeData(@Valid BarcodeBoilerGetRequest barcodeBoilerOrderPrintRequest) {
         var settings = settingRepository.findById(1L).orElseThrow(() ->
                 new RecoverableDataAccessException("Настройки не найдены"));
-        var amountPrint = barcodeBoilerOrderPrintRequest.amountPrint();
         AtomicReference<Integer> nextBoilerNumber = new AtomicReference<>(settings.getNextBoilerNumber());
-        return IntStream.range(0, amountPrint)
+        var barcodes = IntStream.range(0, 1)
                 .mapToObj(i -> {
-                    var serialNumber = WpOneHelper.getSerialNumber(nextBoilerNumber.get(), barcodeBoilerOrderPrintRequest.article());
+                    var serialNumber = WpOneHelper.getSerialNumber(
+                            nextBoilerNumber.get(),
+                            barcodeBoilerOrderPrintRequest.getArticle(),
+                            barcodeBoilerOrderPrintRequest.getTypeLabel());
                     nextBoilerNumber.getAndSet(nextBoilerNumber.get() + 1);
                     return serialNumber;
                 }).
                 toList();
+        return new BarcodeGenerated(barcodes);
     }
 }

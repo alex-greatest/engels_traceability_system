@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1748447353670-1" author="Alexander (generated)">
+        <createTable tableName="label_station_active">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_label_station_active"/>
+            </column>
+            <column name="station_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label_type_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1748447353670-2" author="Alexander (generated)">
+        <createTable tableName="label_type">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_label_type"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_type_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1748447353670-3" author="Alexander (generated)">
+        <createTable tableName="label_value">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_label_value"/>
+            </column>
+            <column name="label_type_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="variable" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1748447353670-4" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="UC_LABEL_TYPE_NAME" tableName="label_type"/>
+    </changeSet>
+    <changeSet id="1748447353670-6" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="station_id" constraintName="uc_label_station_active"
+                             tableName="label_station_active"/>
+    </changeSet>
+    <changeSet id="1748447353670-7" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="name, station_type_id"
+                             constraintName="uc_label_type_name_name_station_type_id" tableName="label_type"/>
+    </changeSet>
+    <changeSet id="1748447353670-8" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="label_type_id, variable, value"
+                             constraintName="uc_label_value_label_type_id_variable" tableName="label_value"/>
+    </changeSet>
+    <changeSet id="1748447353670-9" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="label_type_id" baseTableName="label_station_active"
+                                 constraintName="FK_LABEL_STATION_ACTIVE_ON_LABEL_TYPE" referencedColumnNames="id"
+                                 referencedTableName="label_type"/>
+    </changeSet>
+    <changeSet id="1748447353670-10" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="label_station_active"
+                                 constraintName="FK_LABEL_STATION_ACTIVE_ON_STATION" referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+    <changeSet id="1748447353670-11" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="station_type_id" baseTableName="label_type"
+                                 constraintName="FK_LABEL_TYPE_ON_STATION_TYPE" referencedColumnNames="id"
+                                 referencedTableName="station_type"/>
+    </changeSet>
+    <changeSet id="1748447353670-12" author="Alexander (generated)">
+        <addForeignKeyConstraint baseColumnNames="label_type_id" baseTableName="label_value"
+                                 constraintName="FK_LABEL_VALUE_ON_LABEL_TYPE" referencedColumnNames="id"
+                                 referencedTableName="label_type"/>
+    </changeSet>
+
+</databaseChangeLog>

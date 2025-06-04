@@ -21,17 +21,18 @@ public class OperationTraceabilityService {
     private final ShiftService shiftService;
     private final UserHistoryRepository userHistoryRepository;
 
-    public void createOperation(Boiler boiler, StationHistory station, Integer status) {
+    public void createOperation(Boiler boiler, StationHistory station, Integer status, boolean isCreateLastPart) {
         var user = userHistoryRepository.
                 findUserHistoryForActiveOperatorByStationName(station.getName()).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-        createOperation(boiler, station, user, status);
+        createOperation(boiler, station, user, status, isCreateLastPart);
     }
 
     public void createOperation(Boiler boiler,
                                 StationHistory station,
                                 UserHistory userHistory,
-                                Integer status) {
+                                Integer status,
+                                boolean isCreateLastPart) {
         var numberShift = shiftService.getCurrentShiftStation().getNumber();
         Operation operation = new Operation();
         operation.setDateCreate(LocalDateTime.now());
@@ -41,7 +42,9 @@ public class OperationTraceabilityService {
         operation.setUserHistory(userHistory);
         operation.setStatus(status);
         operationRepository.save(operation);
-        createLastPart(station.getName(), operation.getId());
+        if (isCreateLastPart) {
+            createLastPart(station.getName(), operation.getId());
+        }
     }
 
     public Operation updateOperation(String stationName,
