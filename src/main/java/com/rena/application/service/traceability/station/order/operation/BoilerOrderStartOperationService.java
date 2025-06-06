@@ -3,7 +3,7 @@ package com.rena.application.service.traceability.station.order.operation;
 import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeBoilerGetRequest;
 import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeGenerated;
 import com.rena.application.repository.settings.SettingRepository;
-import com.rena.application.service.traceability.helper.WpOneHelper;
+import com.rena.application.service.traceability.helper.BoilerOrderHelper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class BoilerOrderStartOperationService {
         AtomicReference<Integer> nextBoilerNumber = new AtomicReference<>(settings.getNextBoilerNumber());
         var barcodes = IntStream.range(0, 1)
                 .mapToObj(i -> {
-                    var serialNumber = WpOneHelper.getSerialNumber(
+                    var serialNumber = BoilerOrderHelper.getSerialNumber(
                             nextBoilerNumber.get(),
                             barcodeBoilerOrderPrintRequest.getArticle(),
                             barcodeBoilerOrderPrintRequest.getTypeLabel());

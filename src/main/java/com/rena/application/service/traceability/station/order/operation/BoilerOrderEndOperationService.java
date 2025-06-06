@@ -3,6 +3,7 @@ package com.rena.application.service.traceability.station.order.operation;
 import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeSaveRequest;
 import com.rena.application.entity.dto.traceability.station.order.barcode.BarcodeSaveResponse;
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
+import com.rena.application.entity.model.traceability.common.boiler.BoilerOrderHistory;
 import com.rena.application.entity.model.traceability.common.station.StationHistory;
 import com.rena.application.entity.model.traceability.station.order.BoilerLabelCount;
 import com.rena.application.entity.model.traceability.station.order.BoilerOrder;
@@ -14,6 +15,7 @@ import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.settings.SettingRepository;
 import com.rena.application.repository.settings.user.UserHistoryRepository;
 import com.rena.application.repository.traceability.common.boiler.BoilerLabelCountRepository;
+import com.rena.application.repository.traceability.common.boiler.BoilerOrderHistoryRepository;
 import com.rena.application.repository.traceability.common.boiler.BoilerRepository;
 import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
@@ -39,6 +41,7 @@ public class BoilerOrderEndOperationService {
     private final OperationTraceabilityService operationTraceabilityService;
     private final BoilerLabelCountRepository boilerLabelCountRepository;
     private final PartLastRepository partLastRepository;
+    private final BoilerOrderHistoryRepository boilerOrderHistoryRepository;
 
     @Transactional
     public BarcodeSaveResponse saveBarcodes(@Valid BarcodeSaveRequest barcodeSaveRequest) {
@@ -51,6 +54,7 @@ public class BoilerOrderEndOperationService {
                     orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
             var boilerOrder = boilerOrderHelperService.updateOrder(barcodeSaveRequest);
             var boiler = createBoiler(barcodeSaveRequest, station, boilerOrder, user);
+            createBoilerOrderHistory(boilerOrder, boiler);
             updateBoilerLabelCount(boiler);
             operationTraceabilityService.createOperation(boiler, station, user, 1, false);
             checkBoilerOrder(boilerOrder, station.getName());
@@ -62,7 +66,7 @@ public class BoilerOrderEndOperationService {
         }
     }
 
-    public Boiler createBoiler(BarcodeSaveRequest barcodeSaveRequest,
+    private Boiler createBoiler(BarcodeSaveRequest barcodeSaveRequest,
                                StationHistory station,
                                BoilerOrder boilerOrder,
                                UserHistory user) {
@@ -75,6 +79,14 @@ public class BoilerOrderEndOperationService {
         boiler.setStatus(1);
         boiler.setUserHistory(user);
         return boilerRepository.save(boiler);
+    }
+
+    private void createBoilerOrderHistory(BoilerOrder boilerOrder, Boiler boiler) {
+        var boilerOrderHistory = new BoilerOrderHistory();
+        boilerOrderHistory.setBoilerOrder(boilerOrder);
+        boilerOrderHistory.setBoiler(boiler);
+        boilerOrderHistory.setIsActive(true);
+        boilerOrderHistoryRepository.save(boilerOrderHistory);
     }
 
     public void updateBoilerLabelCount(Boiler boiler) {

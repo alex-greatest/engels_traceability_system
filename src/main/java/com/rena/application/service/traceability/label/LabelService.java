@@ -6,6 +6,7 @@ import com.rena.application.entity.model.traceability.common.station.Station;
 import com.rena.application.entity.model.traceability.label.LabelStationActive;
 import com.rena.application.entity.model.traceability.label.LabelType;
 import com.rena.application.exceptions.RecordNotFoundException;
+import com.rena.application.repository.traceability.common.boiler.BoilerRepository;
 import com.rena.application.repository.traceability.common.station.StationRepository;
 import com.rena.application.repository.traceability.label.LabelStationActiveRepository;
 import com.rena.application.repository.traceability.label.LabelTypeRepository;
@@ -24,6 +25,7 @@ public class LabelService {
     private final StationRepository stationRepository;
     private final LabelStationActiveRepository labelStationActiveRepository;
     private final LabelValueMapper labelValueMapper;
+    private final BoilerRepository boilerRepository;
 
     @Transactional
     public LabelLastStation getLastLabel(String stationName) {
@@ -76,5 +78,14 @@ public class LabelService {
         activeLabelNew.setStation(station);
         activeLabelNew.setLabelType(labelType);
         labelStationActiveRepository.save(activeLabelNew);
+    }
+
+    @Transactional
+    public LabelLastStation selectLabelTypeManual(@Valid LabelValuesManualRequest labelValuesManualRequest) {
+        var isBoilerExists = boilerRepository.existsBySerialNumber(labelValuesManualRequest.getSerialNumber());
+        if (!isBoilerExists) {
+            throw new RecordNotFoundException("Котел с серийным номером " + labelValuesManualRequest.getSerialNumber() + " не найден.");
+        }
+        return selectLabelType(new LabelStationNameData(labelValuesManualRequest.getLabelName(), labelValuesManualRequest.getStationName()));
     }
 }

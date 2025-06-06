@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
 
 public interface BoilerRepository extends JpaRepository<Boiler, String> {
+    boolean existsBySerialNumber(String serialNumber);
+
     @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder where b.boilerOrder.id = ?1")
     Page<Boiler> findByBoilerOrder_OrderNumber(String id, Pageable pageable);
 

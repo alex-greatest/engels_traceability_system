@@ -3,7 +3,7 @@ package com.rena.application.service.traceability.helper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class WpOneHelper {
+public class BoilerOrderHelper {
     public static String getSerialNumber(Integer nextBoilerNumber, String article, String typeLabel) {
         var dateNow = getDateNow();
         var barcodeNumber = getBarcodeNumber(nextBoilerNumber);
