@@ -7,8 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface BoilerMadeOrderRepository extends JpaRepository<BoilerMadeCountOrder, Long> {
+    @Query("select b from BoilerMadeCountOrder b where b.station.name = ?1 and b.boilerOrder.id = ?2")
+    Optional<BoilerMadeCountOrder> findBoilerMadeCountOrderByStation_NameAndBoilerOrder_Id(String name, String id);
+
     @Query("select b from BoilerMadeCountOrder b join b.station join b.boilerOrder where b.station.name = ?1 and b.boilerOrder.id = ?2")
     Optional<BoilerMadeCountOrder> findByStation_NameAndBoilerOrder_Id(String name, String boilerOrderId);
 
     Optional<BoilerMadeCountOrder> findByStation_Name(String name);
+
+
 }

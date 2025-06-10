@@ -10,12 +10,10 @@ public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> 
 
     Optional<UserHistory> findByCodeAndIsActive(Integer code, Boolean is_active);
 
-    @Query("SELECT uh FROM UserHistory uh WHERE uh.isActive = true and uh.userId = " +
-            "(SELECT o.user.id FROM OperatorLoginLog o WHERE o.station.name = ?1 AND o.isLogin = true)")
+    @Query("SELECT uh FROM UserHistory uh, OperatorLoginLog o WHERE uh.isActive = true AND uh.userId = o.user.id AND o.station.name = ?1 AND o.isLogin = true")
     Optional<UserHistory> findUserHistoryForActiveOperatorByStationName(String stationName);
 
 
-    @Query("SELECT uh FROM UserHistory uh WHERE uh.isActive = true and uh.userId = " +
-            "(SELECT a.user.id FROM AdminLoginLog a WHERE a.station.name = ?1 AND a.isLogin = true)")
+    @Query("SELECT uh FROM UserHistory uh, AdminLoginLog a WHERE uh.isActive = true AND uh.userId = a.user.id AND a.station.name = ?1 AND a.isLogin = true")
     Optional<UserHistory> findUserAdminForActiveOperatorByStationName(String stationName);
 }

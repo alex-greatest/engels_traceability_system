@@ -1,14 +1,11 @@
 package com.rena.application.service.traceability.common.initialize;
 
 import com.rena.application.entity.dto.traceability.common.boiler.BoilerMadeInformation;
-import com.rena.application.entity.dto.traceability.common.initialize.ShiftNumber;
 import com.rena.application.entity.model.traceability.common.boiler.BoilerMadeCountOrder;
 import com.rena.application.entity.model.traceability.station.order.BoilerOrder;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.traceability.common.boiler.BoilerMadeOrderRepository;
 import com.rena.application.repository.traceability.common.station.StationRepository;
-import com.rena.application.service.settings.shift.ShiftService;
-import com.rena.application.service.traceability.common.user.UserTraceabilityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +20,8 @@ public class MainInformationService {
     }
 
     public BoilerMadeInformation getBoilerMadeInfo(BoilerOrder boilerOrder, String nameStation) {
-        var boilerOrderInfo = boilerMadeOrderRepository.findByStation_Name(nameStation).
+        var boilerOrderInfo = boilerMadeOrderRepository.
+                findBoilerMadeCountOrderByStation_NameAndBoilerOrder_Id(nameStation, boilerOrder.getId()).
                 orElseGet(() -> createBoilerMadeInformation(boilerOrder, nameStation));
         var amountBoilerMadeOrder = boilerOrderInfo.getAmountBoilerMadeOrder();
         var amountBoilerOrder = boilerOrder.getAmountBoilerOrder();

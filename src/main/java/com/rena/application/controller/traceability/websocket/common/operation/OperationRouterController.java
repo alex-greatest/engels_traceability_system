@@ -4,7 +4,7 @@ import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
 import com.rena.application.entity.dto.traceability.common.operation.OperationInterruptedRequest;
 import com.rena.application.entity.dto.traceability.common.router.OperationStartRoute;
 import com.rena.application.exceptions.RecordNotFoundException;
-import com.rena.application.service.traceability.common.router.ReworkOperationService;
+import com.rena.application.service.traceability.common.router.rework.ReworkOperationService;
 import com.rena.application.service.traceability.common.router.OperationRouterService;
 import com.rena.application.service.traceability.helper.ErrorHelper;
 import lombok.RequiredArgsConstructor;

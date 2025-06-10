@@ -1,7 +1,6 @@
 package com.rena.application.entity.model.settings.type;
 
 import com.rena.application.entity.model.settings.type.additional.BoilerTypeAdditionalDataSet;
-import com.rena.application.entity.model.settings.component.set.ComponentNameSet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import org.hibernate.type.SqlTypes;
 @Setter
 @Entity
 @Table(name = "boiler_type", indexes = {
-        @Index(name = "idx_boiler_type_component_name_set", columnList = "component_name_set_id"),
         @Index(name = "idx_boiler_type_boiler_type_additional_data_set_id", columnList = "boiler_type_additional_data_set_id")
 }, uniqueConstraints = {
         @UniqueConstraint(name = "uc_boiler_type_name_type_name", columnNames = {"type_name"}),
@@ -40,11 +38,6 @@ public class BoilerType {
     @Column(name = "model", nullable = false, unique = true, length = 50)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String model;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "component_name_set_id", nullable = false)
-    private ComponentNameSet componentNameSet;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "boiler_type_additional_data_set_id", nullable = false)

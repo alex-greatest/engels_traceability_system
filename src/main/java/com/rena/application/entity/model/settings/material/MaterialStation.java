@@ -1,4 +1,4 @@
-package com.rena.application.entity.model.settings.component.material;
+package com.rena.application.entity.model.settings.material;
 
 import com.rena.application.entity.model.traceability.common.station.Station;
 import jakarta.persistence.*;

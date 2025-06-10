@@ -11,7 +11,7 @@ import org.hibernate.type.SqlTypes;
 @Setter
 @Entity
 @Table(name = "component_type", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_component_type_name", columnNames = {"name"})
+        @UniqueConstraint(name = "uc_component_type_code", columnNames = {"code"})
 })
 public class ComponentType {
     @Id
@@ -20,9 +20,17 @@ public class ComponentType {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false, unique = true, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String name;
+
+    @NotNull
+    @Column(name = "code", nullable = false, unique = true, length = 50)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String code;
+
+    @Column(name = "length_code", nullable = false)
+    private Integer lengthCode;
 
     @Version
     @Column(name = "version", nullable = false)

@@ -10,10 +10,10 @@ public interface BoilerTypeRepository extends JpaRepository<BoilerType, Long> {
     @Query("select b from BoilerType b join b.article where b.article = ?1")
     Optional<BoilerType> findByArticle(String article);
 
-    @Query("select b from BoilerType b JOIN b.componentNameSet")
+    @Query("select b from BoilerType b")
     List<BoilerType> findAllBoilers();
 
-    @Query("select b from BoilerType b JOIN b.componentNameSet where b.id = ?1")
+    @Query("select b from BoilerType b where b.id = ?1")
     Optional<BoilerType> findBoilerById(Long id);
 
 

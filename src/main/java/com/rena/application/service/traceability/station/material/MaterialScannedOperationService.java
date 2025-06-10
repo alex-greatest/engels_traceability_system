@@ -1,10 +1,10 @@
-package com.rena.application.service.traceability.station.components.prepare;
+package com.rena.application.service.traceability.station.material;
 
 import com.rena.application.config.mapper.component.material.MaterialMapper;
 import com.rena.application.entity.dto.traceability.station.components.scanned.MaterialScannedOperation;
-import com.rena.application.entity.model.settings.component.material.Material;
-import com.rena.application.repository.settings.component.material.MaterialRepository;
-import com.rena.application.repository.settings.component.material.MaterialTypeRepository;
+import com.rena.application.entity.model.settings.material.Material;
+import com.rena.application.repository.settings.material.MaterialRepository;
+import com.rena.application.repository.settings.material.MaterialTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;

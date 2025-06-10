@@ -4,11 +4,9 @@ import com.rena.application.config.mapper.type.BoilerTypeMapper;
 import com.rena.application.entity.dto.settings.boiler_type.BoilerTypeDto;
 import com.rena.application.entity.model.settings.type.BoilerType;
 import com.rena.application.entity.model.settings.type.additional.BoilerTypeAdditionalDataSet;
-import com.rena.application.entity.model.settings.component.set.ComponentNameSet;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.type.BoilerTypeRepository;
 import com.rena.application.repository.settings.type.additional.BoilerTypeAdditionalDataSetRepository;
-import com.rena.application.repository.settings.component.set.ComponentNameSetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,6 @@ public class BoilerTypeService {
     private final BoilerTypeMapper boilerTypeMapper;
     private final BoilerCycleService boilerCycleService;
     private final BoilerTypeAdditionalDataSetRepository boilerTypeAdditionalDataSetRepository;
-    private final ComponentNameSetRepository componentNameSetRepository;
 
     public BoilerType getBoilerById(Long id) {
         return boilerTypeRepository.findBoilerById(id).
@@ -38,13 +35,10 @@ public class BoilerTypeService {
 
     @Transactional
     public void addBoiler(BoilerTypeDto boilerTypeDto) {
-        ComponentNameSet componentNameSet = componentNameSetRepository.findById(boilerTypeDto.componentNameSet().id()).
-                orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
         BoilerTypeAdditionalDataSet boilerTypeAdditionalDataSet = boilerTypeAdditionalDataSetRepository.
                 findById(boilerTypeDto.boilerTypeAdditionalDataSet().id()).
                 orElseThrow(() -> new RecordNotFoundException("Набор данных котла не найден"));
         BoilerType boilerType = boilerTypeMapper.toEntity(boilerTypeDto);
-        boilerType.setComponentNameSet(componentNameSet);
         boilerType.setBoilerTypeAdditionalDataSet(boilerTypeAdditionalDataSet);
         boilerTypeRepository.save(boilerType);
         boilerCycleService.addBoilerCycle(boilerType.getId(), boilerType.getArticle(), boilerType.getModel(),
@@ -55,12 +49,9 @@ public class BoilerTypeService {
     public void updateBoiler(BoilerTypeDto boilerTypeDto) {
         BoilerType boilerType = boilerTypeRepository.findBoilerById(boilerTypeDto.id()).
                 orElseThrow(() -> new RecordNotFoundException("Тип котла не найден"));
-        ComponentNameSet componentNameSetNew = componentNameSetRepository.findById(boilerTypeDto.componentNameSet().id()).
-                orElseThrow(() -> new RecordNotFoundException("Набора компонентов не найден"));
         BoilerTypeAdditionalDataSet boilerTypeAdditionalDataSet = boilerTypeAdditionalDataSetRepository.
                 findById(boilerTypeDto.boilerTypeAdditionalDataSet().id()).
                 orElseThrow(() -> new RecordNotFoundException("Набор данных котла не найден"));
-        boilerType.setComponentNameSet(componentNameSetNew);
         boilerType.setModel(boilerTypeDto.model());
         boilerType.setTypeName(boilerTypeDto.typeName());
         boilerType.setArticle(boilerType.getArticle());

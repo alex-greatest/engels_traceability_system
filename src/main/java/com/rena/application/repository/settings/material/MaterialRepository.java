@@ -1,6 +1,6 @@
-package com.rena.application.repository.settings.component.material;
+package com.rena.application.repository.settings.material;
 
-import com.rena.application.entity.model.settings.component.material.Material;
+import com.rena.application.entity.model.settings.material.Material;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.util.List;

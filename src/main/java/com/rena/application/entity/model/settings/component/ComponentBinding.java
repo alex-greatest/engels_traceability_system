@@ -1,7 +1,6 @@
-package com.rena.application.entity.model.settings.component.binding;
+package com.rena.application.entity.model.settings.component;
 
-import com.rena.application.entity.model.settings.component.ComponentType;
-import com.rena.application.entity.model.settings.component.set.ComponentNameSet;
+import com.rena.application.entity.model.settings.type.BoilerType;
 import com.rena.application.entity.model.traceability.common.station.Station;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,18 +10,13 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "component_binding", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_binding_name_set", columnNames = {"component_name_set_id", "component_type_id"}),
-        @UniqueConstraint(name = "uc_binding_order", columnNames = {"component_name_set_id", "station_id", "order_component"})
+        @UniqueConstraint(name = "uc_component_binding", columnNames = {"station_id", "component_type_id", "boiler_type_id", "order_component"})
 })
 public class ComponentBinding {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "component_name_set_id", nullable = false)
-    private ComponentNameSet componentNameSet;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "station_id", nullable = false)
@@ -34,4 +28,8 @@ public class ComponentBinding {
 
     @Column(name = "order_component", nullable = false)
     private Integer order;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "boiler_type_id")
+    private BoilerType boilerType;
 }

@@ -1,6 +1,6 @@
-package com.rena.application.repository.settings.component.material;
+package com.rena.application.repository.settings.material;
 
-import com.rena.application.entity.model.settings.component.material.MaterialType;
+import com.rena.application.entity.model.settings.material.MaterialType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,6 +13,7 @@ public interface MaterialTypeRepository extends JpaRepository<MaterialType, Long
             "JOIN material_station ms ON ms.material_id = m.id " +
             "JOIN station s ON ms.station_id = s.id " +
             "WHERE s.name = ?1 " +
-            "ORDER BY ms.order_material", nativeQuery = true)
+            "GROUP BY mt.name " +
+            "ORDER BY MIN(ms.order_material)", nativeQuery = true)
     List<String> findDistinctMaterialTypeNamesByStationName(String stationName);
 }

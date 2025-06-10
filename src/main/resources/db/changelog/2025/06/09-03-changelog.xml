@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1749497354797-1" author="Alexander (generated)">
+        <addColumn tableName="component_type">
+            <column name="code" type="VARCHAR(50)"/>
+            <column name="length_code" type="INT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1749497354797-2" author="Alexander (generated)">
+        <addNotNullConstraint columnName="code" tableName="component_type"/>
+    </changeSet>
+    <changeSet id="1749497354797-4" author="Alexander (generated)">
+        <addNotNullConstraint columnName="length_code" tableName="component_type"/>
+    </changeSet>
+    <changeSet id="1749497354797-6" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="code" constraintName="uc_component_type_code" tableName="component_type"/>
+    </changeSet>
+
+</databaseChangeLog>

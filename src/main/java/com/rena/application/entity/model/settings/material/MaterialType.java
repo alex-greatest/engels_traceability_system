@@ -1,4 +1,4 @@
-package com.rena.application.entity.model.settings.component.material;
+package com.rena.application.entity.model.settings.material;
 
 import jakarta.persistence.*;
 import lombok.Getter;

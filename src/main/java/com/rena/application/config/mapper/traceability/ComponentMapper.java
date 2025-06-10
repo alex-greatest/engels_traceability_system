@@ -1,6 +1,6 @@
 package com.rena.application.config.mapper.traceability;
 
-import com.rena.application.entity.dto.result.ComponentResult;
+import com.rena.application.entity.dto.result.component.ComponentResultRequest;
 import com.rena.application.entity.model.traceability.station.component.Component;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -10,11 +10,11 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ComponentMapper {
-    Component toEntity(ComponentResult componentResult);
+    Component toEntity(ComponentResultRequest componentResultRequest);
 
-    List<ComponentResult> toComponentResult(List<Component> component);
+    List<ComponentResultRequest> toComponentResult(List<Component> component);
 
-    ComponentResult toComponentResult(Component component);
+    ComponentResultRequest toComponentResult(Component component);
 
-    List<Component> toEntity(List<ComponentResult> componentResult);
+    List<Component> toEntity(List<ComponentResultRequest> componentResultRequest);
 }

@@ -3,9 +3,6 @@ package com.rena.application.service.traceability.station.components.prepare;
 import com.rena.application.entity.dto.traceability.common.boiler.BoilerMadeInformation;
 import com.rena.application.entity.dto.traceability.common.boiler.BoilerTypeOperation;
 import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationStartResponse;
-import com.rena.application.entity.dto.traceability.station.components.scanned.ComponentsMaterials;
-import com.rena.application.entity.dto.traceability.station.components.scanned.component.ComponentSetOperation;
-import com.rena.application.entity.dto.traceability.station.components.scanned.material.MaterialOperation;
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
 import com.rena.application.entity.model.traceability.common.station.StationHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
@@ -14,16 +11,14 @@ import com.rena.application.service.traceability.common.operation.OperationTrace
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class ComponentsPrepareOperationService {
     private final MainInformationService mainInformationService;
-    private final ComponentsScannedOperationService componentsScannedOperationService;
-    private final MaterialScannedOperationService materialScannedOperationService;
     private final OperationTraceabilityService operationTraceabilityService;
+    private final ComponentsScannedOperationService componentsScannedOperationService;
 
     @Transactional
     public BoilerMadeInformation createResponseOperationComponents(String stationName) {
@@ -35,9 +30,7 @@ public class ComponentsPrepareOperationService {
         var stationName = stationHistory.getName();
         var boilerOrder = boiler.getBoilerOrder();
         var componentsScannedOperation = componentsScannedOperationService.getComponentsScanned(boiler, stationName);
-        var materialsScannedOperation = materialScannedOperationService.getMaterialsScanned(stationName);
-        checkComponents(componentsScannedOperation.components(), materialsScannedOperation.materials());
-        var componentsMaterials = createMaterialComponents(componentsScannedOperation.components(), materialsScannedOperation.materials());
+        checkComponents(componentsScannedOperation.getComponents());
         var boilerMadeInformation = mainInformationService.getBoilerMadeInfo(boilerOrder, stationName);
         var boilerTypeOperation = new BoilerTypeOperation(
                 boiler.getBoilerTypeCycle().getTypeName(),
@@ -47,29 +40,13 @@ public class ComponentsPrepareOperationService {
         return new ComponentsOperationStartResponse(
                 boilerMadeInformation,
                 boilerTypeOperation,
-                componentsScannedOperation,
-                materialsScannedOperation,
-                componentsMaterials
+                componentsScannedOperation
         );
     }
 
-    private void checkComponents(List<ComponentSetOperation> components, List<MaterialOperation> materials) {
-        if (components.isEmpty() && materials.isEmpty()) {
-            throw new RecordNotFoundException("Компоненты и материалы не найдены. Работа не возможна");
+    private<T> void checkComponents(List<T> componentsType) {
+        if (componentsType.isEmpty()) {
+            throw new RecordNotFoundException("На найдены привязанные компоненты. Работа не возможна");
         }
-    }
-
-    private List<ComponentsMaterials> createMaterialComponents(List<ComponentSetOperation> components,
-                                                               List<MaterialOperation> materials) {
-        var componentsMaterials = new ArrayList<ComponentsMaterials>();
-        var componentsMaterialFromComponents = components.stream().
-                map(c -> new ComponentsMaterials(c.componentTypeName(), c.value())).
-                toList();
-        var componentsMaterialFromMaterials = materials.stream().
-                map(m -> new ComponentsMaterials(m.name(), m.value())).
-                toList();
-        componentsMaterials.addAll(componentsMaterialFromComponents);
-        componentsMaterials.addAll(componentsMaterialFromMaterials);
-        return componentsMaterials;
     }
 }

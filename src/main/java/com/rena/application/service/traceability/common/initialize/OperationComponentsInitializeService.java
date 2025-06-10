@@ -2,11 +2,11 @@ package com.rena.application.service.traceability.common.initialize;
 
 import com.rena.application.entity.dto.traceability.common.boiler.BoilerMadeInformation;
 import com.rena.application.entity.dto.traceability.common.exchange.RpcBase;
-import com.rena.application.entity.dto.traceability.station.components.operation.ComponentsOperationStartResponse;
 import com.rena.application.entity.model.settings.PartLast;
 import com.rena.application.entity.model.traceability.common.Operation;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.PartLastRepository;
+import com.rena.application.repository.settings.component.ComponentValueRepository;
 import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
 import com.rena.application.repository.traceability.common.station.OperationRepository;
 import com.rena.application.service.traceability.station.components.prepare.ComponentsPrepareOperationService;
@@ -22,6 +22,7 @@ public class OperationComponentsInitializeService {
     private final OperationRepository operationRepository;
     private final ComponentsPrepareOperationService componentsPrepareOperationService;
     private final StationHistoryRepository stationHistoryRepository;
+    private final ComponentValueRepository componentValueRepository;
 
     public BoilerMadeInformation getLastMainInformationComponents(String nameStation) {
         return componentsPrepareOperationService.createResponseOperationComponents(nameStation);
@@ -29,13 +30,13 @@ public class OperationComponentsInitializeService {
 
     @Transactional
     public RpcBase getLastOperationComponents(@NotBlank String nameStation) {
-        var componentsOperationResponse = partLastRepository.findByStation_Name(nameStation).
-                map(partLast -> createLastPart(partLast, nameStation)).orElse(null);
-        return componentsOperationResponse == null ? getLastMainInformationComponents(nameStation) : componentsOperationResponse;
+        return partLastRepository.findByStation_Name(nameStation).
+                map(partLast -> createLastPart(partLast, nameStation)).
+                orElseGet(() -> getLastMainInformationComponents(nameStation));
     }
 
-    public ComponentsOperationStartResponse createLastPart(PartLast partLast, String nameStation) {
-        if (partLast.getPart_id() == null) {
+    public RpcBase createLastPart(PartLast partLast, String nameStation) {
+        if (partLast.getPart_id() == null || partLast.getPart_id().trim().isEmpty()) {
             return null;
         }
         var operationId = Long.parseLong(partLast.getPart_id());
@@ -44,9 +45,10 @@ public class OperationComponentsInitializeService {
                 orElse(null);
     }
 
-    public ComponentsOperationStartResponse createResponse(String nameStation, Operation operation) {
+    public RpcBase createResponse(String nameStation, Operation operation) {
         if (operation.getStatus() == 3) {
             var boiler = operation.getBoiler();
+            componentValueRepository.deleteByBoiler(boiler.getSerialNumber());
             var station = stationHistoryRepository.findByName(nameStation).
                     orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
             return componentsPrepareOperationService.createResponseOperationComponents(boiler, station);

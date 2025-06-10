@@ -1,4 +1,4 @@
-package com.rena.application.service.traceability.common.router;
+package com.rena.application.service.traceability.common.router.rework;
 
 import com.rena.application.entity.dto.traceability.common.router.OperationStartRoute;
 import com.rena.application.entity.model.settings.user.UserHistory;
@@ -21,11 +21,13 @@ public class ReworkOperationService {
     private final StationHistoryRepository stationHistoryRepository;
     private final UserHistoryRepository userHistoryRepository;
     private final BoilerTraceabilityService boilerTraceabilityService;
+    private final CheckerReworkStationService checkerReworkStationService;
 
     @Transactional
     public void startReworkOperation(@Valid OperationStartRoute operationStartRoute) {
         var station = stationHistoryRepository.findByName("Доработка").
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
+        checkerReworkStationService.checkStationRework(operationStartRoute.getStationName(), operationStartRoute.getSerialNumber());
         var user = userHistoryRepository.
                 findUserHistoryForActiveOperatorByStationName(operationStartRoute.getStationName()).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
@@ -42,4 +44,6 @@ public class ReworkOperationService {
             throw new RecordNotFoundException("У пользователя нет прав для выполнения этой операции");
         }
     }
+
+
 }
