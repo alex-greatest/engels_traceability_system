@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface ComponentTypeRepository extends JpaRepository<ComponentType, Long> {
-    @Query("select c from ComponentType c where c.code = ?1")
-    Optional<ComponentType> findByCode(String code);
+    @Query("select c from ComponentType c where c.code = ?1 and c.name = ?2")
+    Optional<ComponentType> findByCodeAndName(String code, String name);
 }

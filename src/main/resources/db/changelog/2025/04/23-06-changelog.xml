@@ -18,11 +18,6 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="1745426248773-2" author="Alexander (generated)">
-        <addForeignKeyConstraint baseColumnNames="material_id" baseTableName="material_station"
-                                 constraintName="FK_MATERIAL_STATION_ON_MATERIAL" referencedColumnNames="id"
-                                 referencedTableName="material"/>
-    </changeSet>
     <changeSet id="1745426248773-3" author="Alexander (generated)">
         <addForeignKeyConstraint baseColumnNames="station_id" baseTableName="material_station"
                                  constraintName="FK_MATERIAL_STATION_ON_STATION" referencedColumnNames="id"

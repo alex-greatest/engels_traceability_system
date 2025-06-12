@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1749645391109-5" author="Alexander (generated)">
+        <addUniqueConstraint columnNames="code" constraintName="uc_material_type_code" tableName="material_type"/>
+    </changeSet>
+    <changeSet id="1749645391109-1" author="Alexander (generated)">
+        <addNotNullConstraint columnDataType="VARCHAR(50)" columnName="code" tableName="material_type" validate="true"/>
+    </changeSet>
+    <changeSet id="1749645391109-2" author="Alexander (generated)">
+        <addNotNullConstraint columnDataType="INT" columnName="length_code" tableName="material_type" validate="true"/>
+    </changeSet>
+    <changeSet id="1749645391109-3" author="Alexander (generated)">
+        <modifyDataType columnName="name" newDataType="VARCHAR(50)" tableName="material_type"/>
+    </changeSet>
+
+</databaseChangeLog>

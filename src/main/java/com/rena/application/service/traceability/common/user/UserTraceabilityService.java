@@ -48,10 +48,10 @@ public class UserTraceabilityService {
      *
      */
     @Transactional
-    public void stationOperatorLogout(@NotBlank String login) {
+    public void stationOperatorLogout(@NotBlank String login, @NotBlank String stationName) {
         User user = userRepository.findByUsernameAuthorization(login).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-        userLoginLogService.operatorLogout(user.getId());
+        userLoginLogService.operatorLogout(user.getId(), stationName);
     }
 
     @Transactional
@@ -70,10 +70,10 @@ public class UserTraceabilityService {
     }
 
     @Transactional
-    public void stationAdminLogout(@NotBlank String login) {
+    public void stationAdminLogout(@NotBlank String login, @NotBlank String stationName) {
         User user = userRepository.findByUsernameAuthorization(login).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
-        userLoginLogService.adminLogout(user.getId());
+        userLoginLogService.adminLogout(user.getId(), stationName);
     }
 
     @Transactional

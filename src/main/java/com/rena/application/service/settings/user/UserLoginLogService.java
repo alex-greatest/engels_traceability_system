@@ -31,8 +31,8 @@ public class UserLoginLogService {
         operatorLoginLogRepository.save(userLoginLog);
     }
 
-    public void operatorLogout(Long idUser) {
-        operatorLoginLogRepository.findByUserHistory_Username(idUser).ifPresent(operatorLoginLog -> {
+    public void operatorLogout(Long idUser, String stationName) {
+        operatorLoginLogRepository.findByUserHistory_Username(idUser, stationName).ifPresent(operatorLoginLog -> {
             operatorLoginLog.setDateLogout(LocalDateTime.now());
             operatorLoginLog.setIsLogin(false);
         });
@@ -49,8 +49,8 @@ public class UserLoginLogService {
         adminLoginLogRepository.save(adminLoginLog);
     }
 
-    public void adminLogout(Long idUser) {
-        adminLoginLogRepository.findByUserHistory_UserId(idUser).ifPresent(operatorLoginLog -> {
+    public void adminLogout(Long idUser, String stationName) {
+        adminLoginLogRepository.findByUserHistory_UserId(idUser, stationName).ifPresent(operatorLoginLog -> {
             operatorLoginLog.setDateLogout(LocalDateTime.now());
             operatorLoginLog.setIsLogin(false);
         });

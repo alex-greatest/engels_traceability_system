@@ -23,6 +23,9 @@ public class Component {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "code", nullable = false)
+    private String code;
+
     @NotNull
     @Column(name = "value", nullable = false)
     private String value;
@@ -34,4 +37,5 @@ public class Component {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operation_id")
     private Operation operation;
+
 }

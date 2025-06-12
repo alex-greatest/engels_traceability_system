@@ -15,34 +15,11 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="1745412469260-2" author="Alexander (generated)">
-        <addColumn tableName="material">
-            <column name="material_type_id" type="BIGINT"/>
-        </addColumn>
-    </changeSet>
-    <changeSet id="1745412469260-3" author="Alexander (generated)">
-        <addNotNullConstraint columnName="material_type_id" tableName="material"/>
-    </changeSet>
     <changeSet id="1745412469260-4" author="Alexander (generated)">
         <addUniqueConstraint columnNames="name" constraintName="UC_MATERIAL_TYPE_NAME" tableName="material_type"/>
     </changeSet>
-    <changeSet id="1745412469260-6" author="Alexander (generated)">
-        <addForeignKeyConstraint baseColumnNames="material_type_id" baseTableName="material"
-                                 constraintName="FK_MATERIAL_ON_MATERIAL_TYPE" referencedColumnNames="id"
-                                 referencedTableName="material_type"/>
-
-        <createIndex indexName="idx_material_material_type_id" tableName="material">
-            <column name="material_type_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet id="1745412469260-7" author="Alexander (generated)">
-        <dropForeignKeyConstraint baseTableName="material" constraintName="fk_material_on_material_name"/>
-    </changeSet>
     <changeSet id="1745412469260-17" author="Alexander (generated)">
         <dropTable cascadeConstraints="true" tableName="material_name"/>
-    </changeSet>
-    <changeSet id="1745412469260-18" author="Alexander (generated)">
-        <dropColumn columnName="material_name_id" tableName="material"/>
     </changeSet>
 
 </databaseChangeLog>

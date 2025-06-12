@@ -1,6 +1,6 @@
 package com.rena.application.entity.dto.result;
 
-import com.rena.application.entity.dto.result.component.ComponentResultRequest;
+import com.rena.application.entity.dto.traceability.station.component.result.ComponentResultRequest;
 import com.vaadin.hilla.Nonnull;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;

@@ -1,0 +1,65 @@
+package com.rena.application.controller.traceability.websocket.station.material;
+
+import com.rena.application.entity.dto.traceability.station.material.operation.MaterialsOperationSaveResultRequest;
+import com.rena.application.entity.dto.traceability.station.material.result.MaterialResultRequest;
+import com.rena.application.exceptions.RecordNotFoundException;
+import com.rena.application.service.traceability.helper.ErrorHelper;
+import com.rena.application.service.traceability.station.material.MaterialResultSaveService;
+import com.rena.application.service.traceability.station.material.MaterialsResultSaveService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+
+@Controller
+@RequiredArgsConstructor
+@Slf4j
+public class MaterialOperationController {
+    private final SimpMessagingTemplate messagingTemplate;
+    private final MaterialsResultSaveService materialsResultSaveService;
+    private final MaterialResultSaveService materialResultSaveService;
+    private final ErrorHelper errorHelper;
+
+    @MessageMapping("/materials/material/save/request")
+    public void saveMaterial(@Payload MaterialResultRequest materialResultRequest) {
+        try {
+            var materialResultResponse = materialResultSaveService.saveResultsMaterial(materialResultRequest);
+            materialResultResponse.setCorrelationId(materialResultRequest.getCorrelationId());
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/material/save/response",
+                    materialResultRequest.getStationName()), materialResultResponse);
+        } catch (RecordNotFoundException e) {
+            var error = errorHelper.getErrorResponse(e.getMessage(), materialResultRequest.getCorrelationId());
+            log.error("Привязка материала. Станция {}", materialResultRequest.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/material/save/response/error",
+                    materialResultRequest.getStationName()), error);
+        } catch (Exception e) {
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", materialResultRequest.getCorrelationId());
+            log.error("Привязка материала. Станция {}", materialResultRequest.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/component/save/response/error",
+                    materialResultRequest.getStationName()), error);
+        }
+    }
+
+    @MessageMapping("/materials/result/operation/save/request")
+    public void saveComponents(@Payload MaterialsOperationSaveResultRequest materialsOperationSaveResultRequest) {
+        try {
+            var boilerMadeInformation = materialsResultSaveService.saveResultsMaterial(materialsOperationSaveResultRequest);
+            boilerMadeInformation.setCorrelationId(materialsOperationSaveResultRequest.getCorrelationId());
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/materials/save/operation/response",
+                    materialsOperationSaveResultRequest.getStationName()), boilerMadeInformation);
+        } catch (RecordNotFoundException e) {
+            var error = errorHelper.getErrorResponse(e.getMessage(), materialsOperationSaveResultRequest.getCorrelationId());
+            log.error("Сохрание материалов. Станция {}", materialsOperationSaveResultRequest.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/materials/save/operation/response/error",
+                    materialsOperationSaveResultRequest.getStationName()), error);
+        } catch (Exception e) {
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", materialsOperationSaveResultRequest.getCorrelationId());
+            log.error("Сохрание материалов. Станция {}", materialsOperationSaveResultRequest.getStationName(), e);
+            messagingTemplate.convertAndSend(String.format("/message/station/%s/materials/save/operation/response/error",
+                    materialsOperationSaveResultRequest.getStationName()), error);
+        }
+    }
+}
+

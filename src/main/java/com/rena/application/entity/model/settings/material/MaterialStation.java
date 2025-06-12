@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "material_station", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_material_station_order", columnNames = {"station_id", "material_id", "order_material"}),
-        @UniqueConstraint(name = "uc_material_station", columnNames = {"station_id", "material_id"})
+        @UniqueConstraint(name = "uc_material_station_order", columnNames = {"station_id", "material_type_id", "order_material"}),
+        @UniqueConstraint(name = "uc_material_station", columnNames = {"station_id", "material_type_id"})
 })
 public class MaterialStation {
     @Id
@@ -23,8 +23,8 @@ public class MaterialStation {
     private Station station;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "material_id", nullable = false)
-    private Material material;
+    @JoinColumn(name = "material_type_id", nullable = false)
+    private MaterialType materialType;
 
     @Column(name = "order_material", nullable = false)
     private Integer order;

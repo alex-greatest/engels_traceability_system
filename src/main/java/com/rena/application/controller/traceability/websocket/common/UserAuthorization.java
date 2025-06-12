@@ -45,7 +45,7 @@ public class UserAuthorization {
     @MessageMapping("/operator/authorization/logout/request")
     public void stationOperatorLogOut(@Payload OperatorRequestAuthorization operatorRequestAuthorization) {
         try {
-            userTraceabilityService.stationOperatorLogout(operatorRequestAuthorization.getLogin());
+            userTraceabilityService.stationOperatorLogout(operatorRequestAuthorization.getLogin(), operatorRequestAuthorization.getStation());
             var rpcBase = new RpcBase();
             rpcBase.setCorrelationId(operatorRequestAuthorization.getCorrelationId());
             messagingTemplate.convertAndSend(String.format("/message/%s/operator/authorization/logout/response",
@@ -87,7 +87,7 @@ public class UserAuthorization {
     @MessageMapping("/admin/authorization/logout/request")
     public void stationAdminLogOut(@Payload OperatorRequestAuthorization operatorRequestAuthorization) {
         try {
-            userTraceabilityService.stationAdminLogout(operatorRequestAuthorization.getLogin());
+            userTraceabilityService.stationAdminLogout(operatorRequestAuthorization.getLogin(), operatorRequestAuthorization.getStation());
             var rpcBase = new RpcBase();
             rpcBase.setCorrelationId(operatorRequestAuthorization.getCorrelationId());
             messagingTemplate.convertAndSend(String.format("/message/%s/admin/authorization/logout/response",

@@ -182,7 +182,7 @@ Vaadin Hilla (видно по структуре generated endpoints и connect-
 - Use CSS Modules
 
 ## PROJECT-SPECIFIC STANDARDS
--для таблиц используй material-react-table
+-для таблиц используй materialValue-react-table
 -проверяй типы генерируемые hilla vaadin
 -контроллируй согласованность типов
 ## WORKFLOW & RELEASE RULES
@@ -203,8 +203,8 @@ Vaadin Hilla (видно по структуре generated endpoints и connect-
 
 ##Ссылки на документации
 
--materia-react-table: https://www.material-react-table.com/
--material-ui: https://mui.com/material-ui/getting-started/
+-materia-react-table: https://www.materialValue-react-table.com/
+-materialValue-ui: https://mui.com/materialValue-ui/getting-started/
 
 
 

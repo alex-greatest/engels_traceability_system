@@ -6,7 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
     <changeSet id="1745407055731-1" author="Alexander (generated)">
-        <createTable tableName="material">
+        <createTable tableName="materialValue">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_material"/>
             </column>
@@ -19,7 +19,7 @@
         </createTable>
     </changeSet>
     <changeSet id="1745407055731-2" author="Alexander (generated)">
-        <addUniqueConstraint columnNames="name" constraintName="UC_MATERIAL_NAME" tableName="material"/>
+        <addUniqueConstraint columnNames="name" constraintName="UC_MATERIAL_NAME" tableName="materialValue"/>
     </changeSet>
 
 </databaseChangeLog>

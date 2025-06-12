@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface MaterialStationRepository extends JpaRepository<MaterialStation, Long> {
-    @Query("SELECT m FROM MaterialStation m " +
-            "JOIN m.material mt " +
-            "JOIN m.station " +
-            "where m.station.name = ?1")
-    List<MaterialStation> findAllMaterialsByStation(String stationName);
+    @Query("select m from MaterialStation m join m.materialType join m.station where m.station.name = ?1 order by m.order")
+    List<MaterialStation> findByStation_Name(String name);
+
 }

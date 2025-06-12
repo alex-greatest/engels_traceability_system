@@ -1,6 +1,6 @@
 package com.rena.application.config.mapper.traceability;
 
-import com.rena.application.entity.dto.result.component.ComponentResultRequest;
+import com.rena.application.entity.dto.traceability.station.component.result.ComponentResultRequest;
 import com.rena.application.entity.model.traceability.station.component.Component;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
