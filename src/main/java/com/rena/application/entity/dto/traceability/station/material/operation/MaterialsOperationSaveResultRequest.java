@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public class MaterialsOperationSaveResultRequest extends RpcBase {
+    @NotBlank private final String boilerOrderId;
     @NotNull private final List<MaterialsResultSave> materialsResultSaves;
     @NotBlank private final String serialNumber;
     @NotBlank private final String stationName;

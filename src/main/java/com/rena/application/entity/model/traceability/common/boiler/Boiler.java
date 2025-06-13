@@ -1,8 +1,8 @@
 package com.rena.application.entity.model.traceability.common.boiler;
 
 import com.rena.application.entity.model.settings.type.BoilerTypeCycle;
-import com.rena.application.entity.model.traceability.common.station.Station;
 import com.rena.application.entity.model.traceability.common.station.StationHistory;
+import com.rena.application.entity.model.traceability.station.material.PackagingLabel;
 import com.rena.application.entity.model.traceability.station.order.BoilerOrder;
 import com.rena.application.entity.model.settings.user.UserHistory;
 import jakarta.persistence.*;
@@ -56,4 +56,8 @@ public class Boiler {
     @Version
     @Column(name = "version", nullable = false)
     private Integer version;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "packaging_label_id")
+    private PackagingLabel packagingLabel;
 }

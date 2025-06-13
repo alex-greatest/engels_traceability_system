@@ -13,10 +13,11 @@ import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.settings.material.MaterialValueRepository;
 import com.rena.application.repository.settings.material.MaterialTypeRepository;
 import com.rena.application.repository.settings.user.UserHistoryRepository;
-import com.rena.application.repository.traceability.station.components.MaterialResultRepository;
+import com.rena.application.repository.traceability.station.materials.MaterialResultRepository;
 import com.rena.application.service.traceability.common.boiler.BoilerTraceabilityService;
 import com.rena.application.service.traceability.common.initialize.MainInformationService;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
+import com.rena.application.service.traceability.station.order.BoilerOrderManageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,7 @@ public class MaterialsResultSaveService {
     private final BoilerTraceabilityService boilerTraceabilityService;
     private final MainInformationService mainInformationService;
     private final UserHistoryRepository userHistoryRepository;
+    private final BoilerOrderManageService boilerOrderManageService;
 
     @Transactional
     public BoilerMadeInformation saveResultsMaterial(@Valid MaterialsOperationSaveResultRequest materialsOperationSaveResultRequest) {
@@ -50,9 +52,10 @@ public class MaterialsResultSaveService {
                 null,
                 materialsOperationSaveResultRequest.getIsIgnoringError(),
                 admin);
+        boilerOrderManageService.checkBoilerOrder(operation.getBoiler(), materialsOperationSaveResultRequest.getBoilerOrderId());
         var materialsResultSaves = materialsOperationSaveResultRequest.getMaterialsResultSaves();
         saveMaterialsResult(materialsResultSaves, operation);
-        saveComponentValue(materialsOperationSaveResultRequest.getIsIgnoringError(), materialsResultSaves, operation.getBoiler());
+        saveMaterialValue(materialsOperationSaveResultRequest.getIsIgnoringError(), materialsResultSaves, operation.getBoiler());
         var boiler = boilerTraceabilityService.updateBoiler(materialsOperationSaveResultRequest.getSerialNumber(),
                 materialsOperationSaveResultRequest.getStationName(),
                 1);
@@ -75,7 +78,7 @@ public class MaterialsResultSaveService {
         materialResultRepository.save(material);
     }
 
-    private void saveComponentValue(Boolean isIgnoring, List<MaterialsResultSave> materialsResultSaves, Boiler boiler) {
+    private void saveMaterialValue(Boolean isIgnoring, List<MaterialsResultSave> materialsResultSaves, Boiler boiler) {
         if (!isIgnoring) {
             return;
         }

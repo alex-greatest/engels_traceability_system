@@ -22,7 +22,4 @@ public class BoilerOrderHistory {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "boiler_order_id")
     private BoilerOrder boilerOrder;
-
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = false;
 }

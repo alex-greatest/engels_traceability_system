@@ -5,7 +5,7 @@ import com.rena.application.entity.dto.traceability.station.order.history.Boiler
 import com.rena.application.entity.dto.traceability.station.order.history.BoilerHistoryResponse;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.helper.ErrorHelper;
-import com.rena.application.service.traceability.station.order.history.BoilerHistoryService;
+import com.rena.application.service.traceability.station.order.history.BoilerOrderHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class BoilerHistoryController {
     private final SimpMessagingTemplate messagingTemplate;
-    private final BoilerHistoryService boilerHistoryService;
     private final ErrorHelper errorHelper;
+    private final BoilerOrderHistoryService boilerOrderHistoryService;
 
     @MessageMapping("/boiler/list/history/request")
     public void getBoilers(BoilerHistoryRequest boilerHistoryRequest) {
         try {
-            Page<BoilerHistoryResponse> boilers = boilerHistoryService.getBoilers(boilerHistoryRequest);
+            Page<BoilerHistoryResponse> boilers = boilerOrderHistoryService.getBoilers(boilerHistoryRequest);
             var boilersPaging = new Paging<>(boilers.getTotalElements(), boilers.getContent());
             boilersPaging.setCorrelationId(boilerHistoryRequest.getCorrelationId());
             messagingTemplate.convertAndSend(String.format("/message/%s/boiler/list/history/response",

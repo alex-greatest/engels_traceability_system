@@ -2,6 +2,7 @@ package com.rena.application.controller.traceability.websocket.station.material;
 
 import com.rena.application.entity.dto.traceability.station.material.operation.MaterialsOperationSaveResultRequest;
 import com.rena.application.entity.dto.traceability.station.material.result.MaterialResultRequest;
+import com.rena.application.entity.dto.traceability.station.material.result.MaterialsResult;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.helper.ErrorHelper;
 import com.rena.application.service.traceability.station.material.MaterialResultSaveService;
@@ -23,27 +24,27 @@ public class MaterialOperationController {
     private final ErrorHelper errorHelper;
 
     @MessageMapping("/materials/material/save/request")
-    public void saveMaterial(@Payload MaterialResultRequest materialResultRequest) {
+    public void saveMaterial(@Payload MaterialResultRequest materialsResult) {
         try {
-            var materialResultResponse = materialResultSaveService.saveResultsMaterial(materialResultRequest);
-            materialResultResponse.setCorrelationId(materialResultRequest.getCorrelationId());
+            var materialResultResponse = materialResultSaveService.saveResultsMaterial(materialsResult);
+            materialResultResponse.setCorrelationId(materialsResult.getCorrelationId());
             messagingTemplate.convertAndSend(String.format("/message/station/%s/material/save/response",
-                    materialResultRequest.getStationName()), materialResultResponse);
+                    materialsResult.getStationName()), materialResultResponse);
         } catch (RecordNotFoundException e) {
-            var error = errorHelper.getErrorResponse(e.getMessage(), materialResultRequest.getCorrelationId());
-            log.error("Привязка материала. Станция {}", materialResultRequest.getStationName(), e);
+            var error = errorHelper.getErrorResponse(e.getMessage(), materialsResult.getCorrelationId());
+            log.error("Привязка материала. Станция {}", materialsResult.getStationName(), e);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/material/save/response/error",
-                    materialResultRequest.getStationName()), error);
+                    materialsResult.getStationName()), error);
         } catch (Exception e) {
-            var error = errorHelper.getErrorResponse("Неизвестная ошибка", materialResultRequest.getCorrelationId());
-            log.error("Привязка материала. Станция {}", materialResultRequest.getStationName(), e);
+            var error = errorHelper.getErrorResponse("Неизвестная ошибка", materialsResult.getCorrelationId());
+            log.error("Привязка материала. Станция {}", materialsResult.getStationName(), e);
             messagingTemplate.convertAndSend(String.format("/message/station/%s/component/save/response/error",
-                    materialResultRequest.getStationName()), error);
+                    materialsResult.getStationName()), error);
         }
     }
 
     @MessageMapping("/materials/result/operation/save/request")
-    public void saveComponents(@Payload MaterialsOperationSaveResultRequest materialsOperationSaveResultRequest) {
+    public void saveMaterialsResult(@Payload MaterialsOperationSaveResultRequest materialsOperationSaveResultRequest) {
         try {
             var boilerMadeInformation = materialsResultSaveService.saveResultsMaterial(materialsOperationSaveResultRequest);
             boilerMadeInformation.setCorrelationId(materialsOperationSaveResultRequest.getCorrelationId());

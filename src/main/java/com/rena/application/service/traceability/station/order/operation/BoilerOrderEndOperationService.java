@@ -20,6 +20,7 @@ import com.rena.application.repository.traceability.common.boiler.BoilerReposito
 import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
 import com.rena.application.service.traceability.station.order.BoilerOrderHelperService;
+import com.rena.application.service.traceability.station.order.history.BoilerOrderHistoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class BoilerOrderEndOperationService {
     private final OperationTraceabilityService operationTraceabilityService;
     private final BoilerLabelCountRepository boilerLabelCountRepository;
     private final PartLastRepository partLastRepository;
-    private final BoilerOrderHistoryRepository boilerOrderHistoryRepository;
+    private final BoilerOrderHistoryService boilerOrderHistoryService;
 
     @Transactional
     public BarcodeSaveResponse saveBarcodes(@Valid BarcodeSaveRequest barcodeSaveRequest) {
@@ -54,7 +55,7 @@ public class BoilerOrderEndOperationService {
                     orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
             var boilerOrder = boilerOrderHelperService.updateOrder(barcodeSaveRequest);
             var boiler = createBoiler(barcodeSaveRequest, station, boilerOrder, user);
-            createBoilerOrderHistory(boilerOrder, boiler);
+            boilerOrderHistoryService.createBoilerOrderHistory(boilerOrder, boiler);
             updateBoilerLabelCount(boiler);
             operationTraceabilityService.createOperation(boiler, station, user, 1, false);
             checkBoilerOrder(boilerOrder, station.getName());
@@ -79,14 +80,6 @@ public class BoilerOrderEndOperationService {
         boiler.setStatus(1);
         boiler.setUserHistory(user);
         return boilerRepository.save(boiler);
-    }
-
-    private void createBoilerOrderHistory(BoilerOrder boilerOrder, Boiler boiler) {
-        var boilerOrderHistory = new BoilerOrderHistory();
-        boilerOrderHistory.setBoilerOrder(boilerOrder);
-        boilerOrderHistory.setBoiler(boiler);
-        boilerOrderHistory.setIsActive(true);
-        boilerOrderHistoryRepository.save(boilerOrderHistory);
     }
 
     public void updateBoilerLabelCount(Boiler boiler) {
