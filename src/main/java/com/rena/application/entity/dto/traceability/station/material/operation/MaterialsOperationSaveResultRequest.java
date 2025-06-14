@@ -16,5 +16,6 @@ public class MaterialsOperationSaveResultRequest extends RpcBase {
     @NotBlank private final String serialNumber;
     @NotBlank private final String stationName;
     @NotNull private final Boolean isIgnoringError;
+    @NotNull private final Integer amountCopy;
     private final Integer adminIgnoringError;
 }

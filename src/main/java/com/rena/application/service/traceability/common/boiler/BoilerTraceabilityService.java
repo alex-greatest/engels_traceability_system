@@ -36,7 +36,6 @@ public class BoilerTraceabilityService {
         boiler.setDateUpdate(LocalDateTime.now());
         boiler.setStatus(status);
         boiler.setLastStation(station);
-        boilerRepository.save(boiler);
         if (!station.getName().equals("Доработка") && status == 1) {
             updateBoilerMadeOrder(boiler.getBoilerOrder(), station.getName());
         } else if (station.getName().equals("Доработка") && stationNameSource != null) {

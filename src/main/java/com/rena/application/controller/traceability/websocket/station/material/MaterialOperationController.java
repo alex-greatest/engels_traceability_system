@@ -2,7 +2,6 @@ package com.rena.application.controller.traceability.websocket.station.material;
 
 import com.rena.application.entity.dto.traceability.station.material.operation.MaterialsOperationSaveResultRequest;
 import com.rena.application.entity.dto.traceability.station.material.result.MaterialResultRequest;
-import com.rena.application.entity.dto.traceability.station.material.result.MaterialsResult;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.service.traceability.helper.ErrorHelper;
 import com.rena.application.service.traceability.station.material.MaterialResultSaveService;

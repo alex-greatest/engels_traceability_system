@@ -40,6 +40,7 @@ public class MaterialsResultSaveService {
     private final MainInformationService mainInformationService;
     private final UserHistoryRepository userHistoryRepository;
     private final BoilerOrderManageService boilerOrderManageService;
+    private final PackagingLabelService packagingLabelService;
 
     @Transactional
     public BoilerMadeInformation saveResultsMaterial(@Valid MaterialsOperationSaveResultRequest materialsOperationSaveResultRequest) {
@@ -59,6 +60,9 @@ public class MaterialsResultSaveService {
         var boiler = boilerTraceabilityService.updateBoiler(materialsOperationSaveResultRequest.getSerialNumber(),
                 materialsOperationSaveResultRequest.getStationName(),
                 1);
+        var packagingLabel = packagingLabelService.savePackagingLabel(materialsOperationSaveResultRequest.getAmountCopy());
+        packagingLabelService.savePackagingHistoryLabel(materialsOperationSaveResultRequest.getAmountCopy(), operation);
+        boiler.setPackagingLabel(packagingLabel);
         partLastRepository.updatePart_idByStation(null, materialsOperationSaveResultRequest.getStationName());
         return mainInformationService.
                 getBoilerMadeInfo(boiler.getBoilerOrder(), materialsOperationSaveResultRequest.getStationName());
