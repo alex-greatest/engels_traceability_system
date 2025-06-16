@@ -52,7 +52,8 @@ public class BoilerOrderOperationController {
         } catch (RecordNotFoundException e) {
             var error = errorHelper.getErrorResponse(e.getMessage(), barcodeSaveRequest.getCorrelationId());
             log.error("Результат сохранения баркода. Станция {}", barcodeSaveRequest.getStation(), e);
-            messagingTemplate.convertAndSend("/message/%s/boiler/station/get/barcode/response/error", error);
+            messagingTemplate.convertAndSend(String.format("/message/%s/boiler/station/get/barcode/response/error",
+                    barcodeSaveRequest.getStation()), error);
         } catch (Exception e) {
             var error = errorHelper.getErrorResponse("Неизвестная ошибка", barcodeSaveRequest.getCorrelationId());
             log.error("Результат сохранения баркода. Станция {}", barcodeSaveRequest.getStation(), e);

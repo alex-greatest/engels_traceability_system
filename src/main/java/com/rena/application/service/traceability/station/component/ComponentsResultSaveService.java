@@ -12,8 +12,10 @@ import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.component.ComponentTypeRepository;
 import com.rena.application.repository.settings.component.ComponentValueRepository;
 import com.rena.application.repository.settings.user.UserHistoryRepository;
+import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
 import com.rena.application.repository.traceability.station.components.ComponentRepository;
 import com.rena.application.repository.settings.PartLastRepository;
+import com.rena.application.service.traceability.common.boiler.BoilerOrderCounterService;
 import com.rena.application.service.traceability.common.boiler.BoilerTraceabilityService;
 import com.rena.application.service.traceability.common.initialize.MainInformationService;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
@@ -38,9 +40,13 @@ public class ComponentsResultSaveService {
     private final BoilerTraceabilityService boilerTraceabilityService;
     private final MainInformationService mainInformationService;
     private final UserHistoryRepository userHistoryRepository;
+    private final StationHistoryRepository stationHistoryRepository;
+    private final BoilerOrderCounterService boilerOrderCounterService;
 
     @Transactional
     public BoilerMadeInformation saveResultsComponent(@Valid ComponentsOperationSaveResultRequest componentsOperationSaveResultRequest) {
+        var station = stationHistoryRepository.findByName(componentsOperationSaveResultRequest.getStationName()).
+                orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         var admin = isRequiredAdmin(componentsOperationSaveResultRequest.getIsIgnoringError(),
                 componentsOperationSaveResultRequest.getAdminIgnoringError());
         var operation = operationTraceabilityService.updateOperation(
@@ -53,12 +59,12 @@ public class ComponentsResultSaveService {
         var componentsResult = componentsOperationSaveResultRequest.getComponentsResultSave();
         saveComponentsResult(componentsResult, operation);
         saveComponentValue(componentsOperationSaveResultRequest.getIsIgnoringError(), componentsResult, operation.getBoiler());
-        var boiler = boilerTraceabilityService.updateBoiler(componentsOperationSaveResultRequest.getSerialNumber(),
-                componentsOperationSaveResultRequest.getStationName(),
-                1);
+        var boiler = boilerTraceabilityService.updateBoiler(componentsOperationSaveResultRequest.getSerialNumber(), 1, station);
+        boilerOrderCounterService.updateOrderCounter(boiler.getBoilerOrder(), station);
         partLastRepository.updatePart_idByStation(null, componentsOperationSaveResultRequest.getStationName());
-        return mainInformationService.
-                getBoilerMadeInfo(boiler.getBoilerOrder(), componentsOperationSaveResultRequest.getStationName());
+        return mainInformationService.getBoilerMadeInfo(boiler.getBoilerOrder(),
+                componentsOperationSaveResultRequest.getStationName(),
+                false);
     }
 
     private void saveComponentsResult(List<ComponentsResultSave> componentsResultSave, Operation operation) {
@@ -85,11 +91,10 @@ public class ComponentsResultSaveService {
     }
 
     private void saveComponentValue(ComponentsResultSave componentResult, Boiler boiler) {
-        var componentType = componentTypeRepository.findByCodeAndName(componentResult.scannedCode(), componentResult.name())
-                .orElseThrow(() -> new RecordNotFoundException("Тип компонента не найден: " + componentResult.name()));
         var value = new ComponentValue();
         value.setBoiler(boiler);
-        value.setComponentType(componentType);
+        value.setName(componentResult.name());
+        value.setCode(componentResult.scannedCode());
         value.setValue(componentResult.scannedValue());
         componentValueRepository.save(value);
     }

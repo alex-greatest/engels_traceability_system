@@ -54,6 +54,8 @@ public class OperationRouterService {
 
     @Transactional
     public void interruptedOperation(@Valid OperationInterruptedRequest operationInterruptedRequest) {
+        var station = stationHistoryRepository.findByName(operationInterruptedRequest.getStationName()).
+                orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         var admin = userHistoryRepository.findByCodeAndIsActive(operationInterruptedRequest.getAdminInterrupted(), true).
                 orElseThrow(() -> new RecordNotFoundException("Администратор не найден"));
         operationTraceabilityService.updateOperation(
@@ -65,8 +67,8 @@ public class OperationRouterService {
                 admin);
         boilerTraceabilityService.updateBoiler(
                 operationInterruptedRequest.getSerialNumber(),
-                operationInterruptedRequest.getStationName(),
-                4);
+                4,
+                station);
         partLastRepository.updatePart_idByStation(null, operationInterruptedRequest.getStationName());
         checkerReworkStationService.checkStationRework(operationInterruptedRequest.getStationName(), operationInterruptedRequest.getSerialNumber());
     }

@@ -12,19 +12,19 @@ import com.rena.application.entity.model.traceability.common.boiler.Boiler;
 public interface BoilerRepository extends JpaRepository<Boiler, String> {
     boolean existsBySerialNumber(String serialNumber);
 
-    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder where b.boilerOrder.id = ?1")
+    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder left join b.packagingLabel where b.boilerOrder.id = ?1")
     Page<Boiler> findByBoilerOrder_OrderNumber(String id, Pageable pageable);
 
-    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder where b.serialNumber = ?1")
+    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder left join b.packagingLabel where b.serialNumber = ?1")
     Optional<Boiler> findBySerialNumber(String serialNumber);
     
-    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory where b.dateCreate between ?1 and ?2")
+    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory left join b.packagingLabel where b.dateCreate between ?1 and ?2")
     List<Boiler> findAllByDateCreateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory where b.boilerOrder.id = ?1")
+    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory left join b.packagingLabel where b.boilerOrder.id = ?1")
     List<Boiler> findAllByBoilerOrderId(Long boilerOrderId);
 
-    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory where b.boilerOrder.id = ?1")
+    @Query("select b from Boiler b JOIN b.boilerTypeCycle JOIN b.boilerOrder JOIN b.status JOIN b.lastStation JOIN b.userHistory left join b.packagingLabel  where b.boilerOrder.id = ?1")
     Page<Boiler> findAllByBoilerOrderId(Long boilerOrderId, Pageable pageable);
 
 }

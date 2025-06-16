@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ComponentValueRepository extends JpaRepository<ComponentValue, Long> {
-    @Query("select c from ComponentValue c join c.boiler join c.componentType where c.componentType.code = ?1 and c.value = ?2")
+    @Query("select c from ComponentValue c join c.boiler where c.code = ?1 and c.value = ?2")
     Optional<ComponentValue> findByCodeNameAndValue(String code, String value);
 
     @Transactional
@@ -17,7 +17,7 @@ public interface ComponentValueRepository extends JpaRepository<ComponentValue, 
     @Query("delete from ComponentValue c where c.boiler.serialNumber = ?1")
     void deleteByBoiler(String serialNumber);
 
-    @Query("select c from ComponentValue c join c.boiler join c.componentType where c.boiler.serialNumber = ?1")
+    @Query("select c from ComponentValue c join c.boiler where c.boiler.serialNumber = ?1")
     List<ComponentValue> findByBoiler_SerialNumber(String serialNumber);
 
     @Transactional
@@ -25,6 +25,6 @@ public interface ComponentValueRepository extends JpaRepository<ComponentValue, 
     @Query("update ComponentValue c set c.boiler.serialNumber = ?1 where c.boiler = null")
     void updateBoilerByBoiler(String serialNumber);
 
-    @Query("select c from ComponentValue c join c.componentType join c.boiler where c.componentType.name = ?1 and c.value = ?2 and c.boiler = null")
+    @Query("select c from ComponentValue c join c.boiler where c.name = ?1 and c.value = ?2 and c.boiler = null")
     Optional<ComponentValue> findByComponentType_NameAndValue(String name, String value);
 }

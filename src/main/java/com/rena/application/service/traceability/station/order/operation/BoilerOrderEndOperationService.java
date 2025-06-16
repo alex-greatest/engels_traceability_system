@@ -56,7 +56,7 @@ public class BoilerOrderEndOperationService {
             var boilerOrder = boilerOrderHelperService.updateOrder(barcodeSaveRequest);
             var boiler = createBoiler(barcodeSaveRequest, station, boilerOrder, user);
             boilerOrderHistoryService.createBoilerOrderHistory(boilerOrder, boiler);
-            updateBoilerLabelCount(boiler);
+            updateBoilerLabelCount(boiler, barcodeSaveRequest.getAmountPrint());
             operationTraceabilityService.createOperation(boiler, station, user, 1, false);
             checkBoilerOrder(boilerOrder, station.getName());
             updateSettings();
@@ -82,7 +82,7 @@ public class BoilerOrderEndOperationService {
         return boilerRepository.save(boiler);
     }
 
-    public void updateBoilerLabelCount(Boiler boiler) {
+    public void updateBoilerLabelCount(Boiler boiler, Integer amountPrint) {
         var boilerLabelCount = boilerLabelCountRepository.
                 findByBoiler_SerialNumber(boiler.getSerialNumber()).
                 orElseGet(() -> {
@@ -91,7 +91,7 @@ public class BoilerOrderEndOperationService {
                     newBoilerLabelCount.setAmountPrintType(0);
                     return newBoilerLabelCount;
                 });
-        boilerLabelCount.setAmountPrintType(boilerLabelCount.getAmountPrintType() + 1);
+        boilerLabelCount.setAmountPrintType(amountPrint);
         boilerLabelCountRepository.save(boilerLabelCount);
     }
 

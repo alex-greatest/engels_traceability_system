@@ -21,9 +21,9 @@ public class StationRouteCheckResult {
     public String formatErrorStations() {
         String stationsInfo = Stream.concat(
                         Arrays.stream(notPassedStations != null ? notPassedStations : new String[0])
-                                .map(station -> "- " + station + " (не пройдена)"),
+                                .map(station -> "«" + station + "» (не пройдена) \n"),
                         Arrays.stream(failedStations != null ? failedStations : new String[0])
-                                .map(station -> "- " + station + " (NOK)")
+                                .map(station -> "«" + station + "» (NOK)\n")
                 )
                 .sorted()
                 .collect(Collectors.joining("\n"));

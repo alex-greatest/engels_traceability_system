@@ -73,7 +73,6 @@ public class BoilerOrderManageService {
         }
         updateBoilerOrderAssignedBoiler(boiler, boilerOrder);
         boilerOrderHistoryService.createBoilerOrderHistory(boilerOrder, boiler);
-
     }
 
     private void updateBoilerOrderAssignedBoiler(Boiler boiler, BoilerOrder boilerOrder) {

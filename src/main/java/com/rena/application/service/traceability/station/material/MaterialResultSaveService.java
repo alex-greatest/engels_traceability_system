@@ -57,7 +57,8 @@ public class MaterialResultSaveService {
     public MaterialResultResponse createSuccessMaterial(String value, Boiler boiler, MaterialType materialType) {
         var materialValue = new MaterialValue();
         materialValue.setValue(value);
-        materialValue.setMaterialType(materialType);
+        materialValue.setName(materialType.getName());
+        materialValue.setCode(materialType.getCode());
         materialValue.setBoiler(boiler);
         materialValueRepository.save(materialValue);
         return new MaterialResultResponse(materialType.getName(), materialValue.getValue(), 1, null);

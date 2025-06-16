@@ -2,6 +2,7 @@ package com.rena.application.entity.model.settings.material;
 
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,9 +19,13 @@ public class MaterialValue {
     @Column(name = "value", nullable = false)
     private String value;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "material_type_id", nullable = false)
-    private MaterialType materialType;
+    @NotNull
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @NotNull
+    @Column(name = "code", nullable = false)
+    private String code;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "boiler_serial_number", nullable = false)

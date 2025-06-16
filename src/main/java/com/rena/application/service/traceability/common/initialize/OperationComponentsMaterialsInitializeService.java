@@ -31,15 +31,15 @@ public class OperationComponentsMaterialsInitializeService {
     private final MaterialValueRepository materialValueRepository;
     private final MainInformationService mainInformationService;
 
-    public BoilerMadeInformation getLastMainInformationComponents(String nameStation) {
-        return mainInformationService.getBoilerMadeInfo(nameStation);
+    public BoilerMadeInformation getLastMainInformationComponents() {
+        return mainInformationService.getBoilerMadeInfo();
     }
 
     @Transactional
     public RpcBase getLastOperation(@NotBlank String nameStation) {
         return partLastRepository.findByStation_Name(nameStation).
                 map(partLast -> createLastPart(partLast, nameStation)).
-                orElseGet(() -> getLastMainInformationComponents(nameStation));
+                orElseGet(this::getLastMainInformationComponents);
     }
 
     private RpcBase createLastPart(PartLast partLast, String nameStation) {
@@ -58,7 +58,7 @@ public class OperationComponentsMaterialsInitializeService {
             var station = stationHistoryRepository.findByName(nameStation).
                     orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
             return switch (station.getStationType().getName()) {
-                case "Комопненты" -> getLastComponents(boiler, station);
+                case "Компоненты" -> getLastComponents(boiler, station);
                 case "Материалы" -> getLastMaterials(boiler, station);
                 default -> throw new RecordNotFoundException("Тип станции не найден");
             };

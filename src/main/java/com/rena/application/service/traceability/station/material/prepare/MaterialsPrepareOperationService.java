@@ -25,7 +25,7 @@ public class MaterialsPrepareOperationService {
         var boilerOrder = boiler.getBoilerOrder();
         var materialScannedOperation = materialsScannedOperationService.getMaterialsScanned(stationName);
         checkMaterials(materialScannedOperation.getMaterials());
-        var boilerMadeInformation = mainInformationService.getBoilerMadeInfo(boilerOrder, stationName);
+        var boilerMadeInformation = mainInformationService.getBoilerMadeInfoMaterials(boilerOrder, true);
         var boilerTypeOperation = new BoilerTypeOperation(
                 boiler.getBoilerTypeCycle().getTypeName(),
                 boiler.getBoilerTypeCycle().getArticle(),
@@ -34,7 +34,8 @@ public class MaterialsPrepareOperationService {
         return new MaterialsOperationStartResponse(
                 boilerMadeInformation,
                 boilerTypeOperation,
-                materialScannedOperation
+                materialScannedOperation,
+                boiler.getPackagingLabel() != null
         );
     }
 

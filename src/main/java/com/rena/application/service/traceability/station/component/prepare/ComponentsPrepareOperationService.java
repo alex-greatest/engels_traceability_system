@@ -1,6 +1,5 @@
 package com.rena.application.service.traceability.station.component.prepare;
 
-import com.rena.application.entity.dto.traceability.common.boiler.BoilerMadeInformation;
 import com.rena.application.entity.dto.traceability.common.boiler.BoilerTypeOperation;
 import com.rena.application.entity.dto.traceability.station.component.operation.ComponentsOperationStartResponse;
 import com.rena.application.entity.model.traceability.common.boiler.Boiler;
@@ -26,7 +25,7 @@ public class ComponentsPrepareOperationService {
         var boilerOrder = boiler.getBoilerOrder();
         var componentsScannedOperation = componentsScannedOperationService.getComponentsScanned(boiler, stationName);
         checkComponents(componentsScannedOperation.getComponents());
-        var boilerMadeInformation = mainInformationService.getBoilerMadeInfo(boilerOrder, stationName);
+        var boilerMadeInformation = mainInformationService.getBoilerMadeInfo(boilerOrder, stationName, true);
         var boilerTypeOperation = new BoilerTypeOperation(
                 boiler.getBoilerTypeCycle().getTypeName(),
                 boiler.getBoilerTypeCycle().getArticle(),

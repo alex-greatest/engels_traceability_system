@@ -85,7 +85,8 @@ public class ComponentResultSaveService {
     public ComponentResultResponse createSuccessComponent(String value, Boiler boiler, ComponentType componentType) {
         var componentValue = new ComponentValue();
         componentValue.setValue(value);
-        componentValue.setComponentType(componentType);
+        componentValue.setName(componentType.getName());
+        componentValue.setCode(componentType.getCode());
         componentValue.setBoiler(boiler);
         componentValueRepository.save(componentValue);
         return new ComponentResultResponse(componentType.getName(), componentValue.getValue(), 1, null);

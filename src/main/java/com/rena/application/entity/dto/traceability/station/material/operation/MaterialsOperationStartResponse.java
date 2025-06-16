@@ -17,10 +17,8 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class MaterialsOperationStartResponse extends RpcBase {
-    @NotNull
-    private final BoilerMadeInformation boilerMadeInformation;
-    @NotNull
-    private final BoilerTypeOperation boilerTypeCycle;
-    @NotNull
-    private final MaterialScannedOperation materialScannedOperation;
+    @NotNull private final BoilerMadeInformation boilerMadeInformation;
+    @NotNull private final BoilerTypeOperation boilerTypeCycle;
+    @NotNull private final MaterialScannedOperation materialScannedOperation;
+    @NotNull private final Boolean isPackagingLabelSaved;
 }

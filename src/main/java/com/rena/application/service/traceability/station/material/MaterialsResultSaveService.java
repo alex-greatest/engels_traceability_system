@@ -13,7 +13,9 @@ import com.rena.application.repository.settings.PartLastRepository;
 import com.rena.application.repository.settings.material.MaterialValueRepository;
 import com.rena.application.repository.settings.material.MaterialTypeRepository;
 import com.rena.application.repository.settings.user.UserHistoryRepository;
+import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
 import com.rena.application.repository.traceability.station.materials.MaterialResultRepository;
+import com.rena.application.service.traceability.common.boiler.BoilerOrderCounterService;
 import com.rena.application.service.traceability.common.boiler.BoilerTraceabilityService;
 import com.rena.application.service.traceability.common.initialize.MainInformationService;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
@@ -41,9 +43,13 @@ public class MaterialsResultSaveService {
     private final UserHistoryRepository userHistoryRepository;
     private final BoilerOrderManageService boilerOrderManageService;
     private final PackagingLabelService packagingLabelService;
+    private final StationHistoryRepository stationHistoryRepository;
+    private final BoilerOrderCounterService boilerOrderCounterService;
 
     @Transactional
     public BoilerMadeInformation saveResultsMaterial(@Valid MaterialsOperationSaveResultRequest materialsOperationSaveResultRequest) {
+        var station = stationHistoryRepository.findByName(materialsOperationSaveResultRequest.getStationName()).
+                orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         var admin = isRequiredAdmin(materialsOperationSaveResultRequest.getIsIgnoringError(),
                 materialsOperationSaveResultRequest.getAdminIgnoringError());
         var operation = operationTraceabilityService.updateOperation(
@@ -58,14 +64,13 @@ public class MaterialsResultSaveService {
         saveMaterialsResult(materialsResultSaves, operation);
         saveMaterialValue(materialsOperationSaveResultRequest.getIsIgnoringError(), materialsResultSaves, operation.getBoiler());
         var boiler = boilerTraceabilityService.updateBoiler(materialsOperationSaveResultRequest.getSerialNumber(),
-                materialsOperationSaveResultRequest.getStationName(),
-                1);
-        var packagingLabel = packagingLabelService.savePackagingLabel(materialsOperationSaveResultRequest.getAmountCopy());
-        packagingLabelService.savePackagingHistoryLabel(materialsOperationSaveResultRequest.getAmountCopy(), operation);
-        boiler.setPackagingLabel(packagingLabel);
+                1,
+                station
+                );
+        boilerOrderCounterService.updateOrderCounter(boiler.getBoilerOrder(), station);
+        savePackagingLabel(boiler, materialsOperationSaveResultRequest.getAmountCopy(), operation);
         partLastRepository.updatePart_idByStation(null, materialsOperationSaveResultRequest.getStationName());
-        return mainInformationService.
-                getBoilerMadeInfo(boiler.getBoilerOrder(), materialsOperationSaveResultRequest.getStationName());
+        return mainInformationService.getBoilerMadeInfoMaterials(boiler.getBoilerOrder(), false);
     }
 
     private void saveMaterialsResult(List<MaterialsResultSave> materialsResultSaves, Operation operation) {
@@ -78,7 +83,6 @@ public class MaterialsResultSaveService {
         material.setValue(materialsResultSave.scannedValue());
         material.setOperation(operation);
         material.setStatus(materialsResultSave.status());
-        material.setCode(materialsResultSave.scannedCode());
         materialResultRepository.save(material);
     }
 
@@ -92,11 +96,10 @@ public class MaterialsResultSaveService {
     }
 
     private void saveMaterialValueValue(MaterialsResultSave materialResult, Boiler boiler) {
-        var materialType = materialTypeRepository.findByCodeAndName(materialResult.scannedCode(), materialResult.name())
-                .orElseThrow(() -> new RecordNotFoundException("Тип материала не найден: " + materialResult.name()));
         var value = new MaterialValue();
         value.setBoiler(boiler);
-        value.setMaterialType(materialType);
+        value.setName(materialResult.name());
+        value.setCode(materialResult.scannedCode());
         value.setValue(materialResult.scannedValue());
         materialValueRepository.save(value);
     }
@@ -107,5 +110,14 @@ public class MaterialsResultSaveService {
         }
         return userHistoryRepository.findByCodeAndIsActive(code, true).
                 orElseThrow(() -> new RecordNotFoundException("Администратор не найден"));
+    }
+
+    private void savePackagingLabel(Boiler boiler, Integer amountCopy, Operation operation) {
+        if (amountCopy == null || amountCopy <= 0) {
+            return;
+        }
+        packagingLabelService.savePackagingHistoryLabel(amountCopy, operation);
+        var packagingLabel = packagingLabelService.savePackagingLabel(amountCopy);
+        boiler.setPackagingLabel(packagingLabel);
     }
 }

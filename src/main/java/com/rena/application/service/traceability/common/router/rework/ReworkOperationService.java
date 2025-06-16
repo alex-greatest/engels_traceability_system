@@ -2,9 +2,11 @@ package com.rena.application.service.traceability.common.router.rework;
 
 import com.rena.application.entity.dto.traceability.common.router.OperationStartRoute;
 import com.rena.application.entity.model.settings.user.UserHistory;
+import com.rena.application.entity.model.traceability.common.station.StationHistory;
 import com.rena.application.exceptions.RecordNotFoundException;
 import com.rena.application.repository.settings.user.UserHistoryRepository;
 import com.rena.application.repository.traceability.common.router.StationHistoryRepository;
+import com.rena.application.service.traceability.common.boiler.BoilerOrderCounterService;
 import com.rena.application.service.traceability.common.boiler.BoilerTraceabilityService;
 import com.rena.application.service.traceability.common.operation.OperationTraceabilityService;
 import jakarta.transaction.Transactional;
@@ -22,20 +24,21 @@ public class ReworkOperationService {
     private final UserHistoryRepository userHistoryRepository;
     private final BoilerTraceabilityService boilerTraceabilityService;
     private final CheckerReworkStationService checkerReworkStationService;
+    private final BoilerOrderCounterService boilerOrderCounterService;
 
     @Transactional
     public void startReworkOperation(@Valid OperationStartRoute operationStartRoute) {
         var station = stationHistoryRepository.findByName("Доработка").
+                orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
+        var stationSource = stationHistoryRepository.findByName(operationStartRoute.getStationName()).
                 orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         checkerReworkStationService.checkStationRework(operationStartRoute.getStationName(), operationStartRoute.getSerialNumber());
         var user = userHistoryRepository.
                 findUserHistoryForActiveOperatorByStationName(operationStartRoute.getStationName()).
                 orElseThrow(() -> new RecordNotFoundException("Пользователь не найден"));
         checkUser(user);
-        var boiler = boilerTraceabilityService.updateBoiler(operationStartRoute.getSerialNumber(),
-                station,
-                1,
-                operationStartRoute.getStationName());
+        var boiler = boilerTraceabilityService.updateBoiler(operationStartRoute.getSerialNumber(), 1, station);
+        boilerOrderCounterService.decreaseCounter(boiler.getBoilerOrder(), stationSource);
         operationTraceabilityService.createOperation(boiler, station, user, 1, true);
     }
 
@@ -44,6 +47,4 @@ public class ReworkOperationService {
             throw new RecordNotFoundException("У пользователя нет прав для выполнения этой операции");
         }
     }
-
-
 }

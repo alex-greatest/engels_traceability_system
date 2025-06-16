@@ -15,21 +15,22 @@ public class MainInformationService {
     private final BoilerMadeOrderRepository boilerMadeOrderRepository;
     private final StationRepository stationRepository;
 
-    public BoilerMadeInformation getBoilerMadeInfo(String nameStation) {
+    public BoilerMadeInformation getBoilerMadeInfo() {
         return new BoilerMadeInformation(0, 0, 0);
     }
 
-    public BoilerMadeInformation getBoilerMadeInfo(BoilerOrder boilerOrder, String nameStation) {
+    public BoilerMadeInformation getBoilerMadeInfo(BoilerOrder boilerOrder, String nameStation, Boolean isRequiredCheck) {
         var boilerOrderInfo = boilerMadeOrderRepository.
                 findBoilerMadeCountOrderByStation_NameAndBoilerOrder_Id(nameStation, boilerOrder.getId()).
                 orElseGet(() -> createBoilerMadeInformation(boilerOrder, nameStation));
         var amountBoilerMadeOrder = boilerOrderInfo.getAmountBoilerMadeOrder();
         var amountBoilerOrder = boilerOrder.getAmountBoilerOrder();
         var orderNumber = boilerOrder.getOrderNumber();
+        checkAmountBoiler(amountBoilerOrder, amountBoilerMadeOrder, isRequiredCheck);
         return new BoilerMadeInformation(orderNumber, amountBoilerMadeOrder, amountBoilerOrder);
     }
 
-    public BoilerMadeCountOrder createBoilerMadeInformation(BoilerOrder boilerOrder, String nameStation) {
+    private BoilerMadeCountOrder createBoilerMadeInformation(BoilerOrder boilerOrder, String nameStation) {
         var station = stationRepository.findByName(nameStation)
                 .orElseThrow(() -> new RecordNotFoundException("Станция не найдена"));
         var boilerMadeOrder = new BoilerMadeCountOrder();
@@ -37,5 +38,19 @@ public class MainInformationService {
         boilerMadeOrder.setAmountBoilerMadeOrder(0);
         boilerMadeOrder.setStation(station);
         return boilerMadeOrderRepository.save(boilerMadeOrder);
+    }
+
+    public BoilerMadeInformation getBoilerMadeInfoMaterials(BoilerOrder boilerOrder, Boolean isRequiredCheck) {
+        var amountBoilerMadeOrder = boilerOrder.getAmountBoilerMade();
+        var amountBoilerOrder = boilerOrder.getAmountBoilerOrder();
+        var orderNumber = boilerOrder.getOrderNumber();
+        checkAmountBoiler(amountBoilerOrder, amountBoilerMadeOrder, isRequiredCheck);
+        return new BoilerMadeInformation(orderNumber, amountBoilerMadeOrder, amountBoilerOrder);
+    }
+
+    public void checkAmountBoiler(Integer amountOrder, Integer amountMade, Boolean isRequiredCheck) {
+        if (isRequiredCheck && amountMade >= amountOrder) {
+            throw new RecordNotFoundException("Количество изготовленных котлов превышает количество заказанных");
+        }
     }
 }
